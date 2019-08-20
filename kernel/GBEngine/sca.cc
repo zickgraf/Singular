@@ -371,6 +371,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
   if( currRing != _currRing ) rChangeCurrRing(_currRing);
   assume( currRing == _currRing );
 
+        PrintS("got here k_sca_bba 100\n");
 #if MYTEST
   PrintS("\n\n<sca_bba>\n\n");
 #endif
@@ -448,6 +449,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
 
 //   if (strat->minim>0) strat->M = idInit(IDELEMS(F),F->rank);
 
+        PrintS("got here k_sca_bba 200\n");
   reduc = olddeg = 0;
 
 #define NO_BUCKETS
@@ -478,6 +480,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
   }
 
 
+        PrintS("got here k_sca_bba 300\n");
   ///////////////////////////////////////////////////////////////
   // SCA:
 
@@ -534,6 +537,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
     }
   }
 
+        PrintS("got here k_sca_bba 400\n");
   // compute-------------------------------------------------------
   while (strat->Ll >= 0)
   {
@@ -590,6 +594,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
     }//    else
 
 
+        PrintS("got here k_sca_bba 500\n");
     if(strat->P.IsNull()) continue;
 
     if (strat->P.p1 == NULL)
@@ -602,13 +607,17 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
         strat->P.PrepareRed(strat->use_buckets);
     }
 
+        PrintS("got here k_sca_bba 500\n");
     if (TEST_OPT_PROT)
       message((strat->honey ? strat->P.ecart : 0) + strat->P.pFDeg(),
               &olddeg,&reduc,strat, red_result);
 
     // reduction of the element chosen from L
+    PrintS("got here k_sca_bba 514\n");
     red_result = strat->red(&strat->P,strat);
+    PrintS("got here k_sca_bba 516\n");
 
+        PrintS("got here k_sca_bba 510\n");
 
     // reduction to non-zero new poly
     if (red_result == 1)
@@ -621,6 +630,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
 
       int pos = posInS(strat,strat->sl,strat->P.p,strat->P.ecart);
 
+        PrintS("got here k_sca_bba 520\n");
       // reduce the tail and normalize poly
       if (TEST_OPT_INTSTRATEGY)
       {
@@ -639,6 +649,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
       }
       strat->P.is_normalized=nIsOne(pGetCoeff(strat->P.p));
 
+        PrintS("got here k_sca_bba 580\n");
 #ifdef KDEBUG
       if (TEST_OPT_DEBUG){PrintS(" ns:");p_wrp(strat->P.p,currRing);PrintLn();}
 #endif
@@ -671,6 +682,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
         enterT(strat->P, strat);
       }
 
+        PrintS("got here k_sca_bba 600\n");
       // L
       enterpairs(strat->P.p,strat->sl,strat->P.ecart,pos,strat, strat->tl);
 
@@ -725,6 +737,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
         enterL(&strat->L,&strat->Ll,&strat->Lmax,h,pos);
 
 
+        PrintS("got here k_sca_bba 700\n");
 
 
 #if 0
@@ -777,9 +790,13 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
 // the end of "#if 0" (comment)
 #endif
 
+        PrintS("got here k_sca_bba 770\n");
       } // for all x_i \in Ann(lm(P))
+
+        PrintS("got here k_sca_bba 780\n");
     } // if red(P) != NULL
 
+        PrintS("got here k_sca_bba 790\n");
 //     else if (strat->P.p1 == NULL && strat->minim > 0)
 //     {
 //       p_Delete(&strat->P.p2, currRing, strat->tailRing);
@@ -795,6 +812,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
 
   }
 
+        PrintS("got here k_sca_bba 800\n");
 #ifdef KDEBUG
   if (TEST_OPT_DEBUG) messageSets(strat);
 #endif
@@ -829,6 +847,7 @@ ideal k_sca_bba (const ideal F, const ideal Q, const intvec */*w*/, const intvec
   if (tempQ!=NULL) updateResult(strat->Shdl,tempQ,strat);
 
 
+        PrintS("got here k_sca_bba 900\n");
   if (TEST_OPT_REDSB) // ???
   {
     // must be at the very end (after exitBuchMora) as it changes the S set!!!

@@ -654,7 +654,9 @@ static ideal idPrepare (ideal  h1, tHomog hom, int syzcomp, intvec **w, GbVarian
   if (alg==GbStd)
   {
     if (TEST_OPT_PROT) { PrintS("std:"); mflush(); }
+    PrintS("got here idPrepare 100\n");
     h3 = kStd(h2,currRing->qideal,hom,w,NULL,syzcomp);
+    PrintS("got here idPrepare 200\n");
   }
   else if (alg==GbSlimgb)
   {
@@ -910,6 +912,8 @@ ideal idLiftStd (ideal  h1, matrix* ma, tHomog hi, ideal * syz, GbVariant alg)
   poly  p=NULL, q;
   intvec *w=NULL;
 
+  PrintS("got here100\n");
+
   idDelete((ideal*)ma);
   BOOLEAN lift3=FALSE;
   if (syz!=NULL) { lift3=TRUE; idDelete(syz); }
@@ -930,6 +934,7 @@ ideal idLiftStd (ideal  h1, matrix* ma, tHomog hi, ideal * syz, GbVariant alg)
 
   if ((k==1) && (!lift3)) si_opt_2 |=Sy_bit(V_IDLIFT);
 
+  PrintS("got here200\n");
   ring orig_ring = currRing;
   ring syz_ring = rAssure_SyzOrder(orig_ring,TRUE);
   rSetSyzComp(k,syz_ring);
@@ -942,8 +947,10 @@ ideal idLiftStd (ideal  h1, matrix* ma, tHomog hi, ideal * syz, GbVariant alg)
   else
     s_h1 = h1;
 
+  PrintS("got here300\n");
   ideal s_h3=idPrepare(s_h1,hi,k,&w,alg); // main (syz) GB computation
 
+  PrintS("got here400\n");
   ideal s_h2 = idInit(IDELEMS(s_h3), s_h3->rank);
 
   if (lift3) (*syz)=idInit(IDELEMS(s_h3),IDELEMS(h1));
@@ -951,6 +958,7 @@ ideal idLiftStd (ideal  h1, matrix* ma, tHomog hi, ideal * syz, GbVariant alg)
   if (w!=NULL) delete w;
   i = 0;
 
+  PrintS("got here500\n");
   // now sort the result, SB : leave in s_h3
   //                      T:  put in s_h2
   //                      syz: put in *syz
@@ -991,7 +999,9 @@ ideal idLiftStd (ideal  h1, matrix* ma, tHomog hi, ideal * syz, GbVariant alg)
       }
     }
   }
+  PrintS("got here600\n");
   idSkipZeroes(s_h3);
+  PrintS("got here700\n");
   //extern char * iiStringMatrix(matrix im, int dim,char ch);
   //PrintS("SB: ----------------------------------------\n");
   //PrintS(iiStringMatrix((matrix)s_h3,k,'\n'));
@@ -1013,6 +1023,7 @@ ideal idLiftStd (ideal  h1, matrix* ma, tHomog hi, ideal * syz, GbVariant alg)
 
   *ma = mpNew(j,i);
 
+  PrintS("got here800\n");
   i = 1;
   for (j=0; j<IDELEMS(s_h2); j++)
   {
@@ -1038,6 +1049,7 @@ ideal idLiftStd (ideal  h1, matrix* ma, tHomog hi, ideal * syz, GbVariant alg)
       i++;
     }
   }
+  PrintS("got here900\n");
   idDelete(&s_h2);
 
   for (i=0; i<IDELEMS(s_h3); i++)
@@ -1052,6 +1064,7 @@ ideal idLiftStd (ideal  h1, matrix* ma, tHomog hi, ideal * syz, GbVariant alg)
     }
   }
 
+  PrintS("got here1000\n");
   if (syz_ring!=orig_ring) rDelete(syz_ring);
   SI_RESTORE_OPT2(save2);
   return s_h3;

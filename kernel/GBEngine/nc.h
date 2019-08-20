@@ -44,16 +44,24 @@ static inline ideal nc_GB(const ideal F, const ideal Q, const intvec *w, const i
   {
     if( rIsSCA(r) )
     {
-      if (rHasLocalOrMixedOrdering(r))
+      if (rHasLocalOrMixedOrdering(r)) {
+        PrintS("sca_mora");
         gb = sca_mora;
-      else
+      }
+      else {
+        PrintS("sca_bba");
         gb = sca_bba; // sca_gr_bba???
+      }
     } else
     {
-      if (rHasLocalOrMixedOrdering(r))
+      if (rHasLocalOrMixedOrdering(r)) {
+        PrintS("gnc_gr_mora");
         gb = gnc_gr_mora;
-      else
+      }
+      else {
+        PrintS("gnc_gr_bba");
         gb = gnc_gr_bba;
+      }
     }
 
     r->GetNC()->p_Procs.GB = cast_A_to_vptr(gb);

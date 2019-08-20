@@ -2409,6 +2409,7 @@ ideal kStd(ideal F, ideal Q, tHomog h,intvec ** w, intvec *hilb,int syzComp,
     currRing->pLexOrder = TRUE;
     if (hilb==NULL) strat->LazyPass*=2;
   }
+    PrintS("got here kStd 100\n");
   strat->homog=h;
 #ifdef KDEBUG
   idTest(F);
@@ -2419,10 +2420,16 @@ ideal kStd(ideal F, ideal Q, tHomog h,intvec ** w, intvec *hilb,int syzComp,
   {
     const BOOLEAN bIsSCA  = rIsSCA(currRing) && strat->z2homog; // for Z_2 prod-crit
     strat->no_prod_crit   = ! bIsSCA;
-    if (w!=NULL)
+        PrintS("got here kStd 200\n");
+    if (w!=NULL) {
+      PrintS("got here kStd 300\n");
       r = nc_GB(F, Q, *w, hilb, strat, currRing);
-    else
+    }
+    else {
+      PrintS("got here kStd 400\n");
       r = nc_GB(F, Q, NULL, hilb, strat, currRing);
+    }
+    PrintS("got here kStd 500\n");
   }
   else
 #endif
