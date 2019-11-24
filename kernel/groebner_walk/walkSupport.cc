@@ -937,8 +937,10 @@ lists makeTaunList64(int64vec *iv64,int64 i64)
 
 ideal idStd(ideal G)
 {
+  printf("entering idStd\n");
   ideal GG = kStd(G, NULL, testHomog, NULL);
   idSkipZeroes(GG);
+  printf("leaving idStd\n");
   return GG;
 }
 

@@ -654,7 +654,9 @@ static ideal idPrepare (ideal  h1, tHomog hom, int syzcomp, intvec **w, GbVarian
   if (alg==GbStd)
   {
     if (TEST_OPT_PROT) { PrintS("std:"); mflush(); }
+	printf("before kStd\n");
     h3 = kStd(h2,currRing->qideal,hom,w,NULL,syzcomp);
+	printf("after kStd\n");
   }
   else if (alg==GbSlimgb)
   {
@@ -928,6 +930,8 @@ ideal idLiftStd (ideal  h1, matrix* ma, tHomog hi, ideal * syz, GbVariant alg)
 
   k=si_max(1L,id_RankFreeModule(h1,currRing));
 
+  printf("idLiftStd: k = %d\n", k);
+
   if ((k==1) && (!lift3)) si_opt_2 |=Sy_bit(V_IDLIFT);
 
   ring orig_ring = currRing;
@@ -942,7 +946,9 @@ ideal idLiftStd (ideal  h1, matrix* ma, tHomog hi, ideal * syz, GbVariant alg)
   else
     s_h1 = h1;
 
+  printf("before idPrepare\n");
   ideal s_h3=idPrepare(s_h1,hi,k,&w,alg); // main (syz) GB computation
+  printf("after idPrepare\n");
 
   ideal s_h2 = idInit(IDELEMS(s_h3), s_h3->rank);
 

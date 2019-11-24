@@ -3771,6 +3771,7 @@ void chainCritPart (poly p,int ecart,kStrategy strat)
 */
 void initenterpairs (poly h,int k,int ecart,int isFromQ,kStrategy strat, int atR = -1)
 {
+  printf("pGetComp(h) = %d\n", pGetComp(h));
 
   if ((strat->syzComp==0)
   || (pGetComp(h)<=strat->syzComp))
@@ -3788,6 +3789,7 @@ void initenterpairs (poly h,int k,int ecart,int isFromQ,kStrategy strat, int atR
           if (!strat->fromQ[j])
           {
             new_pair=TRUE;
+			printf("asda\n");
             strat->enterOnePair(j,h,ecart,isFromQ,strat, atR);
           //Print("j:%d, Ll:%d\n",j,strat->Ll);
           }
@@ -3798,6 +3800,7 @@ void initenterpairs (poly h,int k,int ecart,int isFromQ,kStrategy strat, int atR
         new_pair=TRUE;
         for (j=0; j<=k; j++)
         {
+			printf("asdb\n");
           strat->enterOnePair(j,h,ecart,isFromQ,strat, atR);
           //Print("j:%d, Ll:%d\n",j,strat->Ll);
         }
@@ -3811,6 +3814,7 @@ void initenterpairs (poly h,int k,int ecart,int isFromQ,kStrategy strat, int atR
         || (pGetComp(strat->S[j])==0))
         {
           new_pair=TRUE;
+			printf("asdc\n");
           strat->enterOnePair(j,h,ecart,isFromQ,strat, atR);
         //Print("j:%d, Ll:%d\n",j,strat->Ll);
         }
@@ -3824,6 +3828,7 @@ void initenterpairs (poly h,int k,int ecart,int isFromQ,kStrategy strat, int atR
       else
     #endif
       strat->chainCrit(h,ecart,strat);
+			printf("asdd\n");
     }
     kMergeBintoL(strat);
   }
@@ -10225,6 +10230,9 @@ void initBuchMora (ideal F,ideal Q,kStrategy strat)
   /*- set L -*/
   strat->Lmax = ((IDELEMS(F)+setmaxLinc-1)/setmaxLinc)*setmaxLinc;
   strat->Ll = -1;
+
+  printf("strat->Ll: %d\n", strat->Ll);
+  
   strat->L = initL(strat->Lmax);
   /*- set B -*/
   strat->Bmax = setmaxL;
@@ -10274,6 +10282,8 @@ void initBuchMora (ideal F,ideal Q,kStrategy strat)
       // /*Shdl=*/initS(F, Q,strat); /*sets also S, ecartS, fromQ */
     }
   }
+
+  printf("strat->Ll: %d\n", strat->Ll);
   strat->fromT = FALSE;
   strat->noTailReduction = !TEST_OPT_REDTAIL;
   if ((!TEST_OPT_SB_1)
@@ -10289,6 +10299,9 @@ void initBuchMora (ideal F,ideal Q,kStrategy strat)
     if (strat->fromQ!=NULL) omFreeSize(strat->fromQ,IDELEMS(strat->Shdl)*sizeof(int));
     strat->fromQ=NULL;
   }
+
+  printf("strat->Ll: %d\n", strat->Ll);
+  
   assume(kTest_TS(strat));
 }
 

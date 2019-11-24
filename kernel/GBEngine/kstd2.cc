@@ -883,6 +883,10 @@ int redRing (LObject* h,kStrategy strat)
 */
 int redHomog (LObject* h,kStrategy strat)
 {
+  printf("entering redHomog");
+  //PrintS("red:");
+  //h->wrp();
+
   if (strat->tl<0) return 1;
   //if (h->GetLmTailRing()==NULL) return 0; // HS: SHOULD NOT BE NEEDED!
   assume(h->FDeg == h->pFDeg());
@@ -939,6 +943,11 @@ int redHomog (LObject* h,kStrategy strat)
     /*
      * end of search: have to reduce with pi
      */
+	//printf("red:\n");
+    //h->wrp();
+    //printf("\nwith\n");
+    //strat->T[ii].wrp();
+	//printf("\n");
 #ifdef KDEBUG
     if (TEST_OPT_DEBUG)
     {
@@ -1001,6 +1010,7 @@ int redHomog (LObject* h,kStrategy strat)
       }
     }
   }
+  printf("leaving redHomog");
 }
 
 KINLINE int ksReducePolyTailSig(LObject* PR, TObject* PW, LObject* Red, kStrategy strat)
@@ -1740,6 +1750,8 @@ int redHoney (LObject* h, kStrategy strat)
   h_p = h->GetLmTailRing();
   not_sev = ~ h->sev;
 
+  int number_of_reductions = 0;
+
   h->PrepareRed(strat->use_buckets);
   loop
   {
@@ -1821,6 +1833,9 @@ int redHoney (LObject* h, kStrategy strat)
     assume(strat->fromT == FALSE);
 
     ksReducePoly(h,&(strat->T[ii]),strat->kNoetherTail(),NULL,strat);
+
+	number_of_reductions++;
+	
 #if SBA_PRINT_REDUCTION_STEPS
     sba_interreduction_steps++;
 #endif
@@ -1839,6 +1854,7 @@ int redHoney (LObject* h, kStrategy strat)
     {
       kDeleteLcm(h);
       h->Clear();
+	  printf("number of reductions: %d\n", number_of_reductions);
       return 0;
     }
     if (TEST_OPT_IDLIFT)
@@ -1866,6 +1882,7 @@ int redHoney (LObject* h, kStrategy strat)
       {
         if(p_GetComp(h->p,currRing)>strat->syzComp)
         {
+		  printf("number of reductions: %d\n", number_of_reductions);
           return 1;
         }
       }
@@ -1873,6 +1890,7 @@ int redHoney (LObject* h, kStrategy strat)
       {
         if(p_GetComp(h->t_p,strat->tailRing)>strat->syzComp)
         {
+		  printf("number of reductions: %d\n", number_of_reductions);
           return 1;
         }
       }
@@ -2256,6 +2274,7 @@ void kDebugPrint(kStrategy strat);
 
 ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 {
+  printf("entering bba\n");
   int   red_result = 1;
   int   olddeg,reduc;
   int hilbeledeg=1,hilbcount=0,minimcnt=0;
@@ -2272,6 +2291,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   initBba(strat);
   /*set enterS, spSpolyShort, reduce, red, initEcart, initEcartPair*/
   /*Shdl=*/initBuchMora(F, Q,strat);
+  printf("strat->Ll: %d\n", strat->Ll);
   if (strat->minim>0) strat->M=idInit(IDELEMS(F),F->rank);
   reduc = olddeg = 0;
 
@@ -2283,9 +2303,11 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   if (!TEST_OPT_OLDSTD)
     withT = ! strat->homog;
 
+  printf("strat->Ll: %d\n", strat->Ll);
   // strat->posInT = posInT_pLength;
   kTest_TS(strat);
 
+  printf("strat->Ll: %d\n", strat->Ll);
 #ifdef HAVE_TAIL_RING
   if(!idIs0(F) &&(!rField_is_Ring(currRing)))  // create strong gcd poly computes with tailring and S[i] ->to be fixed
     kStratInitChangeTailRing(strat);
@@ -2297,18 +2319,30 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     kDebugPrint(strat);
   }
 
+  printf("strat->Ll: %d\n", strat->Ll);
 
 #ifdef KDEBUG
   //kDebugPrint(strat);
 #endif
   /* compute------------------------------------------------------- */
+  printf("F->rank: %d\n", F->rank);
+  printf("before while loop in bba\n");
+  int mycounter = 0;
   while (strat->Ll >= 0)
   {
+	printf("mycounter: %d\n", mycounter);
+	if(mycounter > 60) {
+		//idSkipZeroes(strat->Shdl);
+	}
+    printf("number of GB elements: %d\n", strat->sl);
+	mycounter++;
     #ifdef KDEBUG
       if (TEST_OPT_DEBUG) messageSets(strat);
     #endif
     if (siCntrlc)
     {
+	  // ### never get here
+	  printf("siCntrlc\n");
       while (strat->Ll >= 0)
         deleteInL(strat->L,&strat->Ll,strat->Ll,strat);
       strat->noClearS=TRUE;
@@ -2317,6 +2351,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
         && ((strat->honey && (strat->L[strat->Ll].ecart+currRing->pFDeg(strat->L[strat->Ll].p,currRing)>Kstd1_deg))
             || ((!strat->honey) && (currRing->pFDeg(strat->L[strat->Ll].p,currRing)>Kstd1_deg))))
     {
+	  // ### never get here
+	  printf("TEST_OPT_DEGBOUND\n");
       /*
        *stops computation if
        * 24 IN test and the degree +ecart of L[strat->Ll] is bigger then
@@ -2338,6 +2374,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 
     if (pNext(strat->P.p) == strat->tail)
     {
+	  // ### get here only all elements of the input have been processed
+	  printf("pNext(strat->P.p) == strat->tail\n");
       // deletes the short spoly
       if (rField_is_Ring(currRing))
         pLmDelete(strat->P.p);
@@ -2365,6 +2403,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     }
     else if (strat->P.p1 == NULL)
     {
+	  // ### first process all elements of the input
+	  printf("elseif strat->P.p1 == NULL\n");
       if (strat->minim > 0)
         strat->P.p2=p_Copy(strat->P.p, currRing, strat->tailRing);
       // for input polys, prepare reduction
@@ -2373,16 +2413,21 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 
     if ((strat->P.p == NULL) && (strat->P.t_p == NULL))
     {
+	  // ### never get here
+	  printf("if (strat->P.p == NULL) && (strat->P.t_p == NULL)\n");
       red_result = 0;
     }
     else
     {
+	  printf("not (strat->P.p == NULL) && (strat->P.t_p == NULL)\n");
       if (TEST_OPT_PROT)
         message((strat->honey ? strat->P.ecart : 0) + strat->P.pFDeg(),
                 &olddeg,&reduc,strat, red_result);
 
       /* reduction of the element chosen from L */
+	  printf("before reducing\n");
       red_result = strat->red(&strat->P,strat);
+	  printf("after reducing\n");
       if (errorreported)  break;
     }
 
@@ -2394,6 +2439,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     // reduction to non-zero new poly
     if (red_result == 1)
     {
+	  printf("red_result == 1\n");
       // get the polynomial (canonicalize bucket, make sure P.p is set)
       strat->P.GetP(strat->lmBin);
       // in the homogeneous case FDeg >= pFDeg (sugar/honey)
@@ -2414,12 +2460,15 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
       /* if we are computing over Z we always want to try and cut down
        * the coefficients in the tail terms */
       if (rField_is_Z(currRing) && !rHasLocalOrMixedOrdering(currRing)) {
+	    // ### never get here
+	    printf("rField_is_Z(currRing) && !rHasLocalOrMixedOrdering(currRing)\n");
         redtailBbaAlsoLC_Z(&(strat->P), strat->tl, strat);
         strat->P.pCleardenom();
       }
 
       if ((TEST_OPT_INTSTRATEGY) || (rField_is_Ring(currRing)))
       {
+	    printf("if (TEST_OPT_INTSTRATEGY) || (rField_is_Ring(currRing))\n");
         strat->P.pCleardenom();
         if ((TEST_OPT_REDSB)||(TEST_OPT_REDTAIL))
         {
@@ -2430,6 +2479,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
       }
       else
       {
+	    // ### never get here
+	    printf("not (TEST_OPT_INTSTRATEGY) || (rField_is_Ring(currRing))\n");
         strat->P.pNorm();
         if ((TEST_OPT_REDSB)||(TEST_OPT_REDTAIL))
         {
@@ -2445,6 +2496,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
       // min_std stuff
       if ((strat->P.p1==NULL) && (strat->minim>0))
       {
+	    // ### never get here
+	    printf("(strat->P.p1==NULL) && (strat->minim>0)\n");
         if (strat->minim==1)
         {
           strat->M->m[minimcnt]=p_Copy(strat->P.p,currRing,strat->tailRing);
@@ -2466,19 +2519,32 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
       // enter into S, L, and T
       if ((!TEST_OPT_IDLIFT) || (pGetComp(strat->P.p) <= strat->syzComp))
       {
+	    printf("(!TEST_OPT_IDLIFT) || (pGetComp(strat->P.p) <= strat->syzComp)\n");
+
 		if ((strat->syzComp==0) || (pGetComp(strat->P.p)<=strat->syzComp)) {
 			enterT(strat->P, strat);
 		}
         if (rField_is_Ring(currRing)) {
+	      // ### never get here
+		  printf("if rField_is_Ring(currRing)\n");
           superenterpairs(strat->P.p,strat->sl,strat->P.ecart,pos,strat, strat->tl);
 		}
         else {
+		  printf("not rField_is_Ring(currRing)\n");
           enterpairs(strat->P.p,strat->sl,strat->P.ecart,pos,strat, strat->tl);
 		}
         // posInS only depends on the leading term
+		printf("adding new element to GB\n");
+        printf("number of GB elements: %d\n", strat->sl);
+
 		if ((strat->syzComp==0) || (pGetComp(strat->P.p)<=strat->syzComp)) {
 			strat->enterS(strat->P, pos, strat, strat->tl);
 		}
+
+        printf("number of GB elements: %d\n", strat->sl);
+
+		//p_wrp(strat->P.p,currRing,strat->tailRing);
+
 #if 0
         int pl=pLength(strat->P.p);
         if (pl==1)
@@ -2498,6 +2564,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
       kDeleteLcm(&strat->P);
       if (strat->s_poly!=NULL)
       {
+		// ### never get here
+	    printf("strat->s_poly!=NULL\n");
         // the only valid entries are: strat->P.p,
         // strat->tailRing (read-only, keep it)
         // (and P->p1, P->p2 (read-only, must set to NULL if P.p is changed)
@@ -2518,6 +2586,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     }
     else if (strat->P.p1 == NULL && strat->minim > 0)
     {
+	  // ### never get here
+	  printf("elseif strat->P.p1 == NULL && strat->minim > 0\n");
       p_Delete(&strat->P.p2, currRing, strat->tailRing);
     }
 
@@ -2526,6 +2596,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 #endif /* KDEBUG */
     kTest_TS(strat);
   }
+  printf("after while loop in bba\n");
 #ifdef KDEBUG
   if (TEST_OPT_DEBUG) messageSets(strat);
 #endif /* KDEBUG */
@@ -2614,6 +2685,10 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   if ((Q!=NULL)&&(!errorreported)) updateResult(strat->Shdl,Q,strat);
 
   idTest(strat->Shdl);
+  
+  printf("number of GB elements: %d\n", strat->sl);
+
+  printf("leaving bba\n");
 
   return (strat->Shdl);
 }

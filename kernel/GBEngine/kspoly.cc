@@ -191,6 +191,7 @@ int ksReducePoly(LObject* PR,
                  number *coef,
                  kStrategy strat)
 {
+  //printf("entering ksReducePoly\n");
 #ifdef KDEBUG
   red_count++;
 #ifdef TEST_OPT_DEBUG_RED
@@ -250,6 +251,13 @@ int ksReducePoly(LObject* PR,
 
   p_ExpVectorSub(lm, p2, tailRing); // Calculate the Monomial we must multiply to p2
 
+  //printf("reduce result 0:\n");
+  //PR->wrp();
+  //printf("\n");
+  //printf("lm 0:\n");
+  //p_wrp(lm,currRing,tailRing);
+  //printf("\n");
+
   //if (tailRing != currRing)
   {
     // check that reduction does not violate exp bound
@@ -279,6 +287,13 @@ int ksReducePoly(LObject* PR,
   }
 #endif
 
+  //printf("reduce result 1:\n");
+  //PR->wrp();
+  //printf("\n");
+  //printf("lm 1:\n");
+  //p_wrp(lm,currRing,tailRing);
+  //printf("\n");
+
   // take care of coef buisness
   if (! n_IsOne(pGetCoeff(p2), tailRing->cf))
   {
@@ -299,6 +314,13 @@ int ksReducePoly(LObject* PR,
     if (coef != NULL) *coef = n_Init(1, tailRing->cf);
   }
 
+  //printf("reduce result 2:\n");
+  //PR->wrp();
+  //printf("\n");
+  //printf("lm 2:\n");
+  //p_wrp(lm,currRing,tailRing);
+  //printf("\n");
+
 
   // and finally,
 #ifdef HAVE_SHIFTBBA
@@ -313,6 +335,13 @@ int ksReducePoly(LObject* PR,
   }
   assume(PW->GetpLength() == pLength(PW->p != NULL ? PW->p : PW->t_p));
   PR->LmDeleteAndIter();
+
+  //printf("reduce result 3:\n");
+  //PR->wrp();
+  //printf("\n");
+  //printf("lm 3:\n");
+  //p_wrp(lm,currRing,tailRing);
+  //printf("\n");
 
   return ret;
 }

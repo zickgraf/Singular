@@ -1585,21 +1585,30 @@ void initBba(kStrategy strat)
  /* setting global variables ------------------- */
   strat->enterS = enterSBba;
     strat->red = redHoney;
-  if (strat->honey)
+  if (strat->honey) {
+    printf("redHoney\n");
     strat->red = redHoney;
-  else if (currRing->pLexOrder && !strat->homog)
+  }
+  else if (currRing->pLexOrder && !strat->homog) {
+    printf("redLazy\n");
     strat->red = redLazy;
+  }
   else
   {
+    printf("redHomog\n");
     strat->LazyPass *=4;
     strat->red = redHomog;
   }
   if (rField_is_Ring(currRing))
   {
-    if (rField_is_Z(currRing))
+    if (rField_is_Z(currRing)) {
+      printf("redRing_Z\n");
       strat->red = redRing_Z;
-    else
+	}
+    else {
+      printf("redRing\n");
       strat->red = redRing;
+	}
   }
   if (currRing->pLexOrder && strat->honey)
     strat->initEcart = initEcartNormal;
@@ -2341,6 +2350,9 @@ long kHomModDeg(poly p, ring r)
 ideal kStd(ideal F, ideal Q, tHomog h,intvec ** w, intvec *hilb,int syzComp,
           int newIdeal, intvec *vw, s_poly_proc_t sp)
 {
+  //syzComp = 20; printf("################################################## syzComp is set to %d!!!\n", syzComp);
+  printf("entering kStd\n");
+  printf("syzComp: %d\n", syzComp);
   if(idIs0(F))
     return idInit(1,F->rank);
 
@@ -2520,6 +2532,7 @@ ideal kStd(ideal F, ideal Q, tHomog h,intvec ** w, intvec *hilb,int syzComp,
   HCord=strat->HCord;
   delete(strat);
   if ((delete_w)&&(w!=NULL)&&(*w!=NULL)) delete *w;
+  printf("leaving kStd\n");
   return r;
 }
 
