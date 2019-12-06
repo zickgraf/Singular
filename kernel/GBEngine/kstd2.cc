@@ -1883,7 +1883,8 @@ int redHoney (LObject* h, kStrategy strat)
         if(p_GetComp(h->p,currRing)>strat->syzComp)
         {
 		  printf("number of reductions: %d\n", number_of_reductions);
-          return 1;
+          h->Delete();
+          return 0;
         }
       }
       else if (h->t_p!=NULL)
@@ -1891,7 +1892,8 @@ int redHoney (LObject* h, kStrategy strat)
         if(p_GetComp(h->t_p,strat->tailRing)>strat->syzComp)
         {
 		  printf("number of reductions: %d\n", number_of_reductions);
-          return 1;
+          h->Delete();
+          return 0;
         }
       }
     }
@@ -2517,7 +2519,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
       }
 
       // enter into S, L, and T
-      if ((!TEST_OPT_IDLIFT) || (pGetComp(strat->P.p) <= strat->syzComp))
+      if ((strat->syzComp==0) || (pGetComp(strat->P.p) <= strat->syzComp))
       {
 	    printf("(!TEST_OPT_IDLIFT) || (pGetComp(strat->P.p) <= strat->syzComp)\n");
 
