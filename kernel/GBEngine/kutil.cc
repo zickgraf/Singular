@@ -9594,6 +9594,7 @@ void replaceInLAndSAndT(LObject &p, int tj, kStrategy strat)
 void enterT(LObject &p, kStrategy strat, int atT)
 {
   int i;
+  printf("enterT called with atT = %d\n", atT);
 
 #ifdef PDEBUG
 #ifdef HAVE_SHIFTBBA
@@ -9685,6 +9686,10 @@ void enterT(LObject &p, kStrategy strat, int atT)
   assume(p.sev == 0 || pGetShortExpVector(p.p) == p.sev);
   strat->sevT[atT] = (p.sev == 0 ? pGetShortExpVector(p.p) : p.sev);
   kTest_T(&(strat->T[atT]));
+
+  printf("new T:\n");
+  //strat->T[atT].wrp();printf("\n");
+  printf("at position: %d\n", atT);
 }
 
 /*2
@@ -10042,10 +10047,12 @@ BOOLEAN kPosInLDependsOnLength(int (*pos_in_l)
 
 void initBuchMoraPos (kStrategy strat)
 {
+  printf("find posInT\n");
   if (rHasGlobalOrdering(currRing))
   {
     if (strat->honey)
     {
+	  printf("choose posInX15\n");
       strat->posInL = posInL15;
       // ok -- here is the deal: from my experiments for Singular-2-0
       // I conclude that that posInT_EcartpLength is the best of
@@ -10055,6 +10062,7 @@ void initBuchMoraPos (kStrategy strat)
         strat->posInT = posInT15;
       else
         strat->posInT = posInT_EcartpLength;
+      strat->posInT = posInT15;
     }
     else if (currRing->pLexOrder && !TEST_OPT_INTSTRATEGY)
     {
@@ -10123,6 +10131,10 @@ void initBuchMoraPos (kStrategy strat)
   else if (BTEST1(12) || BTEST1(14) || BTEST1(16) || BTEST1(18))
     strat->posInT = posInT1;
   strat->posInLDependsOnLength = kPosInLDependsOnLength(strat->posInL);
+
+  if (strat->posInT == posInT_EcartpLength) {
+	printf("I have chosen posInT_EcartpLength\n");
+  }
 }
 
 #ifdef HAVE_RINGS

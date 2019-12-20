@@ -1756,7 +1756,10 @@ int redHoney (LObject* h, kStrategy strat)
   loop
   {
     j=kFindDivisibleByInT(strat, h);
-    if (j < 0) return 1;
+    if (j < 0) {
+	    printf("number of reductions: %d\n", number_of_reductions);
+		return 1;
+	}
 
     ei = strat->T[j].ecart;
     li = strat->T[j].pLength;
@@ -1922,8 +1925,10 @@ int redHoney (LObject* h, kStrategy strat)
       if (at <= strat->Ll)
       {
         int dummy=strat->sl;
-        if (kFindDivisibleByInS(strat, &dummy, h) < 0)
-          return 1;
+        if (kFindDivisibleByInS(strat, &dummy, h) < 0) {
+	      printf("number of reductions: %d\n", number_of_reductions);
+		  return 1;
+		}
         enterL(&strat->L,&strat->Ll,&strat->Lmax,*h,at);
 #ifdef KDEBUG
         if (TEST_OPT_DEBUG)
@@ -2333,11 +2338,11 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   while (strat->Ll >= 0)
   {
 	printf("mycounter: %d\n", mycounter);
-	if(mycounter > 60) {
-		//idSkipZeroes(strat->Shdl);
-	}
-    printf("number of GB elements: %d\n", strat->sl);
 	mycounter++;
+	//if(mycounter == 160) {
+	//  return (strat->Shdl);
+	//}
+    printf("number of GB elements: %d\n", strat->sl);
     #ifdef KDEBUG
       if (TEST_OPT_DEBUG) messageSets(strat);
     #endif
@@ -2428,8 +2433,12 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 
       /* reduction of the element chosen from L */
 	  printf("before reducing\n");
+	  //printf("reduce:");
+	  //p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
       red_result = strat->red(&strat->P,strat);
 	  printf("after reducing\n");
+	  //printf("result:");
+	  //p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
       if (errorreported)  break;
     }
 
@@ -2471,7 +2480,11 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
       if ((TEST_OPT_INTSTRATEGY) || (rField_is_Ring(currRing)))
       {
 	    printf("if (TEST_OPT_INTSTRATEGY) || (rField_is_Ring(currRing))\n");
+		//printf("before clearing denom:\n");
+		//p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
         strat->P.pCleardenom();
+		//printf("after clearing denom:\n");
+		//p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
         if ((TEST_OPT_REDSB)||(TEST_OPT_REDTAIL))
         {
           strat->P.p = redtailBba(&(strat->P),pos-1,strat, withT,!TEST_OPT_CONTENTSB);
@@ -2537,7 +2550,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 		}
         // posInS only depends on the leading term
 		printf("adding new element to GB\n");
-        printf("number of GB elements: %d\n", strat->sl);
+		//p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
+		printf("number of GB elements: %d\n", strat->sl);
 
 		if ((strat->syzComp==0) || (pGetComp(strat->P.p)<=strat->syzComp)) {
 			strat->enterS(strat->P, pos, strat, strat->tl);
@@ -2545,7 +2559,10 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 
         printf("number of GB elements: %d\n", strat->sl);
 
-		//p_wrp(strat->P.p,currRing,strat->tailRing);
+		//p_wrp(strat->T[0].p,currRing,strat->tailRing); printf("\n");
+		//strat->T[0]->p->wrp(); printf("\n");
+		//&(strat->T[0])->GetLmTailRing();
+		//strat->L[0]
 
 #if 0
         int pl=pLength(strat->P.p);
