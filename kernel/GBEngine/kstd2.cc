@@ -1886,8 +1886,8 @@ int redHoney (LObject* h, kStrategy strat)
         if(p_GetComp(h->p,currRing)>strat->syzComp)
         {
 		  printf("number of reductions: %d\n", number_of_reductions);
-          h->Delete();
-          return 0;
+          //h->Delete();
+          return 1;
         }
       }
       else if (h->t_p!=NULL)
@@ -1895,8 +1895,8 @@ int redHoney (LObject* h, kStrategy strat)
         if(p_GetComp(h->t_p,strat->tailRing)>strat->syzComp)
         {
 		  printf("number of reductions: %d\n", number_of_reductions);
-          h->Delete();
-          return 0;
+          //h->Delete();
+          return 1;
         }
       }
     }
@@ -2533,13 +2533,13 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
       }
 
       // enter into S, L, and T
-      if ((strat->syzComp==0) || (pGetComp(strat->P.p) <= strat->syzComp))
+      if ((!TEST_OPT_IDLIFT) || (pGetComp(strat->P.p) <= strat->syzComp))
       {
 	    printf("(!TEST_OPT_IDLIFT) || (pGetComp(strat->P.p) <= strat->syzComp)\n");
 
-		if ((strat->syzComp==0) || (pGetComp(strat->P.p)<=strat->syzComp)) {
+		//if ((strat->syzComp==0) || (pGetComp(strat->P.p)<=strat->syzComp)) {
 			enterT(strat->P, strat);
-		}
+		//}
         if (rField_is_Ring(currRing)) {
 	      // ### never get here
 		  printf("if rField_is_Ring(currRing)\n");
@@ -2554,9 +2554,9 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 		//p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
 		printf("number of GB elements: %d\n", strat->sl);
 
-		if ((strat->syzComp==0) || (pGetComp(strat->P.p)<=strat->syzComp)) {
+		//if ((strat->syzComp==0) || (pGetComp(strat->P.p)<=strat->syzComp)) {
 			strat->enterS(strat->P, pos, strat, strat->tl);
-		}
+		//}
 
         printf("number of GB elements: %d\n", strat->sl);
 
