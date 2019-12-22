@@ -2487,6 +2487,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 		//p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
         if ((TEST_OPT_REDSB)||(TEST_OPT_REDTAIL))
         {
+		  printf("redtail\n");
           strat->P.p = redtailBba(&(strat->P),pos-1,strat, withT,!TEST_OPT_CONTENTSB);
           strat->P.pCleardenom();
           if (strat->redTailChange) { strat->P.t_p=NULL; }
@@ -2642,9 +2643,12 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   /* complete reduction of the standard basis--------- */
   if (TEST_OPT_REDSB)
   {
+	printf("completely reduce SB\n");
     completeReduce(strat);
+	printf("finished completely reducing SB\n");
     if (strat->completeReduce_retry)
     {
+	  printf("retry complete reduction\n");
       // completeReduce needed larger exponents, retry
       // to reduce with S (instead of T)
       // and in currRing (instead of strat->tailRing)
