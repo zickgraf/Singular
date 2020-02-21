@@ -1584,6 +1584,7 @@ void initBba(kStrategy strat)
 {
  /* setting global variables ------------------- */
   strat->enterS = enterSBba;
+  strat->enterMyT = enterMyT;
     strat->red = redHoney;
   if (strat->honey) {
     printf("redHoney\n");

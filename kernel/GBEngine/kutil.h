@@ -280,6 +280,7 @@ public:
   int (*posInL)(const LSet set, const int length,
                 LObject* L,const kStrategy strat);
   void (*enterS)(LObject &h, int pos,kStrategy strat, int atR/* =-1*/ );
+  void (*enterMyT)(poly h, int pos,kStrategy strat, int atR/* =-1*/ );
   void (*initEcartPair)(LObject * h, poly f, poly g, int ecartF, int ecartG);
   int (*posInLOld)(const LSet Ls,const int Ll,
                    LObject* Lo,const kStrategy strat);
@@ -297,9 +298,11 @@ public:
 
   LObject P;
   ideal Shdl;
+  ideal MyThdl;
   ideal D; /*V(S) is in D(D)*/
   ideal M; /*set of minimal generators*/
   polyset S;
+  polyset MyT;
   polyset syz;
   polyset sig;
   intset ecartS;
@@ -343,7 +346,7 @@ public:
   omBin tailBin;
   int nr;
   int cp,c3;
-  int sl,mu;
+  int sl,mytl,mu;
   int syzl,syzmax,syzidxmax;
   int tl,tmax;
   int Ll,Lmax;
@@ -422,6 +425,7 @@ static inline LSet initL (int nr=setmaxL)
 void deleteInL(LSet set, int *length, int j,kStrategy strat);
 void enterL (LSet *set,int *length, int *LSetmax, LObject p,int at);
 void enterSBba (LObject &p,int atS,kStrategy strat, int atR = -1);
+void enterMyT (poly p,int atS,kStrategy strat, int atR = -1);
 void enterSBbaShift (LObject &p,int atS,kStrategy strat, int atR = -1);
 void enterSSba (LObject &p,int atS,kStrategy strat, int atR = -1);
 void initEcartPairBba (LObject* Lp,poly f,poly g,int ecartF,int ecartG);

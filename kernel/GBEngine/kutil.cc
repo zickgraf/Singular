@@ -8188,6 +8188,8 @@ void initSL (ideal F, ideal Q,kStrategy strat)
   strat->fromQ=NULL;
   strat->Shdl=idInit(i,F->rank);
   strat->S=strat->Shdl->m;
+  strat->MyThdl=idInit(i,F->rank*10);
+  strat->MyT=strat->MyThdl->m;
   /*- put polys into S -*/
   if (Q!=NULL)
   {
@@ -9272,6 +9274,128 @@ void updateS(BOOLEAN toT,kStrategy strat)
 #endif
 }
 
+
+
+
+
+
+
+
+
+void enterMyT (poly p,int atMyT,kStrategy strat, int atR)
+{
+  //strat->news = TRUE;
+  /*- puts p to the standardbasis s at position at -*/
+  if (strat->mytl == IDELEMS(strat->MyThdl)-1)
+  {
+    //strat->sevMyT = (unsigned long*) omRealloc0Size(strat->sevMyT,
+    //                                IDELEMS(strat->MyThdl)*sizeof(unsigned long),
+    //                                (IDELEMS(strat->MyThdl)+setmaxTinc)
+    //                                              *sizeof(unsigned long));
+    //strat->ecartMyT = (intset)omReallocSize(strat->ecartMyT,
+    //                                      IDELEMS(strat->MyThdl)*sizeof(int),
+    //                                      (IDELEMS(strat->MyThdl)+setmaxTinc)
+    //                                              *sizeof(int));
+    //strat->MyT_2_R = (int*) omRealloc0Size(strat->MyT_2_R,
+    //                                     IDELEMS(strat->MyThdl)*sizeof(int),
+    //                                     (IDELEMS(strat->MyThdl)+setmaxTinc)
+    //                                              *sizeof(int));
+    //if (strat->lenMyT!=NULL)
+    //  strat->lenMyT=(int*)omRealloc0Size(strat->lenMyT,
+    //                                   IDELEMS(strat->MyThdl)*sizeof(int),
+    //                                   (IDELEMS(strat->MyThdl)+setmaxTinc)
+    //                                             *sizeof(int));
+    //if (strat->lenMyTw!=NULL)
+    //  strat->lenMyTw=(wlen_type*)omRealloc0Size(strat->lenMyTw,
+    //                                   IDELEMS(strat->MyThdl)*sizeof(wlen_type),
+    //                                   (IDELEMS(strat->MyThdl)+setmaxTinc)
+    //                                             *sizeof(wlen_type));
+    //if (strat->fromQ!=NULL)
+    //{
+    //  strat->fromQ = (intset)omReallocSize(strat->fromQ,
+    //                                IDELEMS(strat->MyThdl)*sizeof(int),
+    //                                (IDELEMS(strat->MyThdl)+setmaxTinc)*sizeof(int));
+    //}
+    pEnlargeSet(&strat->MyT,IDELEMS(strat->MyThdl), 5000);
+    IDELEMS(strat->MyThdl)+=5000;
+    strat->MyThdl->m=strat->MyT;
+  }
+  if (atMyT <= strat->mytl)
+  {
+#ifdef ENTER_USE_MEMMOVE
+    memmove(&(strat->MyT[atMyT+1]), &(strat->MyT[atMyT]),
+            (strat->mytl - atMyT + 1)*sizeof(poly));
+    //memmove(&(strat->ecartMyT[atMyT+1]), &(strat->ecartMyT[atMyT]),
+    //        (strat->mytl - atMyT + 1)*sizeof(int));
+    //memmove(&(strat->sevMyT[atMyT+1]), &(strat->sevMyT[atMyT]),
+    //        (strat->mytl - atMyT + 1)*sizeof(unsigned long));
+    //memmove(&(strat->MyT_2_R[atMyT+1]), &(strat->MyT_2_R[atMyT]),
+    //        (strat->mytl - atMyT + 1)*sizeof(int));
+    //if (strat->lenMyT!=NULL)
+    //memmove(&(strat->lenMyT[atMyT+1]), &(strat->lenMyT[atMyT]),
+    //        (strat->mytl - atMyT + 1)*sizeof(int));
+    //if (strat->lenMyTw!=NULL)
+    //memmove(&(strat->lenMyTw[atMyT+1]), &(strat->lenMyTw[atMyT]),
+    //        (strat->mytl - atMyT + 1)*sizeof(wlen_type));
+#else
+    for (i=strat->mytl+1; i>=atMyT+1; i--)
+    {
+      strat->MyT[i] = strat->MyT[i-1];
+      //strat->ecartMyT[i] = strat->ecartMyT[i-1];
+      //strat->sevMyT[i] = strat->sevMyT[i-1];
+      //strat->MyT_2_R[i] = strat->MyT_2_R[i-1];
+    }
+//    if (strat->lenMyT!=NULL)
+//    for (i=strat->mytl+1; i>=atMyT+1; i--)
+//      strat->lenMyT[i] = strat->lenMyT[i-1];
+//    if (strat->lenMyTw!=NULL)
+//    for (i=strat->mytl+1; i>=atMyT+1; i--)
+//      strat->lenMyTw[i] = strat->lenMyTw[i-1];
+#endif
+  }
+//  if (strat->fromQ!=NULL)
+//  {
+//#ifdef ENTER_USE_MEMMOVE
+//    memmove(&(strat->fromQ[atMyT+1]), &(strat->fromQ[atMyT]),
+//                  (strat->mytl - atMyT + 1)*sizeof(int));
+//#else
+//    for (i=strat->mytl+1; i>=atMyT+1; i--)
+//    {
+//      strat->fromQ[i] = strat->fromQ[i-1];
+//    }
+//#endif
+//    strat->fromQ[atMyT]=0;
+//  }
+
+  /*- save result -*/
+  //poly pp=p.p;
+  strat->MyT[atMyT] = p;
+  //if (strat->honey) strat->ecartMyT[atMyT] = p.ecart;
+  //if (p.sev == 0)
+  //  p.sev = pGetShortExpVector(pp);
+  //else
+  //  assume(p.sev == pGetShortExpVector(pp));
+  //strat->sevMyT[atMyT] = p.sev;
+  //strat->ecartMyT[atMyT] = p.ecart;
+  //strat->MyT_2_R[atMyT] = atR;
+  strat->mytl++;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*2
 * -puts p to the standardbasis s at position at
 * -saves the result in S
@@ -10239,6 +10363,7 @@ void initBuchMora (ideal F,ideal Q,kStrategy strat)
   strat->tail = pInit();
   /*- set s -*/
   strat->sl = -1;
+  strat->mytl = -1;
   /*- set L -*/
   strat->Lmax = ((IDELEMS(F)+setmaxLinc-1)/setmaxLinc)*setmaxLinc;
   strat->Ll = -1;
@@ -11793,6 +11918,7 @@ skStrategy::skStrategy()
   P.tailRing = currRing;
   tl = -1;
   sl = -1;
+  mytl = -1;
 #ifdef HAVE_LM_BIN
   lmBin = omGetStickyBinOfBin(currRing->PolyBin);
 #endif

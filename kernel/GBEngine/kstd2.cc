@@ -2453,6 +2453,61 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	  printf("red_result == 1\n");
       // get the polynomial (canonicalize bucket, make sure P.p is set)
       strat->P.GetP(strat->lmBin);
+
+	  if (strat->syzComp > 0) {
+		  // replace transformation matrix part by unit vector
+		  printf("replace transformation matrix part by unit vector\n");
+		  poly    p,q;
+		  p = strat->P.p;
+
+		  // crash if p == NULL
+		  if (p == NULL) {
+			  pNext(p);
+		  }
+			  
+		  q = pOne();
+		  pSetComp(q, F->rank + 1 + mycounter);
+		  pSetmComp(q);
+
+		  poly transformationColumn = NULL;
+
+		  if(pGetComp(p) <= strat->syzComp)
+		  {
+			  while (pNext(p) != NULL)
+			  {
+				if (pGetComp(pNext(p)) > strat->syzComp)
+				{
+
+				  transformationColumn = pNext(p);
+				  pNext(p) = q;
+				  break;
+				  // alternative?
+				  // p->next = q;
+				}
+				else
+				{
+				  pIter(p);
+				}
+			  }
+		  }
+		  else
+		  {
+			  transformationColumn = strat->P.p;
+			  strat->P.p = q;
+		  }
+
+		  
+		  if (transformationColumn != NULL) {
+			  printf("enterMyT\n");
+			  strat->enterMyT(transformationColumn, mycounter, strat, strat->tl);
+		  }
+		  
+		  //p_wrp(p,currRing,strat->tailRing); printf("\n");
+		  printf("finished replacing transformation matrix part by unit vector\n");
+		  // finished replacing transformation matrix part by unit vector
+	  }
+	  
+	  
       // in the homogeneous case FDeg >= pFDeg (sugar/honey)
       // but now, for entering S, T, we reset it
       // in the inhomogeneous case: FDeg == pFDeg
@@ -2617,6 +2672,11 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     kTest_TS(strat);
   }
   printf("after while loop in bba\n");
+
+  
+  printf("building transformation matrix");
+  
+  
 #ifdef KDEBUG
   if (TEST_OPT_DEBUG) messageSets(strat);
 #endif /* KDEBUG */
