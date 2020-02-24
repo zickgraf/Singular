@@ -700,18 +700,21 @@ KINLINE poly sLObject::GetP(omBin lmBin)
   //kTest_L(this);
   if (p == NULL)
   {
+	printf("GetP, p == NULL\n");
     p = k_LmInit_tailRing_2_currRing(t_p, tailRing,
                                      ((lmBin!=NULL)?lmBin:currRing->PolyBin));
     FDeg = pFDeg();
   }
   else if ((lmBin != NULL) && (lmBin != currRing->PolyBin))
   {
+	printf("GetP, p != NULL and (lmBin != NULL) && (lmBin != currRing->PolyBin)\n");
     p = p_LmShallowCopyDelete(p, currRing);
     FDeg = pFDeg();
   }
 
   if (bucket != NULL)
   {
+	printf("bucket != NULL\n");
     kBucketClear(bucket, &pNext(p), &pLength);
     kBucketDestroy(&bucket);
     pLength++;

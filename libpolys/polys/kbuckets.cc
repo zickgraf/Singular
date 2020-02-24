@@ -716,11 +716,16 @@ void kBucket_Add_q(kBucket_pt bucket, poly q, int *l)
 void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
                             poly spNoether)
 {
+
+	
+	
+  // printf("MYDEBUG enter kBucket_Minus_m_Mult_p\n");
   assume(*l <= 0 || pLength(p) == *l);
   int i, l1;
   poly p1 = p;
   ring r = bucket->bucket_ring;
 
+	
   if (*l <= 0)
   {
     l1 = pLength(p1);
@@ -749,6 +754,7 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
   else
 #endif
   {
+
     if ((i <= bucket->buckets_used) && (bucket->buckets[i] != NULL))
     {
       assume(pLength(bucket->buckets[i])==(unsigned)bucket->buckets_length[i]);
@@ -764,9 +770,20 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
 //     else
 //#endif
       MULTIPLY_BUCKET(bucket,i);
+	  
+	  
+	  
+	  printf("MYDEBUG using existing bucket???\n");
+	  p_Write(p1, r);
+
       p1 = p_Minus_mm_Mult_qq(bucket->buckets[i], m, p1,
                             bucket->buckets_length[i], l1,
                             spNoether, r);
+
+	  
+	  
+	  
+	  
       l1 = bucket->buckets_length[i];
       bucket->buckets[i] = NULL;
       bucket->buckets_length[i] = 0;
@@ -778,6 +795,8 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
       if (spNoether != NULL)
       {
         l1 = -1;
+		// never get here
+	    // printf("MYDEBUG not using existing bucket???\n");
         p1 = r->p_Procs->pp_Mult_mm_Noether(p1, m, spNoether, l1, r);
         i = pLogLength(l1);
       }
@@ -791,6 +810,7 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
 
   while (bucket->buckets[i] != NULL)
   {
+	//printf("while loop\n");
     //kbTest(bucket);
     MULTIPLY_BUCKET(bucket,i);
     p1 = p_Add_q(p1, bucket->buckets[i],
@@ -811,6 +831,18 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
                                bucket->l, l1,
                                spNoether, r);
 #endif
+  //printf("MYDEBUG exit kBucket_Minus_m_Mult_p\n");
+  
+  
+  
+	//if(store != NULL && p != NULL) {
+	//  	poly asd = p;
+	//  	while (pNext(asd) != NULL)
+	//  	{
+	//  		pIter(asd);
+	//  	}
+	//  	pNext(asd) = store;
+	//}
 }
 
 //////////////////////////////////////////////////////////////////////////

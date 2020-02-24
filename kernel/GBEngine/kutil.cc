@@ -9316,8 +9316,8 @@ void enterMyT (poly p,int atMyT,kStrategy strat, int atR)
     //                                IDELEMS(strat->MyThdl)*sizeof(int),
     //                                (IDELEMS(strat->MyThdl)+setmaxTinc)*sizeof(int));
     //}
-    pEnlargeSet(&strat->MyT,IDELEMS(strat->MyThdl), 5000);
-    IDELEMS(strat->MyThdl)+=5000;
+    pEnlargeSet(&strat->MyT,IDELEMS(strat->MyThdl), 20000);
+    IDELEMS(strat->MyThdl)+=20000;
     strat->MyThdl->m=strat->MyT;
   }
   if (atMyT <= strat->mytl)
@@ -10186,7 +10186,7 @@ void initBuchMoraPos (kStrategy strat)
         strat->posInT = posInT15;
       else
         strat->posInT = posInT_EcartpLength;
-      //strat->posInT = posInT15;
+      strat->posInT = posInT15;
     }
     else if (currRing->pLexOrder && !TEST_OPT_INTSTRATEGY)
     {

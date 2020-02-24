@@ -204,6 +204,26 @@ int ksReducePoly(LObject* PR,
 //  }
 #endif
 #endif
+
+  
+    //Print("Red %d:", red_count); PR->wrp(); Print(" with:");
+    //PW->wrp();
+	//pWrite(PR->p);
+	//printf("\n");
+    //pWrite(PW->p);
+	//printf("\n");
+  
+	//{
+	//	//p1.wrp();printf("\n");
+	//	printf("PR components:\n");
+	//	poly q = PR->p;
+	//	while (q != NULL)
+	//	{
+	//		printf("%d\n", pGetComp(q));
+	//		pIter(q);
+	//	}
+	//}
+  
   int ret = 0;
   ring tailRing = PR->tailRing;
   kTest_L(PR,tailRing);
@@ -277,6 +297,11 @@ int ksReducePoly(LObject* PR,
     }
   }
 
+  
+
+  //printf("asd\n");
+  
+
 #ifdef HAVE_SHIFTBBA
   poly lmRight;
   if (tailRing->isLPring)
@@ -321,6 +346,7 @@ int ksReducePoly(LObject* PR,
   //p_wrp(lm,currRing,tailRing);
   //printf("\n");
 
+  poly store = NULL;
 
   // and finally,
 #ifdef HAVE_SHIFTBBA
@@ -331,13 +357,112 @@ int ksReducePoly(LObject* PR,
   else
 #endif
   {
+
+
+  
+  
+  
+        
+    // store additional component
+    //if(t2 != NULL) {
+    //  poly p = t2;
+    //  while (pNext(p) != NULL)
+    //  {
+    //  	if (pGetComp(pNext(p)) > 30)
+    //  	{
+    //      store = pNext(p);
+    //  	  p->next = NULL;
+
+    //  	  
+    //  	  if (pNext(store) != NULL) {
+    //  		  printf("assertion failed, pNext is not NULL\n");
+    //  		  exit(1);
+    //  	  }
+
+    //  	  break;
+    //  	}
+    //  	else
+    //  	{
+    //  	  pIter(p);
+    //  	}
+    //  }
+    //}
+
+
+    
+    //Print("Red %d:", red_count); PR->wrp(); Print(" with:");
+    //PW->wrp();
+    //pWrite(PR->p);
+  
+  
+	  
+	//printf("one ksReducePoly\n");
     PR->Tail_Minus_mm_Mult_qq(lm, t2, pLength(t2) /*PW->GetpLength() - 1*/, spNoether);
+
+	
+  
+    // restore store
+	//if(store != NULL) {
+	//  if (t2 == NULL) {
+	//  	pNext(p2) = store;	
+	//  }
+	//  else {
+	//  	poly asd = t2;
+	//  	while (pNext(asd) != NULL)
+	//  	{
+	//  		pIter(asd);
+	//  	}
+	//  	pNext(asd) = store;
+	//  }
+	//}
+  
+  
   }
+
+  
+	
+  
   assume(PW->GetpLength() == pLength(PW->p != NULL ? PW->p : PW->t_p));
   PR->LmDeleteAndIter();
 
+
+	//{
+	//	printf("PR components after reduce:\n");
+	//	poly q = PR->p;
+	//	while (q != NULL)
+	//	{
+	//		printf("%d\n", pGetComp(q));
+	//		pIter(q);
+	//	}
+	//}
+  
+
+	
+	
+  //if( store != NULL)
+  //	printf("%d\n", pGetComp(store));
+  
+  //// overwrite store
+  ////if(t2 != NULL) {
+  //  poly p = PR->p;
+  //  while (pNext(p) != NULL)
+  //  {
+  //  	// delete monomial at component pGetComp(store)
+  //  	if (pGetComp(pNext(p)) == pGetComp(store))
+  //  	{
+  //  	  printf("really delete\n");
+  //  	  pNext(p) = pNext(pNext(p));
+  //  	  break;
+  //  	}
+  //  	else
+  //  	{
+  //  	  pIter(p);
+  //  	}
+  //  }
+  ////}
+  
   //printf("reduce result 3:\n");
-  //PR->wrp();
+  //pWrite(PR->p);
   //printf("\n");
   //printf("lm 3:\n");
   //p_wrp(lm,currRing,tailRing);

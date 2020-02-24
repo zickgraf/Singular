@@ -1753,6 +1753,9 @@ int redHoney (LObject* h, kStrategy strat)
   int number_of_reductions = 0;
 
   h->PrepareRed(strat->use_buckets);
+  printf("before reduce loop\n");
+
+  
   loop
   {
     j=kFindDivisibleByInT(strat, h);
@@ -1833,10 +1836,32 @@ int redHoney (LObject* h, kStrategy strat)
       strat->T[ii].wrp();
     }
 #endif
+
+	
+    //PrintS("red:");
+    //pWrite(h->t_p);
+    //h->wrp();
+    //Print("\nwith T[%d]:",ii);
+    //pWrite(strat->T[ii].p);
+	
+    //PrintS("red:");
+    //pWrite(h->p);
+    //Print("\nwith T[%d]:",ii);
+    //pWrite(strat->T[ii].p);
+	
     assume(strat->fromT == FALSE);
+
 
     ksReducePoly(h,&(strat->T[ii]),strat->kNoetherTail(),NULL,strat);
 
+
+	
+    //PrintS("\nto:");
+    ////pWrite(h->p);
+    //pWrite(h->t_p);
+    //h->wrp();
+    //PrintLn();
+	
 	number_of_reductions++;
 	
 #if SBA_PRINT_REDUCTION_STEPS
@@ -1886,8 +1911,8 @@ int redHoney (LObject* h, kStrategy strat)
         if(p_GetComp(h->p,currRing)>strat->syzComp)
         {
 		  printf("number of reductions: %d\n", number_of_reductions);
-          //h->Delete();
-          return 1;
+          h->Delete();
+          return 0;
         }
       }
       else if (h->t_p!=NULL)
@@ -1895,8 +1920,8 @@ int redHoney (LObject* h, kStrategy strat)
         if(p_GetComp(h->t_p,strat->tailRing)>strat->syzComp)
         {
 		  printf("number of reductions: %d\n", number_of_reductions);
-          //h->Delete();
-          return 1;
+          h->Delete();
+          return 0;
         }
       }
     }
@@ -1961,6 +1986,7 @@ int redHoney (LObject* h, kStrategy strat)
       }
     }
   }
+  printf("after reduce loop\n");
 }
 
 /*2
@@ -2435,8 +2461,10 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	  printf("before reducing\n");
 	  //printf("reduce:");
 	  //p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
+	  //pWrite(strat->P.p);
+	  //pWrite(strat->tail);
       red_result = strat->red(&strat->P,strat);
-	  printf("after reducing\n");
+	  //printf("after reducing\n");
 	  //printf("result:");
 	  //p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
       if (errorreported)  break;
@@ -2451,61 +2479,15 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     if (red_result == 1)
     {
 	  printf("red_result == 1\n");
+	  //printf("result polnomial:\n");
+	  //pWrite(strat->P.p);
+	  //pWrite(strat->P.bucket->buckets[0]);
       // get the polynomial (canonicalize bucket, make sure P.p is set)
       strat->P.GetP(strat->lmBin);
 
-	  if (strat->syzComp > 0) {
-		  // replace transformation matrix part by unit vector
-		  printf("replace transformation matrix part by unit vector\n");
-		  poly    p,q;
-		  p = strat->P.p;
+	  //printf("result polnomial:\n");
+	  //pWrite(strat->P.p);
 
-		  // crash if p == NULL
-		  if (p == NULL) {
-			  pNext(p);
-		  }
-			  
-		  q = pOne();
-		  pSetComp(q, F->rank + 1 + mycounter);
-		  pSetmComp(q);
-
-		  poly transformationColumn = NULL;
-
-		  if(pGetComp(p) <= strat->syzComp)
-		  {
-			  while (pNext(p) != NULL)
-			  {
-				if (pGetComp(pNext(p)) > strat->syzComp)
-				{
-
-				  transformationColumn = pNext(p);
-				  pNext(p) = q;
-				  break;
-				  // alternative?
-				  // p->next = q;
-				}
-				else
-				{
-				  pIter(p);
-				}
-			  }
-		  }
-		  else
-		  {
-			  transformationColumn = strat->P.p;
-			  strat->P.p = q;
-		  }
-
-		  
-		  if (transformationColumn != NULL) {
-			  printf("enterMyT\n");
-			  strat->enterMyT(transformationColumn, mycounter, strat, strat->tl);
-		  }
-		  
-		  //p_wrp(p,currRing,strat->tailRing); printf("\n");
-		  printf("finished replacing transformation matrix part by unit vector\n");
-		  // finished replacing transformation matrix part by unit vector
-	  }
 	  
 	  
       // in the homogeneous case FDeg >= pFDeg (sugar/honey)
@@ -2592,6 +2574,73 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
       {
 	    printf("(!TEST_OPT_IDLIFT) || (pGetComp(strat->P.p) <= strat->syzComp)\n");
 
+		  //for(int asd=0;asd<1400000;asd++) {
+		  //    poly x = pOne();
+		  //    strat->enterMyT(x, strat->mytl + 1, strat, strat->tl);
+		  //}
+			  
+
+		
+		
+		  if (strat->syzComp > 0) {
+			  // replace transformation matrix part by unit vector
+			  printf("replace transformation matrix part by unit vector\n");
+			  poly    p,q;
+			  p = strat->P.p;
+
+			  // crash if p == NULL
+			  if (p == NULL) {
+				  pNext(p);
+			  }
+				  
+			  q = pOne();
+			  pSetComp(q, F->rank + 1 + strat->mytl + 1);
+			  pSetmComp(q);
+
+			  poly transformationColumn = NULL;
+
+			  if(pGetComp(p) <= strat->syzComp)
+			  {
+				  while (pNext(p) != NULL)
+				  {
+					if (pGetComp(pNext(p)) > strat->syzComp)
+					{
+
+					  transformationColumn = pNext(p);
+					  pNext(p) = q;
+					  break;
+					  // alternative?
+					  // p->next = q;
+					}
+					else
+					{
+					  pIter(p);
+					}
+				  }
+			  }
+			  else
+			  {
+				  transformationColumn = strat->P.p;
+				  strat->P.p = q;
+			  }
+
+
+			  if (pNext(q) != NULL) {
+				  printf("assertion failed, pNext is not NULL\n");
+				  exit(1);
+			  }
+			  
+			  if (transformationColumn != NULL) {
+				  printf("enterMyT\n");
+				  strat->enterMyT(transformationColumn, strat->mytl + 1, strat, strat->tl);
+			  }
+
+			  //p_wrp(p,currRing,strat->tailRing); printf("\n");
+			  printf("finished replacing transformation matrix part by unit vector\n");
+			  // finished replacing transformation matrix part by unit vector
+		  }
+		
+		
 		//if ((strat->syzComp==0) || (pGetComp(strat->P.p)<=strat->syzComp)) {
 			enterT(strat->P, strat);
 		//}
@@ -2674,7 +2723,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   printf("after while loop in bba\n");
 
   
-  printf("building transformation matrix");
+  printf("building transformation matrix\n");
   
   
 #ifdef KDEBUG

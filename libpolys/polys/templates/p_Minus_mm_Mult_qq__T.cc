@@ -18,6 +18,35 @@
  ***************************************************************/
 LINKAGE poly p_Minus_mm_Mult_qq__T(poly p, poly m, poly q, int& Shorter, const poly spNoether, const ring r)
 {
+  //printf("MYDEBUG p_Minus_mm_Mult_qq__T TEMPLATE\n");
+  
+	poly store;
+    if(q != NULL) {
+      poly asd = q;
+      while (pNext(asd) != NULL)
+      {
+      	if (__p_GetComp(pNext(asd), r) > 30)
+      	{
+          store = pNext(asd);
+      	  asd->next = NULL;
+
+      	  
+      	  if (pNext(store) != NULL) {
+      		  printf("assertion failed, pNext is not NULL\n");
+      	  }
+
+      	  break;
+      	}
+      	else
+      	{
+      	  pIter(asd);
+      	}
+      }
+    }
+	
+	
+  int myLoopCounter = 0;
+	
   p_Test(p, r);
   p_Test(q, r);
   p_LmTest(m, r);
@@ -59,10 +88,13 @@ LINKAGE poly p_Minus_mm_Mult_qq__T(poly p, poly m, poly q, int& Shorter, const p
   p_MemAddAdjust__T(qm, r);
 
   CmpTop:
+  //printf("loop %d\n", myLoopCounter);
+  myLoopCounter++;
   // compare qm = m*q and p w.r.t. monomial ordering
   p_MemCmp__T(qm->exp, p->exp, length, ordsgn, goto Equal, goto Greater, goto Smaller );
 
   Equal:   // qm equals p
+  //printf("At Equal\n");
   tb = n_Mult__T(pGetCoeff(q), tm, r->cf);
 #ifdef HAVE_ZERODIVISORS
   if (!n_IsZero__T(tb,r->cf)) {
@@ -92,12 +124,15 @@ LINKAGE poly p_Minus_mm_Mult_qq__T(poly p, poly m, poly q, int& Shorter, const p
 #endif
   n_Delete__T(&tb, r->cf);
   pIter(q);
+  //if (q == NULL || p == NULL || __p_GetComp(q, r) > 30 || __p_GetComp(p, r) > 30) goto Finish; // are we done ?
   if (q == NULL || p == NULL) goto Finish; // are we done ?
   // no, so update qm
+  //printf("goto SumTop\n");
   goto SumTop;
 
 
   Greater:
+  //printf("At Greater\n");
 #ifdef HAVE_ZERODIVISORS
   tb = n_Mult__T(pGetCoeff(q), tneg, r->cf);
   if (!n_IsZero__T(tb,r->cf))
@@ -114,22 +149,36 @@ LINKAGE poly p_Minus_mm_Mult_qq__T(poly p, poly m, poly q, int& Shorter, const p
   n_Delete__T(&tb, r->cf);
 #endif
   pIter(q);
+  //if (q == NULL || __p_GetComp(q, r) > 30) // are we done?
   if (q == NULL) // are we done?
   {
     qm = NULL;
     goto Finish;
   }
   // construct new qm
+  //printf("goto AllocTop\n");
   goto AllocTop;
 
   Smaller:
+  //printf("At Smaller\n");
   a = pNext(a) = p;// append p to result and advance p
   pIter(p);
+  //if (p == NULL || __p_GetComp(p, r) > 30) goto Finish;
   if (p == NULL) goto Finish;
+  //printf("goto CmpTop\n");
   goto CmpTop;
 
 
   Finish: // q or p is NULL: Clean-up time
+
+  //printf("At finish\n");
+  
+  //if(__p_GetComp(q, r) > 30) {
+  //    q = NULL;	  
+  //}
+  
+  
+  
   if (q == NULL) // append rest of p to result
   {
     pNext(a) = p;

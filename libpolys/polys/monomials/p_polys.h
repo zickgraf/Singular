@@ -1009,6 +1009,7 @@ static inline poly p_Mult_mm(poly p, poly m, const ring r)
 static inline poly p_Minus_mm_Mult_qq(poly p, const poly m, const poly q, int &lp, int lq,
                                       const poly spNoether, const ring r)
 {
+  //printf("MYDEBUG p_Minus_mm_Mult_qq1\n");
   int shorter;
   const poly res = r->p_Procs->p_Minus_mm_Mult_qq(p, m, q, shorter, spNoether, r);
   lp += lq - shorter;

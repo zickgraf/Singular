@@ -602,7 +602,7 @@ static ideal idPrepare (ideal  h1, tHomog hom, int syzcomp, intvec **w, GbVarian
     syzcomp = k;
     rSetSyzComp(k,currRing);
   }
-  h2->rank = syzcomp+i;
+  h2->rank = syzcomp+i+2*730;
 
   //if (hom==testHomog)
   //{
