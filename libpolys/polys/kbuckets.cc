@@ -773,8 +773,8 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
 	  
 	  
 	  
-	  printf("MYDEBUG using existing bucket???\n");
-	  p_Write(p1, r);
+	  //printf("MYDEBUG using existing bucket???\n");
+	  //p_Write(p1, r);
 
       p1 = p_Minus_mm_Mult_qq(bucket->buckets[i], m, p1,
                             bucket->buckets_length[i], l1,

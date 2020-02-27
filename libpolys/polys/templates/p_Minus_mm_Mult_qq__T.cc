@@ -20,29 +20,29 @@ LINKAGE poly p_Minus_mm_Mult_qq__T(poly p, poly m, poly q, int& Shorter, const p
 {
   //printf("MYDEBUG p_Minus_mm_Mult_qq__T TEMPLATE\n");
   
-	poly store;
-    if(q != NULL) {
-      poly asd = q;
-      while (pNext(asd) != NULL)
-      {
-      	if (__p_GetComp(pNext(asd), r) > 30)
-      	{
-          store = pNext(asd);
-      	  asd->next = NULL;
+	//poly store;
+    //if(q != NULL) {
+    //  poly asd = q;
+    //  while (pNext(asd) != NULL)
+    //  {
+    //  	if (__p_GetComp(pNext(asd), r) > 30)
+    //  	{
+    //      store = pNext(asd);
+    //  	  asd->next = NULL;
 
-      	  
-      	  if (pNext(store) != NULL) {
-      		  printf("assertion failed, pNext is not NULL\n");
-      	  }
+    //  	  
+    //  	  if (pNext(store) != NULL) {
+    //  		  printf("assertion failed, pNext is not NULL\n");
+    //  	  }
 
-      	  break;
-      	}
-      	else
-      	{
-      	  pIter(asd);
-      	}
-      }
-    }
+    //  	  break;
+    //  	}
+    //  	else
+    //  	{
+    //  	  pIter(asd);
+    //  	}
+    //  }
+    //}
 	
 	
   int myLoopCounter = 0;

@@ -372,10 +372,10 @@ int ksReducePoly(LObject* PR,
     //  	{
     //      store = pNext(p);
     //  	  p->next = NULL;
-
+	//	  PW->pLength--;
     //  	  
     //  	  if (pNext(store) != NULL) {
-    //  		  printf("assertion failed, pNext is not NULL\n");
+    //  		  printf("assertion failed, pNext is not NULL, before reduce\n");
     //  		  exit(1);
     //  	  }
 
@@ -392,14 +392,27 @@ int ksReducePoly(LObject* PR,
     
     //Print("Red %d:", red_count); PR->wrp(); Print(" with:");
     //PW->wrp();
+	//printf("Reduce lead monom?\n");
     //pWrite(PR->p);
   
+	//for(int i=0;i<=PR->bucket->buckets_used;i++) {
+	//	printf("bucket %d:\n", i);
+	//		if(PR->bucket->buckets[i] != NULL) {
+	//			pWrite(PR->bucket->buckets[i]);
+	//		}
+	//}
+
+	//
+    //Print("with:\n");
+    //pWrite(t2);
+	
   
 	  
 	//printf("one ksReducePoly\n");
     PR->Tail_Minus_mm_Mult_qq(lm, t2, pLength(t2) /*PW->GetpLength() - 1*/, spNoether);
 
 	
+
   
     // restore store
 	//if(store != NULL) {
@@ -413,9 +426,18 @@ int ksReducePoly(LObject* PR,
 	//  		pIter(asd);
 	//  	}
 	//  	pNext(asd) = store;
+	//	PW->pLength++;
 	//  }
 	//}
+
   
+	//printf("to:\n");
+	//for(int i=0;i<=PR->bucket->buckets_used;i++) {
+	//	printf("bucket %d:\n", i);
+	//	pWrite(PR->bucket->buckets[i]);
+	//}
+
+	
   
   }
 
@@ -467,6 +489,47 @@ int ksReducePoly(LObject* PR,
   //printf("lm 3:\n");
   //p_wrp(lm,currRing,tailRing);
   //printf("\n");
+  //
+  //
+  
+  
+  
+	// also add store to result
+	//if(store != NULL) {
+	//	poly asd = PR->bucket->buckets[PR->bucket->buckets_used];
+    //  	if (asd == NULL) {
+    //  	    printf("assertion failed, asd is NULL\n");
+    //  	    exit(1);
+    //  	}
+	//	
+	//	
+	//  	while (pNext(asd) != NULL)
+	//  	{
+	//		if(pGetComp(pNext(asd)) == pGetComp(store)) {
+	//			//printf("assertion failed, asd should not have a common component with store\n");
+	//			break;
+	//			//exit(1);
+	//		}
+	//		if(pGetComp(pNext(asd)) > pGetComp(store)) {
+	//			poly q = pOne();
+	//		    pSetComp(q, pGetComp(store));
+	//			pNext(q) = pNext(asd);
+	//			pNext(asd) = q;
+	//			PR->bucket->buckets_length[PR->bucket->buckets_used]++;
+	//			PR->pLength++;
+	//			break;
+	//		}
+	//  		pIter(asd);
+	//  	}
+
+	//	if(pNext(asd) == NULL) {
+	//		poly q = pOne();
+	//		pSetComp(q, pGetComp(store));
+	//		pNext(asd) = q;
+	//		PR->bucket->buckets_length[PR->bucket->buckets_used]++;
+	//		PR->pLength++;
+	//	}
+	//}
 
   return ret;
 }

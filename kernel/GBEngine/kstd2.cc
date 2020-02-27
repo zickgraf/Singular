@@ -1735,6 +1735,51 @@ int redLazy (LObject* h,kStrategy strat)
 */
 int redHoney (LObject* h, kStrategy strat)
 {
+
+    // add some additional components
+    //for(int ii=0;ii<84;ii++)
+    //{
+    //    if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
+    //        //int target_comp = pGetComp(store);
+    //        int target_comp = 730 + 1 + ii + 1;
+    //        
+    //        poly asd = h->bucket->buckets[h->bucket->buckets_used];
+    //        if (asd == NULL) {
+    //            printf("assertion failed, asd is NULL\n");
+    //            exit(1);
+    //        }
+    //        
+    //        while (pNext(asd) != NULL)
+    //        {
+    //            if(pGetComp(pNext(asd)) == target_comp) {
+    //                //printf("assertion failed, asd should not have a common component with store\n");
+    //                break;
+    //                //exit(1);
+    //            }
+    //            if(pGetComp(pNext(asd)) > target_comp) {
+    //                poly q = pOne();
+    //                pSetComp(q, target_comp);
+    //                pNext(q) = pNext(asd);
+    //                pNext(asd) = q;
+    //                h->bucket->buckets_length[h->bucket->buckets_used]++;
+    //                h->pLength++;
+    //                break;
+    //            }
+    //            pIter(asd);
+    //        }
+
+    //        if(pNext(asd) == NULL) {
+    //            poly q = pOne();
+    //            pSetComp(q, target_comp);
+    //            pNext(asd) = q;
+    //            h->bucket->buckets_length[h->bucket->buckets_used]++;
+    //            h->pLength++;
+    //        }
+    //    }
+    //}
+
+    
+    
   if (strat->tl<0) return 1;
   //if (h->GetLmTailRing()==NULL) return 0; // HS: SHOULD NOT BE NEEDED!
   assume(h->FDeg == h->pFDeg());
@@ -1760,6 +1805,47 @@ int redHoney (LObject* h, kStrategy strat)
   {
     j=kFindDivisibleByInT(strat, h);
     if (j < 0) {
+		// add some additional components
+		//for(int ii=0;ii<84;ii++)
+		//{
+		//    if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
+		//        //int target_comp = pGetComp(store);
+		//        int target_comp = 730 + 1 + ii + 1;
+		//        
+		//        poly asd = h->bucket->buckets[h->bucket->buckets_used];
+		//        if (asd == NULL) {
+		//            printf("assertion failed, asd is NULL\n");
+		//            exit(1);
+		//        }
+		//        
+		//        while (pNext(asd) != NULL)
+		//        {
+		//            if(pGetComp(pNext(asd)) == target_comp) {
+		//                //printf("assertion failed, asd should not have a common component with store\n");
+		//                break;
+		//                //exit(1);
+		//            }
+		//            if(pGetComp(pNext(asd)) > target_comp) {
+		//                poly q = pOne();
+		//                pSetComp(q, target_comp);
+		//                pNext(q) = pNext(asd);
+		//                pNext(asd) = q;
+		//                h->bucket->buckets_length[h->bucket->buckets_used]++;
+		//                h->pLength++;
+		//                break;
+		//            }
+		//            pIter(asd);
+		//        }
+
+		//        if(pNext(asd) == NULL) {
+		//            poly q = pOne();
+		//            pSetComp(q, target_comp);
+		//            pNext(asd) = q;
+		//            h->bucket->buckets_length[h->bucket->buckets_used]++;
+		//            h->pLength++;
+		//        }
+		//    }
+		//}
 	    printf("number of reductions: %d\n", number_of_reductions);
 		return 1;
 	}
@@ -1837,7 +1923,6 @@ int redHoney (LObject* h, kStrategy strat)
     }
 #endif
 
-	
     //PrintS("red:");
     //pWrite(h->t_p);
     //h->wrp();
@@ -1846,21 +1931,166 @@ int redHoney (LObject* h, kStrategy strat)
 	
     //PrintS("red:");
     //pWrite(h->p);
-    //Print("\nwith T[%d]:",ii);
+
+	//
+	//for(int i=0;i<=h->bucket->buckets_used;i++) {
+	//	printf("bucket %d:\n", i);
+	//	pWrite(h->bucket->buckets[i]);
+	//}
+  
+	//
+	//
+    //Print("with T[%d]:\n",ii);
     //pWrite(strat->T[ii].p);
 	
     assume(strat->fromT == FALSE);
 
+	//for(int i=0;i<strat->tl;i++) {
+	//	if(strat->T[i].p != NULL) {
+	//	  poly p = strat->T[i].p;
+	//	  while (pNext(p) != NULL)
+	//	  {
+	//		if (pGetComp(pNext(p)) > 30)
+	//		{
+	//		  if (pNext(pNext(p)) != NULL) {
+	//			  printf("assertion failed, pNext is not NULL, kstd2.cc\n");
+	//			  exit(1);
+	//		  }
 
+	//		  break;
+	//		}
+	//		else
+	//		{
+	//		  pIter(p);
+	//		}
+	//	  }
+	//	}
+	//}
+	
+	poly store = NULL;
+	
+    // store additional component
+    //if(strat->T[ii].p != NULL) {
+    //  poly p = strat->T[ii].p;
+    //  while (pNext(p) != NULL)
+    //  {
+    //  	if (pGetComp(pNext(p)) > 30)
+    //  	{
+    //      store = pNext(p);
+    //  	  p->next = NULL;
+	//	  strat->T[ii].pLength--;
+    //  	  
+    //  	  if (pNext(store) != NULL) {
+    //  		  printf("assertion failed, pNext is not NULL, before reduce\n");
+    //  		  exit(1);
+    //  	  }
+
+    //  	  break;
+    //  	}
+    //  	else
+    //  	{
+    //  	  pIter(p);
+    //  	}
+    //  }
+    //}
+    
+
+    // remove additional components from dividend
+    //if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
+    //    
+    //    poly asd = h->bucket->buckets[h->bucket->buckets_used];
+    //    
+    //    while (pNext(asd) != NULL)
+    //    {
+    //        if(pGetComp(pNext(asd)) > 30) {
+    //            poly tail = pNext(asd);
+    //            asd->next = NULL;
+    //            
+    //            h->bucket->buckets_length[h->bucket->buckets_used]--;
+    //            h->pLength--;
+    //            
+    //            while (pNext(tail) != NULL) {
+    //                h->bucket->buckets_length[h->bucket->buckets_used]--;
+    //                h->pLength--;
+    //                pIter(tail);
+    //            }
+    //            break;
+    //        }
+    //        pIter(asd);
+    //    }
+    //}
+    
+    
     ksReducePoly(h,&(strat->T[ii]),strat->kNoetherTail(),NULL,strat);
 
-
 	
-    //PrintS("\nto:");
-    ////pWrite(h->p);
-    //pWrite(h->t_p);
-    //h->wrp();
-    //PrintLn();
+
+    // restore store
+	//if(store != NULL) {
+	//  if (strat->T[ii].p == NULL) {
+	//  	strat->T[ii].p = store;	
+	//  }
+	//  else {
+	//  	poly asd = strat->T[ii].p;
+	//  	while (pNext(asd) != NULL)
+	//  	{
+	//  		pIter(asd);
+	//  	}
+	//  	pNext(asd) = store;
+	//	strat->T[ii].pLength++;
+	//  }
+	//}
+
+	// also add store to result
+	//if(store != NULL)
+	//{
+	//	if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
+	//		//int target_comp = pGetComp(store);
+	//		int target_comp = 730*2 + 1 + ii + 1;
+	//		
+	//		poly asd = h->bucket->buckets[h->bucket->buckets_used];
+	//		if (asd == NULL) {
+	//			printf("assertion failed, asd is NULL\n");
+	//			exit(1);
+	//		}
+	//		
+	//		while (pNext(asd) != NULL)
+	//		{
+	//			if(pGetComp(pNext(asd)) == target_comp) {
+	//				//printf("assertion failed, asd should not have a common component with store\n");
+	//				break;
+	//				//exit(1);
+	//			}
+	//			if(pGetComp(pNext(asd)) > target_comp) {
+	//				poly q = pOne();
+	//				pSetComp(q, target_comp);
+	//				pNext(q) = pNext(asd);
+	//				pNext(asd) = q;
+	//				h->bucket->buckets_length[h->bucket->buckets_used]++;
+	//				h->pLength++;
+	//				break;
+	//			}
+	//			pIter(asd);
+	//		}
+
+	//		if(pNext(asd) == NULL) {
+	//			poly q = pOne();
+	//			pSetComp(q, target_comp);
+	//			pNext(asd) = q;
+	//			h->bucket->buckets_length[h->bucket->buckets_used]++;
+	//			h->pLength++;
+	//		}
+	//	}
+	//}
+
+    //PrintS("actual to:");
+    //pWrite(h->p);
+
+	//
+	//for(int i=0;i<=h->bucket->buckets_used;i++) {
+	//	printf("bucket %d:\n", i);
+	//	pWrite(h->bucket->buckets[i]);
+	//}
 	
 	number_of_reductions++;
 	
@@ -1985,7 +2215,17 @@ int redHoney (LObject* h, kStrategy strat)
         Print(".%ld",d); mflush();
       }
     }
+
+    
+    
+
+    
+    
   }
+
+  
+  
+  
   printf("after reduce loop\n");
 }
 
@@ -2365,8 +2605,9 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   {
 	printf("mycounter: %d\n", mycounter);
 	mycounter++;
-	//if(mycounter == 160) {
-	//  return (strat->Shdl);
+	//if(mycounter == 11) {
+	//  exit(1);
+	//  //return (strat->Shdl);
 	//}
     printf("number of GB elements: %d\n", strat->sl);
     #ifdef KDEBUG
@@ -2467,6 +2708,17 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	  //printf("after reducing\n");
 	  //printf("result:");
 	  //p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
+
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
       if (errorreported)  break;
     }
 
@@ -2479,11 +2731,53 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     if (red_result == 1)
     {
 	  printf("red_result == 1\n");
+		//for(int ii=0;ii<84;ii++)
+		//{
+		//    if(strat->P.bucket != NULL && strat->P.bucket->buckets[strat->P.bucket->buckets_used] != NULL) {
+		//        //int target_comp = pGetComp(store);
+		//        int target_comp = 730 + 1 + ii + 1;
+		//        
+		//        poly asd = strat->P.bucket->buckets[strat->P.bucket->buckets_used];
+		//        if (asd == NULL) {
+		//            printf("assertion failed, asd is NULL\n");
+		//            exit(1);
+		//        }
+		//        
+		//        while (pNext(asd) != NULL)
+		//        {
+		//            if(pGetComp(pNext(asd)) == target_comp) {
+		//                //printf("assertion failed, asd should not have a common component with store\n");
+		//                break;
+		//                //exit(1);
+		//            }
+		//            if(pGetComp(pNext(asd)) > target_comp) {
+		//                poly q = pOne();
+		//                pSetComp(q, target_comp);
+		//                pNext(q) = pNext(asd);
+		//                pNext(asd) = q;
+		//                strat->P.bucket->buckets_length[strat->P.bucket->buckets_used]++;
+		//                strat->P.pLength++;
+		//                break;
+		//            }
+		//            pIter(asd);
+		//        }
+
+		//        if(pNext(asd) == NULL) {
+		//            poly q = pOne();
+		//            pSetComp(q, target_comp);
+		//            pNext(asd) = q;
+		//            strat->P.bucket->buckets_length[strat->P.bucket->buckets_used]++;
+		//            strat->P.pLength++;
+		//        }
+		//    }
+		//}
 	  //printf("result polnomial:\n");
 	  //pWrite(strat->P.p);
 	  //pWrite(strat->P.bucket->buckets[0]);
       // get the polynomial (canonicalize bucket, make sure P.p is set)
       strat->P.GetP(strat->lmBin);
+
+	  
 
 	  //printf("result polnomial:\n");
 	  //pWrite(strat->P.p);
@@ -2519,7 +2813,126 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	    printf("if (TEST_OPT_INTSTRATEGY) || (rField_is_Ring(currRing))\n");
 		//printf("before clearing denom:\n");
 		//p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
+		// myglobalvar = 1;
+		
+		
+		
+		int added = 0;
+		int removed = 0;
+		
+		//for(int ii=0;ii<1;ii++)
+		//{
+		//        int target_comp = 730 * 2 + 1 + ii + 1;
+		//		target_comp = 7894;
+		//        
+		//        poly asd = strat->P.p;
+		//        if (asd == NULL) {
+		//            printf("assertion failed, asd is NULL\n");
+		//            exit(1);
+		//        }
+		//        
+		//        while (pNext(asd) != NULL)
+		//        {
+		//            if(pGetComp(pNext(asd)) == target_comp) {
+		//                printf("assertion failed, asd should not have a common component with store\n");
+		//                exit(1);
+		//				break;
+		//            }
+		//            if(pGetComp(pNext(asd)) > target_comp) {
+		//                printf("assertion failed, asd should not have a common component greater than store\n");
+		//                exit(1);
+		//                poly q = pOne();
+		//                pSetComp(q, target_comp);
+		//                pNext(q) = pNext(asd);
+		//                pNext(asd) = q;
+		//                strat->P.pLength++;
+		//                break;
+		//            }
+		//            pIter(asd);
+		//        }
+
+		//        if(pNext(asd) == NULL) {
+		//            poly q = pOne();
+		//            pSetComp(q, target_comp);
+		//            pNext(asd) = q;
+		//            strat->P.pLength++;
+		//			added = 1;
+		//        }
+		//}
+
+		//printf("apply pCleardenom to:\n");
+		//pWrite(strat->P.p);
+		
         strat->P.pCleardenom();
+
+		//printf("result:\n");
+		//pWrite(strat->P.p);
+		
+		// remove magic component 7894
+		//{
+		//  int target_comp = 7894;
+		//  
+		//  poly asd = strat->P.p;
+		//  if (asd == NULL) {
+		//  	printf("assertion failed, asd is NULL\n");
+		//  	exit(1);
+		//  }
+		//  
+		//  while (pNext(asd) != NULL)
+		//  {
+		//  	if(pGetComp(pNext(asd)) == target_comp) {
+		//  		pNext(asd) = NULL;
+		//		strat->P.pLength--;
+		//		removed = 1;
+		//  		break;
+		//  	}
+		//  	pIter(asd);
+		//  }
+		//}
+		
+		if(added != removed) {
+		  	printf("assertion failed, added component but did not remove it or other way round\n");
+		  	exit(1);
+		}
+		
+		
+		//for(int ii=0;ii<1;ii++)
+		//{
+		//        int target_comp = 730 * 2 + 1 + ii + 1;
+		//		target_comp = 7894;
+		//        
+		//        poly asd = strat->P.p;
+		//        if (asd == NULL) {
+		//            printf("assertion failed, asd is NULL\n");
+		//            exit(1);
+		//        }
+		//        
+		//        while (pNext(asd) != NULL)
+		//        {
+		//            if(pGetComp(pNext(asd)) == target_comp) {
+		//                //printf("assertion failed, asd should not have a common component with store\n");
+		//                break;
+		//                //exit(1);
+		//            }
+		//            if(pGetComp(pNext(asd)) > target_comp) {
+		//                poly q = pOne();
+		//                pSetComp(q, target_comp);
+		//                pNext(q) = pNext(asd);
+		//                pNext(asd) = q;
+		//                strat->P.pLength++;
+		//                break;
+		//            }
+		//            pIter(asd);
+		//        }
+
+		//        if(pNext(asd) == NULL) {
+		//            poly q = pOne();
+		//            pSetComp(q, target_comp);
+		//            pNext(asd) = q;
+		//            strat->P.pLength++;
+		//        }
+		//}
+	  
 		//printf("after clearing denom:\n");
 		//p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
         if ((TEST_OPT_REDSB)||(TEST_OPT_REDTAIL))
@@ -2608,6 +3021,9 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 
 					  transformationColumn = pNext(p);
 					  pNext(p) = q;
+					  int newLength = pLength(strat->P.p);
+					  printf("shorten from %d to %d\n", strat->P.pLength, newLength);
+					  strat->P.pLength = newLength;
 					  break;
 					  // alternative?
 					  // p->next = q;
@@ -2622,6 +3038,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 			  {
 				  transformationColumn = strat->P.p;
 				  strat->P.p = q;
+                  strat->P.pLength = 1;
 			  }
 
 

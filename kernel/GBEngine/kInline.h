@@ -468,9 +468,43 @@ KINLINE long sTObject::SetDegStuffReturnLDeg()
 // manipulations
 KINLINE void  sTObject::pCleardenom()
 {
+	//int target_comp = 730 * 2 + 1 + 0 + 1;
+	//
+	//poly asd = p;
+	//if (asd == NULL) {
+	//	printf("assertion failed, asd is NULL\n");
+	//	exit(1);
+	//}
+	//
+	//while (pNext(asd) != NULL)
+	//{
+	//	if(pGetComp(pNext(asd)) == target_comp) {
+	//		//printf("assertion failed, asd should not have a common component with store\n");
+	//		break;
+	//		//exit(1);
+	//	}
+	//	if(pGetComp(pNext(asd)) > target_comp) {
+	//		poly q = pOne();
+	//		pSetComp(q, target_comp);
+	//		pNext(q) = pNext(asd);
+	//		pNext(asd) = q;
+	//		pLength++;
+	//		break;
+	//	}
+	//	pIter(asd);
+	//}
+
+	//if(pNext(asd) == NULL) {
+	//	poly q = pOne();
+	//	pSetComp(q, target_comp);
+	//	pNext(asd) = q;
+	//	pLength++;
+	//}
+
   assume(p != NULL);
   if (TEST_OPT_CONTENTSB)
   {
+	printf("is TEST_OPT_CONTENTSB\n");
     number n;
     if (t_p != NULL)
     {
@@ -492,13 +526,16 @@ KINLINE void  sTObject::pCleardenom()
   }
   else
   {
+	printf("is not TEST_OPT_CONTENTSB\n");
     if (t_p != NULL)
     {
+	  printf("is t_p != NULL\n");
       p_ProjectiveUnique(t_p, tailRing);
       pSetCoeff0(p, pGetCoeff(t_p));
     }
     else
     {
+	  printf("is not t_p != NULL\n");
       p_ProjectiveUnique(p, currRing);
     }
   }
