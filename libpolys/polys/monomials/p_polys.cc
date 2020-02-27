@@ -2276,6 +2276,7 @@ poly p_Power(poly p, int i, const ring r)
 
 void p_Content(poly ph, const ring r)
 {
+
   if (ph==NULL) return;
   const coeffs cf=r->cf;
   if (pNext(ph)==NULL)
@@ -2317,10 +2318,14 @@ content_finish:
   if(!n_GreaterZero(pGetCoeff(ph),r->cf)) ph = p_Neg(ph,r);
 }
 
-#define CLEARENUMERATORS 1
+#define CLEARENUMERATORS 0
 
 void p_ContentForGB(poly ph, const ring r)
 {
+  printf("in p_ContentForGB\n");
+
+  
+  
   if(TEST_OPT_CONTENTSB) return;
   assume( ph != NULL );
 
@@ -2399,6 +2404,26 @@ void p_ContentForGB(poly ph, const ring r)
     if(!n_GreaterZero(pGetCoeff(ph),r->cf)) ph = p_Neg(ph,r);
     if (rField_is_Q(r)||(getCoeffType(r->cf)==n_transExt)) // should not be used anymore if CLEARENUMERATORS is 1
     {
+      // remove magic component 7894
+      // {
+      //   int target_comp = 7894;
+      //   
+      //   poly asd = ph;
+      //   if (asd == NULL) {
+      //   	printf("assertion failed, asd is NULL\n");
+      //   	exit(1);
+      //   }
+      //   
+      //   while (pNext(asd) != NULL)
+      //   {
+      //   	if(__p_GetComp(pNext(asd), r) == target_comp) {
+      //   		pNext(asd) = NULL;
+      //   		break;
+      //   	}
+      //   	pIter(asd);
+      //   }
+      // }
+  
       h=p_InitContent(ph,r);
       p=ph;
     }
@@ -2407,7 +2432,7 @@ void p_ContentForGB(poly ph, const ring r)
       h=n_Copy(pGetCoeff(ph),r->cf);
       p = pNext(ph);
     }
-    while (p!=NULL)
+    while (p!=NULL and p_GetComp(p, r) <= 30)
     {
       n_Normalize(pGetCoeff(p),r->cf);
       d=n_SubringGcd(h,pGetCoeff(p),r->cf);
@@ -2434,7 +2459,7 @@ void p_ContentForGB(poly ph, const ring r)
         //  nWrite(tmp);Print(StringEndS("\n")); // NOTE/TODO: use StringAppendS("\n"); omFree(s);
         //}
         //nDelete(&tmp);
-        d = n_ExactDiv(pGetCoeff(p),h,r->cf);
+        d = n_Div(pGetCoeff(p),h,r->cf);
         p_SetCoeff(p,d,r);
         pIter(p);
       }
@@ -2669,7 +2694,7 @@ number p_InitContent(poly ph, const ring r)
     }
     pIter(ph);
   }
-  while(ph!=NULL);
+  while(ph!=NULL and p_GetComp(ph, r) <= 30);
   return n_SubringGcd(d,d2,r->cf);
 }
 #endif
@@ -2797,6 +2822,8 @@ void p_Content(poly ph, const ring r)
 /* cleardenom suff                                                           */
 poly p_Cleardenom(poly p, const ring r)
 {
+  printf("in p_Cleardenom\n");
+  
   if( p == NULL )
     return NULL;
 
@@ -2860,11 +2887,12 @@ poly p_Cleardenom(poly p, const ring r)
   }
 #endif
 
+
   if(1)
   {
     // get lcm of all denominators ----------------------------------
     h = n_Init(1,r->cf);
-    while (p!=NULL)
+    while (p!=NULL and p_GetComp(p, r) <= 30)
     {
       n_Normalize(pGetCoeff(p),r->cf);
       d=n_NormalizeHelper(h,pGetCoeff(p),r->cf);
@@ -2888,6 +2916,27 @@ poly p_Cleardenom(poly p, const ring r)
     n_Delete(&h,r->cf);
     p=start;
 
+    // remove magic component 7894
+    //{
+    //  int target_comp = 7894;
+    //  
+    //  poly asd = p;
+    //  if (asd == NULL) {
+    //  	printf("assertion failed, asd is NULL\n");
+    //  	exit(1);
+    //  }
+    //  
+    //  while (pNext(asd) != NULL)
+    //  {
+    //  	if(__p_GetComp(pNext(asd), r) == target_comp) {
+    //  		pNext(asd) = NULL;
+    //  		break;
+    //  	}
+    //  	pIter(asd);
+    //  }
+    //}
+	
+	
     p_ContentForGB(p,r);
 #ifdef HAVE_RATGRING
     if (rIsRatGRing(r))
@@ -3088,6 +3137,7 @@ void p_Cleardenom_n(poly ph,const ring r,number &c)
 
 }
 
+
   // normalization: for poly over Q: make poly primitive, integral
   //                              Qa make poly integral with leading
   //                                  coefficient minimal in N
@@ -3098,6 +3148,65 @@ void p_ProjectiveUnique(poly ph, const ring r)
   if( ph == NULL )
     return;
 
+  printf("in p_ProjectiveUnique\n");
+  
+
+  // remove magic component 7894
+  //{
+  //  int target_comp = 7894;
+  //  
+  //  poly asd = ph;
+  //  if (asd == NULL) {
+  //  	printf("assertion failed, asd is NULL\n");
+  //  	exit(1);
+  //  }
+  //  
+  //  while (pNext(asd) != NULL)
+  //  {
+  //  	if(__p_GetComp(pNext(asd), r) == target_comp) {
+  //  		pNext(asd) = NULL;
+  //  		break;
+  //  	}
+  //  	pIter(asd);
+  //  }
+  //}
+  
+  //{
+  //  int target_comp = 730 * 2 + 1 + 0 + 1;
+  //  
+  //  poly asd = ph;
+  //  if (asd == NULL) {
+  //  	printf("assertion failed, asd is NULL\n");
+  //  	exit(1);
+  //  }
+  //  
+  //  while (pNext(asd) != NULL)
+  //  {
+  //  	if(__p_GetComp(pNext(asd), r) == target_comp) {
+  //  		//printf("assertion failed, asd should not have a common component with store\n");
+  //  		break;
+  //  		//exit(1);
+  //  	}
+  //  	if(__p_GetComp(pNext(asd), r) > target_comp) {
+  //  		poly q = p_One(r);
+  //  		p_SetComp(q, target_comp, r);
+  //  		pNext(q) = pNext(asd);
+  //  		pNext(asd) = q;
+  //  		//pLength++;
+  //  		break;
+  //  	}
+  //  	pIter(asd);
+  //  }
+
+  //  if(pNext(asd) == NULL) {
+  //  	poly q = p_One(r);
+  //  	p_SetComp(q, target_comp, r);
+  //  	pNext(asd) = q;
+  //  	//pLength++;
+  //  }
+  //}
+  
+  
   assume( r != NULL ); assume( r->cf != NULL );
   const coeffs C = r->cf;
 
@@ -3132,6 +3241,7 @@ void p_ProjectiveUnique(poly ph, const ring r)
 
   if(!nCoeff_is_Q(C) && !nCoeff_is_transExt(C))
   {
+	printf("!nCoeff_is_Q(C) && !nCoeff_is_transExt(C)");
     h = p_GetCoeff(p, C);
     number hInv = n_Invers(h, C);
     pIter(p);
