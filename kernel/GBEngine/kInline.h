@@ -651,6 +651,61 @@ KINLINE void sLObject::Tail_Mult_nn(number n)
 KINLINE void sLObject::Tail_Minus_mm_Mult_qq(poly m, poly q, int lq,
                                              poly spNoether)
 {
+
+	// remove additional components from dividend
+	//if(bucket != NULL) {
+	//	for(int myi = 1; myi <= bucket->buckets_used; myi++) {
+	//		if(bucket->buckets[myi] != NULL) {
+	//			
+	//			poly asd = bucket->buckets[myi];
+	//			
+	//			if(pGetComp(asd) > 30) {
+	//				poly tail = asd;
+	//				bucket->buckets[myi] = NULL;
+	//				
+	//				bucket->buckets_length[myi]--;
+	//				pLength--;
+
+	//				while (pNext(tail) != NULL) {
+	//					bucket->buckets_length[myi]--;
+	//					pLength--;
+	//					pIter(tail);
+	//				}
+
+	//				if(bucket->buckets_length[myi] != 0) {
+	//					printf("assertion failed, bucket length is not 0\n");
+	//					exit(1);	
+	//				}
+	//			}
+	//			else {
+	//			
+	//				while (pNext(asd) != NULL)
+	//				{
+	//					if(pGetComp(pNext(asd)) > 30) {
+	//						poly tail = pNext(asd);
+	//						asd->next = NULL;
+	//						
+	//						bucket->buckets_length[myi]--;
+	//						pLength--;
+
+	//						while (pNext(tail) != NULL) {
+	//							bucket->buckets_length[myi]--;
+	//							pLength--;
+	//							pIter(tail);
+	//						}
+
+	//						break;
+	//					}
+	//					pIter(asd);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//else {
+	//	printf("bucket is NULL\n");	
+	//}
+	
   if (bucket != NULL)
   {
     kBucket_Minus_m_Mult_p(bucket, m, q, &lq, spNoether);

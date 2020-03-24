@@ -1800,53 +1800,184 @@ int redHoney (LObject* h, kStrategy strat)
   h->PrepareRed(strat->use_buckets);
   printf("before reduce loop\n");
 
+	// remove additional components from dividend
+	//if(h->bucket != NULL) {
+	//	for(int myi = 1; myi <= h->bucket->buckets_used; myi++) {
+	//		if(h->bucket->buckets[myi] != NULL) {
+	//			
+	//			poly asd = h->bucket->buckets[myi];
+	//			
+	//			if(pGetComp(asd) > 30) {
+	//				int tail_length = pLength(asd);
+	//				h->bucket->buckets[myi] = NULL;
+	//				
+	//				h->bucket->buckets_length[myi] -= tail_length;
+	//				h->pLength -= tail_length;
+	//				
+	//				if(h->bucket->buckets_length[myi] != 0) {
+	//					printf("assertion failed, bucket length is not 0\n");
+	//					exit(1);	
+	//				}
+	//			}
+	//			else {
+	//			
+	//				while (pNext(asd) != NULL)
+	//				{
+	//					if(pGetComp(pNext(asd)) > 30) {
+	//						int tail_length = pLength(pNext(asd));
+	//						asd->next = NULL;
+	//						
+	//						h->bucket->buckets_length[myi] -= tail_length;
+	//						h->pLength -= tail_length;
+
+	//						break;
+	//					}
+	//					pIter(asd);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//else {
+	//	printf("bucket is NULL\n");	
+	//}
+
   
+	// add some additional components to dividend
+	//{
+	//	if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
+	//		
+	//		poly asd = h->bucket->buckets[h->bucket->buckets_used];
+	//		if (asd == NULL) {
+	//			printf("assertion failed, asd is NULL\n");
+	//			exit(1);
+	//		}
+	//		
+	//		while (pNext(asd) != NULL)
+	//		{
+	//			if(pGetComp(pNext(asd)) > 30) {
+	//				printf("this should never happen\n");
+	//				exit(1);
+	//			}
+	//			pIter(asd);
+	//		}
+
+	//		if(pNext(asd) != NULL) {
+	//			printf("this should never happen\n");
+	//			exit(1);
+	//		}
+	//		
+	//		for(int myii=0;myii<100;myii++) {
+	//			int target_comp = 730 + 1 + myii + 1;
+	//			poly q = pOne();
+	//			pSetComp(q, target_comp);
+	//			pNext(asd) = q;
+	//			h->bucket->buckets_length[h->bucket->buckets_used]++;
+	//			h->pLength++;
+	//			pIter(asd);
+	//		}
+	//	}
+	//}
+
+	
+	
+	// remove additional components from dividend
+	//if(h->bucket != NULL) {
+	//	for(int myi = 1; myi <= h->bucket->buckets_used; myi++) {
+	//		if(h->bucket->buckets[myi] != NULL) {
+	//			
+	//			poly asd = h->bucket->buckets[myi];
+	//			
+	//			if(pGetComp(asd) > 30) {
+	//				int tail_length = pLength(asd);
+	//				h->bucket->buckets[myi] = NULL;
+	//				
+	//				h->bucket->buckets_length[myi] -= tail_length;
+	//				h->pLength -= tail_length;
+	//				
+	//				if(h->bucket->buckets_length[myi] != 0) {
+	//					printf("assertion failed, bucket length is not 0\n");
+	//					exit(1);	
+	//				}
+	//			}
+	//			else {
+	//			
+	//				while (pNext(asd) != NULL)
+	//				{
+	//					if(pGetComp(pNext(asd)) > 30) {
+	//						int tail_length = pLength(pNext(asd));
+	//						asd->next = NULL;
+	//						
+	//						h->bucket->buckets_length[myi] -= tail_length;
+	//						h->pLength -= tail_length;
+
+	//						break;
+	//					}
+	//					pIter(asd);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//else {
+	//	printf("bucket is NULL\n");	
+	//}
+	
+	
+	
+	
   loop
   {
     j=kFindDivisibleByInT(strat, h);
     if (j < 0) {
-		// add some additional components
-		//for(int ii=0;ii<84;ii++)
-		//{
-		//    if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
-		//        //int target_comp = pGetComp(store);
-		//        int target_comp = 730 + 1 + ii + 1;
-		//        
-		//        poly asd = h->bucket->buckets[h->bucket->buckets_used];
-		//        if (asd == NULL) {
-		//            printf("assertion failed, asd is NULL\n");
-		//            exit(1);
-		//        }
-		//        
-		//        while (pNext(asd) != NULL)
-		//        {
-		//            if(pGetComp(pNext(asd)) == target_comp) {
-		//                //printf("assertion failed, asd should not have a common component with store\n");
-		//                break;
-		//                //exit(1);
-		//            }
-		//            if(pGetComp(pNext(asd)) > target_comp) {
-		//                poly q = pOne();
-		//                pSetComp(q, target_comp);
-		//                pNext(q) = pNext(asd);
-		//                pNext(asd) = q;
-		//                h->bucket->buckets_length[h->bucket->buckets_used]++;
-		//                h->pLength++;
-		//                break;
-		//            }
-		//            pIter(asd);
-		//        }
 
-		//        if(pNext(asd) == NULL) {
-		//            poly q = pOne();
-		//            pSetComp(q, target_comp);
-		//            pNext(asd) = q;
-		//            h->bucket->buckets_length[h->bucket->buckets_used]++;
-		//            h->pLength++;
-		//        }
-		//    }
+		
+		// remove additional components from dividend
+		//if(h->bucket != NULL) {
+		//	for(int myi = 1; myi <= h->bucket->buckets_used; myi++) {
+		//		if(h->bucket->buckets[myi] != NULL) {
+		//			
+		//			poly asd = h->bucket->buckets[myi];
+		//			
+		//			if(pGetComp(asd) > 30) {
+		//				int tail_length = pLength(asd);
+		//				h->bucket->buckets[myi] = NULL;
+		//				
+		//				h->bucket->buckets_length[myi] -= tail_length;
+		//				h->pLength -= tail_length;
+		//				
+		//				if(h->bucket->buckets_length[myi] != 0) {
+		//					printf("assertion failed, bucket length is not 0\n");
+		//					exit(1);	
+		//				}
+		//			}
+		//			else {
+		//			
+		//				while (pNext(asd) != NULL)
+		//				{
+		//					if(pGetComp(pNext(asd)) > 30) {
+		//						int tail_length = pLength(pNext(asd));
+		//						asd->next = NULL;
+		//						
+		//						h->bucket->buckets_length[myi] -= tail_length;
+		//						h->pLength -= tail_length;
+
+		//						break;
+		//					}
+		//					pIter(asd);
+		//				}
+		//			}
+		//		}
+		//	}
 		//}
+		//else {
+		//	printf("bucket is NULL\n");	
+		//}
+
+		
+		
 	    printf("number of reductions: %d\n", number_of_reductions);
+		printf("regular return\n");
 		return 1;
 	}
 
@@ -1969,7 +2100,7 @@ int redHoney (LObject* h, kStrategy strat)
 	
 	poly store = NULL;
 	
-    // store additional component
+    // store additional component of divisor
     //if(strat->T[ii].p != NULL) {
     //  poly p = strat->T[ii].p;
     //  while (pNext(p) != NULL)
@@ -1993,12 +2124,12 @@ int redHoney (LObject* h, kStrategy strat)
     //  	}
     //  }
     //}
-    
-
-    // remove additional components from dividend
-    //if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
+	
+	
+    // remove additional components from divisor
+    //if(strat->T[ii].p != NULL) {
     //    
-    //    poly asd = h->bucket->buckets[h->bucket->buckets_used];
+    //    poly asd = strat->T[ii].p;
     //    
     //    while (pNext(asd) != NULL)
     //    {
@@ -2006,8 +2137,299 @@ int redHoney (LObject* h, kStrategy strat)
     //            poly tail = pNext(asd);
     //            asd->next = NULL;
     //            
-    //            h->bucket->buckets_length[h->bucket->buckets_used]--;
-    //            h->pLength--;
+    //            strat->T[ii].pLength--;
+    //            
+    //            while (pNext(tail) != NULL) {
+    //                strat->T[ii].pLength--;
+    //                pIter(tail);
+    //            }
+    //            break;
+    //        }
+    //        pIter(asd);
+    //    }
+    //}
+    
+
+	// add some additional components to dividend
+	//{
+	//	if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
+	//		
+	//		poly asd = h->bucket->buckets[h->bucket->buckets_used];
+	//		if (asd == NULL) {
+	//			printf("assertion failed, asd is NULL\n");
+	//			exit(1);
+	//		}
+	//		
+	//		while (pNext(asd) != NULL)
+	//		{
+	//			if(pGetComp(pNext(asd)) > 30) {
+	//				printf("this should never happen\n");
+	//				exit(1);
+	//			}
+	//			pIter(asd);
+	//		}
+
+	//		if(pNext(asd) != NULL) {
+	//			printf("this should never happen\n");
+	//			exit(1);
+	//		}
+	//		
+	//		for(int myii=0;myii<200;myii++) {
+	//			int target_comp = 730 + 1 + myii + 1;
+	//			poly q = pOne();
+	//			pSetComp(q, target_comp);
+	//			pNext(asd) = q;
+	//			h->bucket->buckets_length[h->bucket->buckets_used]++;
+	//			h->pLength++;
+	//			pIter(asd);
+	//		}
+	//	}
+	//}
+
+
+	// add one additional component to dividend
+	//if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
+	//	int target_comp = 730*2 + 1 + ii + 1;
+	//	
+	//	poly asd = h->bucket->buckets[h->bucket->buckets_used];
+	//	if (asd == NULL) {
+	//		printf("assertion failed, asd is NULL\n");
+	//		exit(1);
+	//	}
+	//	
+	//	while (pNext(asd) != NULL)
+	//	{
+	//		if(pGetComp(pNext(asd)) == target_comp) {
+	//			break;
+	//		}
+	//		if(pGetComp(pNext(asd)) > target_comp) {
+	//			poly q = pOne();
+	//			pSetComp(q, target_comp);
+	//			pNext(q) = pNext(asd);
+	//			pNext(asd) = q;
+	//			h->bucket->buckets_length[h->bucket->buckets_used]++;
+	//			h->pLength++;
+	//			break;
+	//		}
+	//		pIter(asd);
+	//	}
+
+	//	if(pNext(asd) == NULL) {
+	//		poly q = pOne();
+	//		pSetComp(q, target_comp);
+	//		pNext(asd) = q;
+	//		h->bucket->buckets_length[h->bucket->buckets_used]++;
+	//		h->pLength++;
+	//	}
+	//}
+	
+	
+	// remove additional components from dividend
+	//if(h->bucket != NULL) {
+	//	for(int myi = 1; myi <= h->bucket->buckets_used; myi++) {
+	//		if(h->bucket->buckets[myi] != NULL) {
+	//			
+	//			poly asd = h->bucket->buckets[myi];
+	//			
+	//			if(pGetComp(asd) > 30) {
+	//				int tail_length = pLength(asd);
+	//				h->bucket->buckets[myi] = NULL;
+	//				
+	//				h->bucket->buckets_length[myi] -= tail_length;
+	//				h->pLength -= tail_length;
+	//				
+	//				if(h->bucket->buckets_length[myi] != 0) {
+	//					printf("assertion failed, bucket length is not 0\n");
+	//					exit(1);	
+	//				}
+	//			}
+	//			else {
+	//			
+	//				while (pNext(asd) != NULL)
+	//				{
+	//					if(pGetComp(pNext(asd)) > 30) {
+	//						int tail_length = pLength(pNext(asd));
+	//						asd->next = NULL;
+	//						
+	//						h->bucket->buckets_length[myi] -= tail_length;
+	//						h->pLength -= tail_length;
+
+	//						break;
+	//					}
+	//					pIter(asd);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//else {
+	//	printf("bucket is NULL\n");	
+	//}
+
+	
+	// add some additional components to divisor
+	//{
+	//	poly asd = strat->T[ii].p;
+	//	if (asd == NULL) {
+	//		printf("assertion failed, asd is NULL\n");
+	//		exit(1);
+	//	}
+	//	
+	//	while (pNext(asd) != NULL)
+	//	{
+	//		if(pGetComp(pNext(asd)) > 30) {
+	//			printf("this should never happen\n");
+	//			exit(1);
+	//		}
+	//		pIter(asd);
+	//	}
+
+	//	if(pNext(asd) != NULL) {
+	//		printf("this should never happen\n");
+	//		exit(1);
+	//	}
+	//	
+	//	for(int myii=0;myii<1;myii++) {
+	//		int target_comp = 730 + 1 + myii + 1 + 1000 + ii;
+	//		poly q = pOne();
+	//		pSetComp(q, target_comp);
+	//		pNext(asd) = q;
+	//		strat->T[ii].pLength++;
+	//		pIter(asd);
+	//	}
+	//}
+	
+	
+	
+	
+	
+
+    // remove additional components from divisor
+    //if(strat->T[ii].p != NULL) {
+    //    
+    //    poly asd = strat->T[ii].p;
+    //    
+    //    while (pNext(asd) != NULL)
+    //    {
+    //        if(pGetComp(pNext(asd)) > 30) {
+    //            poly tail = pNext(asd);
+    //            asd->next = NULL;
+    //            
+    //            strat->T[ii].pLength--;
+    //            
+    //            while (pNext(tail) != NULL) {
+    //                strat->T[ii].pLength--;
+    //                pIter(tail);
+    //            }
+    //            break;
+    //        }
+    //        pIter(asd);
+    //    }
+    //}
+
+	
+	// add one to divisor
+    //if(strat->T[ii].p != NULL) {
+    //    
+    //    poly asd = strat->T[ii].p;
+    //    
+    //    while (pNext(asd) != NULL)
+    //    {
+    //        pIter(asd);
+    //    }
+
+	//	poly q = pOne();
+	//	pSetComp(q, 730 + ii);
+    //    asd->next = q;
+	//	strat->T[ii].pLength++;
+	//	
+	//	
+    //}
+    
+    
+    ksReducePoly(h,&(strat->T[ii]),strat->kNoetherTail(),NULL,strat);
+
+    // remove additional components from divisor
+    //if(strat->T[ii].p != NULL) {
+    //    
+    //    poly asd = strat->T[ii].p;
+    //    
+    //    while (pNext(asd) != NULL)
+    //    {
+    //        if(pGetComp(pNext(asd)) > 30) {
+    //            poly tail = pNext(asd);
+    //            asd->next = NULL;
+    //            
+    //            strat->T[ii].pLength--;
+    //            
+    //            while (pNext(tail) != NULL) {
+    //                strat->T[ii].pLength--;
+    //                pIter(tail);
+    //            }
+    //            break;
+    //        }
+    //        pIter(asd);
+    //    }
+    //}
+    
+
+	// remove additional components from dividend
+	//if(h->bucket != NULL) {
+	//	for(int myi = 1; myi <= h->bucket->buckets_used; myi++) {
+	//		if(h->bucket->buckets[myi] != NULL) {
+	//			
+	//			poly asd = h->bucket->buckets[myi];
+	//			
+	//			if(pGetComp(asd) > 30) {
+	//				int tail_length = pLength(asd);
+	//				h->bucket->buckets[myi] = NULL;
+	//				
+	//				h->bucket->buckets_length[myi] -= tail_length;
+	//				h->pLength -= tail_length;
+	//				
+	//				if(h->bucket->buckets_length[myi] != 0) {
+	//					printf("assertion failed, bucket length is not 0\n");
+	//					exit(1);	
+	//				}
+	//			}
+	//			else {
+	//			
+	//				while (pNext(asd) != NULL)
+	//				{
+	//					if(pGetComp(pNext(asd)) > 30) {
+	//						int tail_length = pLength(pNext(asd));
+	//						asd->next = NULL;
+	//						
+	//						h->bucket->buckets_length[myi] -= tail_length;
+	//						h->pLength -= tail_length;
+
+	//						break;
+	//					}
+	//					pIter(asd);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//else {
+	//	printf("bucket is NULL\n");	
+	//}
+
+    // replace additional components in dividend with one
+    //if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
+    //    
+    //    poly asd = h->bucket->buckets[h->bucket->buckets_used];
+    //    
+    //    while (pNext(asd) != NULL)
+    //    {
+    //        if(pGetComp(pNext(asd)) > 30) {
+	//			poly q = pOne();
+	//			pSetComp(q, pGetComp(pNext(asd)));
+    //            poly tail = pNext(asd);
+    //            asd->next = q;
+    //            
+    //            //h->bucket->buckets_length[h->bucket->buckets_used]--;
+    //            //h->pLength--;
     //            
     //            while (pNext(tail) != NULL) {
     //                h->bucket->buckets_length[h->bucket->buckets_used]--;
@@ -2019,11 +2441,52 @@ int redHoney (LObject* h, kStrategy strat)
     //        pIter(asd);
     //    }
     //}
-    
-    
-    ksReducePoly(h,&(strat->T[ii]),strat->kNoetherTail(),NULL,strat);
-
 	
+	
+    // replace single component of dividend with one
+    //if(h->bucket != NULL) {
+    //    int target_comp = 730 + 1 + 0 + 1 + 1000 + ii;
+	//	
+
+	//	int found_comp = 0;
+	//	
+	//	for(int myi = 1; myi <= h->bucket->buckets_used; myi++) {
+	//		poly asd = h->bucket->buckets[myi];
+
+	//		if(asd == NULL) {
+	//			continue;	
+	//		}
+
+	//		while (pNext(asd) != NULL)
+	//		{
+	//			if(pGetComp(pNext(asd)) == target_comp) {
+	//				poly q = pOne();
+	//				pSetComp(q, target_comp);
+	//				poly tail = pNext(asd);
+	//				asd->next = q;
+	//				q->next = tail->next;
+	//				
+	//				if(found_comp) {
+	//					//printf("found multiple monomials with same component\n");
+	//					//exit(1);
+	//				}
+	//				
+	//				found_comp = 1;
+	//			}
+	//			pIter(asd);
+	//		}
+	//	}
+
+	//	if(!found_comp) {
+	//		printf("assertion failed, could not find monomial with component %d\n", target_comp);
+	//		//exit(1);
+	//	}
+    //}
+	//else {
+	//	printf("assertion failed, bucket is NULL\n");	
+	//	exit(1);
+	//}
+    
 
     // restore store
 	//if(store != NULL) {
@@ -2182,6 +2645,7 @@ int redHoney (LObject* h, kStrategy strat)
         int dummy=strat->sl;
         if (kFindDivisibleByInS(strat, &dummy, h) < 0) {
 	      printf("number of reductions: %d\n", number_of_reductions);
+		  printf("early bailout\n");
 		  return 1;
 		}
         enterL(&strat->L,&strat->Ll,&strat->Lmax,*h,at);
@@ -2604,11 +3068,11 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   while (strat->Ll >= 0)
   {
 	printf("mycounter: %d\n", mycounter);
+	if(mycounter == 90) {
+	  // exit(1);
+	  //return (strat->Shdl);
+	}
 	mycounter++;
-	//if(mycounter == 11) {
-	//  exit(1);
-	//  //return (strat->Shdl);
-	//}
     printf("number of GB elements: %d\n", strat->sl);
     #ifdef KDEBUG
       if (TEST_OPT_DEBUG) messageSets(strat);
@@ -2712,7 +3176,11 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	  
 	  
 	  
-	  
+	  if(mycounter == 90) {
+		  //printf("###################################");
+	      //pWrite(strat->P.bucket->buckets[1]);
+		  //exit(1);
+	  }
 	  
 	  
 	  
@@ -2776,11 +3244,10 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	  //pWrite(strat->P.bucket->buckets[0]);
       // get the polynomial (canonicalize bucket, make sure P.p is set)
       strat->P.GetP(strat->lmBin);
-
 	  
 
-	  //printf("result polnomial:\n");
-	  //pWrite(strat->P.p);
+	  printf("result polnomial:\n");
+	  pWrite(strat->P.p);
 
 	  
 	  
@@ -2889,11 +3356,11 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 		//  	pIter(asd);
 		//  }
 		//}
-		
-		if(added != removed) {
-		  	printf("assertion failed, added component but did not remove it or other way round\n");
-		  	exit(1);
-		}
+		//
+		//if(added != removed) {
+		//  	printf("assertion failed, added component but did not remove it or other way round\n");
+		//  	exit(1);
+		//}
 		
 		
 		//for(int ii=0;ii<1;ii++)
@@ -2994,8 +3461,30 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 			  
 
 		
+		  // remove additional components
+		  //if(strat->P.p != NULL) {
+		  //    
+		  //    poly asd = strat->P.p;
+		  //    
+		  //    while (pNext(asd) != NULL)
+		  //    {
+		  //  	  if(pGetComp(pNext(asd)) > 30) {
+		  //  		  poly tail = pNext(asd);
+		  //  		  asd->next = NULL;
+		  //  		  
+		  //  		  strat->P.pLength--;
+		  //  		  
+		  //  		  while (pNext(tail) != NULL) {
+		  //  			  strat->P.pLength--;
+		  //  			  pIter(tail);
+		  //  		  }
+		  //  		  break;
+		  //  	  }
+		  //  	  pIter(asd);
+		  //    }
+		  //}
 		
-		  if (strat->syzComp > 0) {
+		  if (strat->syzComp > 0 && false) {
 			  // replace transformation matrix part by unit vector
 			  printf("replace transformation matrix part by unit vector\n");
 			  poly    p,q;
@@ -3007,7 +3496,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 			  }
 				  
 			  q = pOne();
-			  pSetComp(q, F->rank + 1 + strat->mytl + 1);
+			  pSetComp(q, F->rank + 1 + mycounter + 1);
 			  pSetmComp(q);
 
 			  poly transformationColumn = NULL;
@@ -3032,6 +3521,12 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 					{
 					  pIter(p);
 					}
+				  }
+				  // this only happens while debugging -> makes debugging more consistent
+				  if(pNext(p) == NULL)
+				  {
+					  pNext(p) = q;
+					  strat->P.pLength++;
 				  }
 			  }
 			  else

@@ -406,13 +406,120 @@ int ksReducePoly(LObject* PR,
     //Print("with:\n");
     //pWrite(t2);
 	
+    // remove additional components from divisor
+    //if(PW->p != NULL) {
+    //    
+    //    poly asd = PW->p;
+    //    
+    //    while (pNext(asd) != NULL)
+    //    {
+    //        if(pGetComp(pNext(asd)) > 30) {
+    //            poly tail = pNext(asd);
+    //            asd->next = NULL;
+    //            
+    //            PW->pLength--;
+    //            
+    //            while (pNext(tail) != NULL) {
+    //                PW->pLength--;
+    //                pIter(tail);
+    //            }
+    //            break;
+    //        }
+    //        pIter(asd);
+    //    }
+    //}
+	
   
-	  
 	//printf("one ksReducePoly\n");
     PR->Tail_Minus_mm_Mult_qq(lm, t2, pLength(t2) /*PW->GetpLength() - 1*/, spNoether);
 
-	
+	// correct bucket length
+	//if(PR->bucket != NULL) {
+	//	// leading monomial is not stored in bucket, right?
+	//	int sum = 1;
+	//	for(int myi = 1; myi <= PR->bucket->buckets_used; myi++) {
 
+	//		if(PR->bucket->buckets[myi] != NULL) {
+	//			
+	//			poly asd = PR->bucket->buckets[myi];
+	//			int cur_length = pLength(asd);
+	//			PR->bucket->buckets_length[myi] = cur_length;
+	//			sum += cur_length;
+	//			
+	//		}
+	//	}
+	//	PR->pLength = sum;
+	//}
+	//else {
+	//	printf("bucket is NULL\n");	
+	//}
+
+	// remove additional components from dividend
+	//if(PR->bucket != NULL) {
+	//	for(int myi = 1; myi <= PR->bucket->buckets_used; myi++) {
+	//		if(PR->bucket->buckets[myi] != NULL) {
+	//			
+	//			poly asd = PR->bucket->buckets[myi];
+	//			
+	//			if(pGetComp(asd) > 30) {
+	//				int tail_length = pLength(asd);
+	//				PR->bucket->buckets[myi] = NULL;
+	//				
+	//				PR->bucket->buckets_length[myi] -= tail_length;
+	//				PR->pLength -= tail_length;
+	//				
+	//				if(PR->bucket->buckets_length[myi] != 0) {
+	//					printf("assertion failed, bucket length is not 0\n");
+	//					exit(1);	
+	//				}
+	//			}
+	//			else {
+	//			
+	//				while (pNext(asd) != NULL)
+	//				{
+	//					if(pGetComp(pNext(asd)) > 30) {
+	//						int tail_length = pLength(pNext(asd));
+	//						asd->next = NULL;
+	//						
+	//						PR->bucket->buckets_length[myi] -= tail_length;
+	//						PR->pLength -= tail_length;
+
+	//						break;
+	//					}
+	//					pIter(asd);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//else {
+	//	printf("bucket is NULL\n");	
+	//}
+	  
+	
+    // remove additional components from divisor
+    //if(PW->p != NULL) {
+    //    
+    //    poly asd = PW->p;
+    //    
+    //    while (pNext(asd) != NULL)
+    //    {
+    //        if(pGetComp(pNext(asd)) > 30) {
+    //            poly tail = pNext(asd);
+    //            asd->next = NULL;
+    //            
+    //            PW->pLength--;
+    //            
+    //            while (pNext(tail) != NULL) {
+    //                PW->pLength--;
+    //                pIter(tail);
+    //            }
+    //            break;
+    //        }
+    //        pIter(asd);
+    //    }
+    //}
+	
   
     // restore store
 	//if(store != NULL) {
@@ -447,6 +554,51 @@ int ksReducePoly(LObject* PR,
   assume(PW->GetpLength() == pLength(PW->p != NULL ? PW->p : PW->t_p));
   PR->LmDeleteAndIter();
 
+  //{	
+  //  LObject* h = PR;
+  //  // add some additional components to dividend
+  //  for(int ii=0;ii<100;ii++)
+  //  {
+  //  	if(h->bucket != NULL && h->bucket->buckets[h->bucket->buckets_used] != NULL) {
+  //  		//int target_comp = pGetComp(store);
+  //  		int target_comp = 730 + 1 + ii + 1;
+  //  		
+  //  		poly asd = h->bucket->buckets[h->bucket->buckets_used];
+  //  		if (asd == NULL) {
+  //  			printf("assertion failed, asd is NULL\n");
+  //  			exit(1);
+  //  		}
+  //  		
+  //  		while (pNext(asd) != NULL)
+  //  		{
+  //  			if(pGetComp(pNext(asd)) == target_comp) {
+  //  				//printf("assertion failed, asd should not have a common component with store\n");
+  //  				break;
+  //  				//exit(1);
+  //  			}
+  //  			if(pGetComp(pNext(asd)) > target_comp) {
+  //  				poly q = pOne();
+  //  				pSetComp(q, target_comp);
+  //  				pNext(q) = pNext(asd);
+  //  				pNext(asd) = q;
+  //  				h->bucket->buckets_length[h->bucket->buckets_used]++;
+  //  				h->pLength++;
+  //  				break;
+  //  			}
+  //  			pIter(asd);
+  //  		}
+
+  //  		if(pNext(asd) == NULL) {
+  //  			poly q = pOne();
+  //  			pSetComp(q, target_comp);
+  //  			pNext(asd) = q;
+  //  			h->bucket->buckets_length[h->bucket->buckets_used]++;
+  //  			h->pLength++;
+  //  		}
+  //  	}
+  //  }
+  //}
+	
 
 	//{
 	//	printf("PR components after reduce:\n");

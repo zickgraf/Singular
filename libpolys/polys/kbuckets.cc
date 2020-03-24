@@ -718,10 +718,10 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
 {
 
 	
-	
   // printf("MYDEBUG enter kBucket_Minus_m_Mult_p\n");
   assume(*l <= 0 || pLength(p) == *l);
   int i, l1;
+  int myshorterlength = 0;
   poly p1 = p;
   ring r = bucket->bucket_ring;
 
@@ -757,6 +757,22 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
 
     if ((i <= bucket->buckets_used) && (bucket->buckets[i] != NULL))
     {
+      // remove additional components from divisor
+      //if(p1 != NULL) {
+      //    
+      //    poly asd = p1;
+      //    
+      //    while (pNext(asd) != NULL)
+      //    {
+      //        if(p_GetComp(pNext(asd), r) > 30) {
+      //            poly tail = pNext(asd);
+      //            asd->next = NULL;
+      //            break;
+      //        }
+      //        pIter(asd);
+      //    }
+      //}
+	
       assume(pLength(bucket->buckets[i])==(unsigned)bucket->buckets_length[i]);
 //#ifdef USE_COEF_BUCKETS
 //     if(bucket->coef[i]!=NULL)
@@ -775,6 +791,52 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
 	  
 	  //printf("MYDEBUG using existing bucket???\n");
 	  //p_Write(p1, r);
+	  
+	  // divisor = p1
+	  
+      // remove additional components from divisor
+      //if(p1 != NULL) {
+      //    
+      //    poly asd = p1;
+      //    
+      //    while (pNext(asd) != NULL)
+      //    {
+      //        if(p_GetComp(pNext(asd), r) > 30) {
+      //            poly tail = pNext(asd);
+      //            asd->next = NULL;
+      //            break;
+      //        }
+      //        pIter(asd);
+      //    }
+      //}
+	
+	    // remove additional components from bucket, i.e. dividend
+		//myshorterlength = 0;
+		//{
+		//  poly asd = bucket->buckets[i];
+		//  while (asd != NULL && pNext(asd) != NULL)
+		//  {
+		//	if (p_GetComp(pNext(asd), r) > 30)
+		//	{
+		//		poly tail = pNext(asd);
+		//		asd->next = NULL;
+		//		
+		//		myshorterlength++;
+
+		//		while (pNext(tail) != NULL) {
+		//			myshorterlength++;
+		//			pIter(tail);
+		//		}
+		//	    break;
+		//	}
+		//	else
+		//	{
+		//	  pIter(asd);
+		//	}
+		//  }
+		//}
+	
+  
 
       p1 = p_Minus_mm_Mult_qq(bucket->buckets[i], m, p1,
                             bucket->buckets_length[i], l1,
@@ -803,6 +865,26 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
       else
       {
         p1 = r->p_Procs->pp_mm_Mult(p1, m, r);
+
+		
+        // remove additional components from divisor
+        //if(p1 != NULL) {
+        //    
+        //    poly asd = p1;
+        //    
+        //    while (pNext(asd) != NULL)
+        //    {
+        //        if(p_GetComp(pNext(asd), r) > 30) {
+        //            poly tail = pNext(asd);
+        //            asd->next = NULL;
+        //            break;
+        //        }
+        //        pIter(asd);
+        //    }
+        //}
+
+	  
+	  
       }
       pSetCoeff0(m, n_InpNeg(pGetCoeff(m),r->cf));
     }
@@ -820,6 +902,10 @@ void kBucket_Minus_m_Mult_p(kBucket_pt bucket, poly m, poly p, int *l,
     i = pLogLength(l1);
   }
 
+  //if(myshorterlength > 0) {
+  //  i = pLogLength(l1 - myshorterlength);
+  //}
+  
   bucket->buckets[i] = p1;
   bucket->buckets_length[i]=l1;
   if (i >= bucket->buckets_used)

@@ -24,6 +24,7 @@ LINKAGE poly p_Mult_nn__T(poly p, const number n, const ring r)
 #ifdef HAVE_ZERODIVISORS
   poly old = NULL;
 #endif
+  //MYDEBUG while (p!=NULL && p_GetComp(p, r) <= 30)
   while (p!=NULL)
   {
 #ifndef HAVE_ZERODIVISORS
