@@ -3248,6 +3248,17 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 
 	  printf("result polnomial:\n");
 	  pWrite(strat->P.p);
+		
+		{
+			poly asd = strat->P.p;
+			while(asd != NULL) {
+				if(pGetComp(asd) > 730) {
+					pWrite(strat->P.p);
+					exit(1);
+				}
+				pIter(asd);
+			}
+		}
 
 	  
 	  

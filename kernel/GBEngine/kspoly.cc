@@ -185,6 +185,41 @@ int ksReducePolyZ(LObject* PR,
   return ret;
 }
 
+
+poly mergepolys(poly p, poly q) {
+	poly merged = pOne();
+	poly tail = merged;
+	
+	while(p != NULL && q != NULL) {
+		int comp_p = pGetComp(p);
+		int comp_q = pGetComp(q);
+		if(comp_p == comp_q) {
+			printf("cannot merge polys with common components\n");
+			exit(1);
+		}
+		if(comp_p < comp_q) {
+			pNext(tail) = p;
+			pIter(p);
+			pIter(tail);
+		}
+		else {
+			pNext(tail) = q;
+			pIter(q);
+			pIter(tail);
+		}
+	}
+
+	if(p != NULL) {
+		pNext(tail) = p;	
+	}
+
+	if(q != NULL) {
+		pNext(tail) = q;	
+	}
+
+	return pNext(merged);
+}
+
 int ksReducePoly(LObject* PR,
                  TObject* PW,
                  poly spNoether,
@@ -194,6 +229,9 @@ int ksReducePoly(LObject* PR,
   //printf("entering ksReducePoly\n");
   
 	
+	int dividend_additional_comp = 735;
+	int divisor_additional_comp = 738;
+
 	// extract transformation coeffs of dividend and add one
 	poly transformation_coeffs_dividend = NULL;
 	int transformation_coeffs_dividend_bucket = -1;
@@ -213,55 +251,74 @@ int ksReducePoly(LObject* PR,
 				
 				poly asd = PR->bucket->buckets[myi];
 				poly q = pOne();
-				pSetComp(q, 731);
+				pSetComp(q, dividend_additional_comp);
 				
 				if(pGetComp(asd) > 30) {
-					if(transformation_coeffs_dividend != NULL) {
-						printf("transformation coeff of dividend is not contained in a single bucket, this is not supported\n");
+					int new_transformation_coeffs_dividend_length = pLength(asd);
+
+					transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, asd);
+
+					if(pLength(transformation_coeffs_dividend) != transformation_coeffs_dividend_length + new_transformation_coeffs_dividend_length) {
+						printf("Merge did not preserve length\n");	
 						exit(1);
 					}
-					transformation_coeffs_dividend = asd;
-					transformation_coeffs_dividend_bucket = myi;
-					transformation_coeffs_dividend_length = pLength(asd);
-					PR->bucket->buckets[myi] = q;
 					
-					PR->bucket->buckets_length[myi] -= transformation_coeffs_dividend_length;
-					PR->pLength -= transformation_coeffs_dividend_length;
-					
+					// replace tail by one or NULL
+					PR->bucket->buckets_length[myi] -= new_transformation_coeffs_dividend_length;
+					PR->pLength -= new_transformation_coeffs_dividend_length;
+
 					if(PR->bucket->buckets_length[myi] != 0) {
 						printf("assertion failed, bucket length is not 0\n");
 						exit(1);	
 					}
+					
+					if(transformation_coeffs_dividend_length == 0) {
+						// first transformation coeffs found -> add one
+						transformation_coeffs_dividend_bucket = myi;
+						PR->bucket->buckets[myi] = q;
 
-					PR->bucket->buckets_length[myi]++;
-					PR->pLength++;
+						PR->bucket->buckets_length[myi]++;
+						PR->pLength++;
+					}
+					else {
+						PR->bucket->buckets[myi] = NULL;
+					}
+							
+					transformation_coeffs_dividend_length += new_transformation_coeffs_dividend_length;
 				}
 				else {
 				
 					while (pNext(asd) != NULL)
 					{
 						if(pGetComp(pNext(asd)) > 30) {
-							if(transformation_coeffs_dividend != NULL) {
 		
-						pWrite(PR->p);
-						for(int myii = 0; myii <= PR->bucket->buckets_used; myii++) {
-							printf("bucket %d:\n", myii);
-							pWrite(PR->bucket->buckets[myii]);
-						}
-								printf("transformation coeff of dividend is not contained in a single bucket, this is not supported\n");
+							int new_transformation_coeffs_dividend_length = pLength(pNext(asd));
+
+							transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, pNext(asd));
+
+							if(pLength(transformation_coeffs_dividend) != transformation_coeffs_dividend_length + new_transformation_coeffs_dividend_length) {
+								printf("Merge did not preserve length\n");	
 								exit(1);
 							}
-							transformation_coeffs_dividend = asd->next;
-							transformation_coeffs_dividend_bucket = myi;
-							transformation_coeffs_dividend_length = pLength(pNext(asd));
-							asd->next = q;
 							
-							PR->bucket->buckets_length[myi] -= transformation_coeffs_dividend_length;
-							PR->pLength -= transformation_coeffs_dividend_length;
+							// replace tail by one or NULL
+							PR->bucket->buckets_length[myi] -= new_transformation_coeffs_dividend_length;
+							PR->pLength -= new_transformation_coeffs_dividend_length;
 
-							PR->bucket->buckets_length[myi]++;
-							PR->pLength++;
+							if(transformation_coeffs_dividend_length == 0) {
+								// first transformation coeffs found -> add one
+								transformation_coeffs_dividend_bucket = myi;
+								pNext(asd) = q;
 
+								PR->bucket->buckets_length[myi]++;
+								PR->pLength++;
+							}
+							else {
+								pNext(asd) = NULL;
+							}
+							
+							transformation_coeffs_dividend_length += new_transformation_coeffs_dividend_length;
+							
 							break;
 						}
 						pIter(asd);
@@ -279,6 +336,11 @@ int ksReducePoly(LObject* PR,
 		exit(1);
 	}
 
+						// pWrite(PR->p); // MYDEBUG
+						// for(int myii = 0; myii <= PR->bucket->buckets_used; myii++) {
+						// 	printf("bucket %d:\n", myii);
+						// 	pWrite(PR->bucket->buckets[myii]);
+						// }
 	
 	
 	// extract transformation coeffs of divisor and add one
@@ -288,7 +350,7 @@ int ksReducePoly(LObject* PR,
         
         poly asd = PW->p;
 		poly q = pOne();
-		pSetComp(q, 732);
+		pSetComp(q, divisor_additional_comp);
         
         while (pNext(asd) != NULL)
         {
@@ -382,6 +444,8 @@ int ksReducePoly(LObject* PR,
       if (PR->t_p!=NULL) PR->t_p=_p; else PR->p=_p;
       PR->pLength=0; // usually not used, GetpLength re-computes it if needed
     }
+	printf("aaaaaaa1");
+	exit(1);
     return 0;
   }
 #endif
@@ -390,6 +454,8 @@ int ksReducePoly(LObject* PR,
   {                       // just cancel the leading term
     PR->LmDeleteAndIter();
     if (coef != NULL) *coef = n_Init(1, tailRing->cf);
+	printf("aaaaaaa2");
+	exit(1);
     return 0;
   }
 
@@ -409,8 +475,16 @@ int ksReducePoly(LObject* PR,
     {
       // undo changes of lm
       p_ExpVectorAdd(lm, p2, tailRing);
-      if (strat == NULL) return 2;
-      if (! kStratChangeTailRing(strat, PR, PW)) return -1;
+      if (strat == NULL) {
+			printf("aaaaaaa3");
+			exit(1);
+		  return 2;
+	  }
+      if (! kStratChangeTailRing(strat, PR, PW)) {
+			printf("aaaaaaa4");
+			exit(1);
+		  return -1;
+	  }
       tailRing = strat->tailRing;
       p1 = PR->GetLmTailRing();
       p2 = PW->GetLmTailRing();
@@ -814,14 +888,14 @@ int ksReducePoly(LObject* PR,
 	if(PR->bucket != NULL) {
 		poly qwe = PR->p;
 
-		if(pGetComp(qwe) == 731) {
+		if(pGetComp(qwe) == dividend_additional_comp) {
 			if(dividend_coeff != NULL) {
-				printf("multiple monomials with component 731 in dividend\n");
+				printf("a: multiple monomials with component 731 in dividend\n");
 				exit(1);
 			}
 			dividend_coeff = pGetCoeff(qwe);
 			
-			if(pNext(qwe) != NULL && pGetComp(pNext(qwe)) != 732) {
+			if(pNext(qwe) != NULL && pGetComp(pNext(qwe)) != divisor_additional_comp) {
 				printf("there is a component which is different from 732 after 731\n");
 				exit(1);
 			}
@@ -836,14 +910,14 @@ int ksReducePoly(LObject* PR,
 				
 				poly asd = PR->bucket->buckets[myi];
 				
-				if(pGetComp(asd) == 731) {
+				if(pGetComp(asd) == dividend_additional_comp) {
 					if(dividend_coeff != NULL) {
-						printf("multiple monomials with component 731 in dividend\n");
+						printf("b: multiple monomials with component 731 in dividend\n");
 						exit(1);
 					}
 					dividend_coeff = pGetCoeff(asd);
 					
-					if(pNext(asd) != NULL && pGetComp(pNext(asd)) != 732) {
+					if(pNext(asd) != NULL && pGetComp(pNext(asd)) != divisor_additional_comp) {
 						printf("there is a component which is different from 732 after 731\n");
 						exit(1);
 					}
@@ -857,14 +931,14 @@ int ksReducePoly(LObject* PR,
 				
 					while (pNext(asd) != NULL)
 					{
-						if(pGetComp(pNext(asd)) == 731) {
+						if(pGetComp(pNext(asd)) == dividend_additional_comp) {
 							if(dividend_coeff != NULL) {
-								printf("multiple monomials with component 731 in dividend\n");
+								printf("c: multiple monomials with component 731 in dividend\n");
 								exit(1);
 							}
 							dividend_coeff = pGetCoeff(pNext(asd));
 							
-							if(pNext(pNext(asd)) != NULL && pGetComp(pNext(pNext(asd))) != 732) {
+							if(pNext(pNext(asd)) != NULL && pGetComp(pNext(pNext(asd))) != divisor_additional_comp) {
 								printf("there is a component which is different from 732 after 731\n");
 								exit(1);
 							}
@@ -898,7 +972,7 @@ int ksReducePoly(LObject* PR,
 				
 				poly asd = PR->bucket->buckets[myi];
 				
-				if(pGetComp(asd) == 732) {
+				if(pGetComp(asd) == divisor_additional_comp) {
 					if(divisor_coeff != NULL) {
 						printf("multiple monomials with component 732 in dividend\n");
 						exit(1);
@@ -919,7 +993,7 @@ int ksReducePoly(LObject* PR,
 				
 					while (pNext(asd) != NULL)
 					{
-						if(pGetComp(pNext(asd)) == 732) {
+						if(pGetComp(pNext(asd)) == divisor_additional_comp) {
 							if(divisor_coeff != NULL) {
 								printf("multiple monomials with component 732 in dividend\n");
 								exit(1);
@@ -974,11 +1048,11 @@ int ksReducePoly(LObject* PR,
     // divisor
     if (PW->p != NULL) {
         poly asd = PW->p;
-        while (pNext(asd) != NULL && pGetComp(pNext(asd)) != 732) {
+        while (pNext(asd) != NULL && pGetComp(pNext(asd)) != divisor_additional_comp) {
       	    pIter(asd);
         }
 
-        if(pNext(asd) == NULL || pGetComp(pNext(asd)) != 732) {
+        if(pNext(asd) == NULL || pGetComp(pNext(asd)) != divisor_additional_comp) {
       	    printf("could not find additional component in divisor at component 732\n");
       	    exit(1);
         }
