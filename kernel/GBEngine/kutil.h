@@ -69,6 +69,7 @@ public:
   poly p;       // Lm(p) \in currRing Tail(p) \in tailRing
   poly t_p;     // t_p \in tailRing: as monomials Lm(t_p) == Lm(p)
   poly transformation_coeffs = NULL;
+  int transformation_coeffs_length = 0;
   poly max_exp;     // p_GetMaxExpP(pNext(p))
   ring tailRing;
   long FDeg;    // pFDeg(p)
