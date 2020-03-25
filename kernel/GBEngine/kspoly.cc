@@ -350,20 +350,20 @@ if(strat != NULL && strat->syzComp > 0) {
 	if(PW->p != NULL) {
 		
 		poly asd = PW->p;
-		poly q = pOne();
-		pSetComp(q, divisor_additional_comp);
+		//poly q = pOne();
+		//pSetComp(q, divisor_additional_comp);
 		
 		while (pNext(asd) != NULL)
 		{
 			if(pGetComp(pNext(asd)) > 30) {
 				transformation_coeffs_divisor = pNext(asd);
-				pNext(asd) = q;
-				//pNext(asd) = NULL;
+				//pNext(asd) = q;
+				pNext(asd) = NULL;
 				
 				transformation_coeffs_divisor_length = pLength(transformation_coeffs_divisor);
 
 				PW->pLength -= transformation_coeffs_divisor_length;
-				PW->pLength++;
+				//PW->pLength++;
 				
 				break;
 			}
@@ -992,73 +992,73 @@ if(strat != NULL && strat->syzComp > 0) {
 		printf("could not find dividend_monom\n");
 		exit(1);
 	}
-	// divisor_monom
-	poly divisor_monom = NULL;
-	if(PR->bucket != NULL) {
-		for(int myi = 1; myi <= PR->bucket->buckets_used; myi++) {
-			if(PR->bucket->buckets[myi] != NULL) {
-				
-				poly asd = PR->bucket->buckets[myi];
-				
-				if(pGetComp(asd) == divisor_additional_comp) {
-					if(divisor_monom != NULL) {
-						printf("multiple monomials with component 732 in dividend\n");
-						exit(1);
-					}
-					divisor_monom = asd;
-					
-					if(pNext(asd) != NULL) {
-						printf("there is another component after 732\n");
-						exit(1);
-					}
+	//// divisor_monom
+	//poly divisor_monom = NULL;
+	//if(PR->bucket != NULL) {
+	//	for(int myi = 1; myi <= PR->bucket->buckets_used; myi++) {
+	//		if(PR->bucket->buckets[myi] != NULL) {
+	//			
+	//			poly asd = PR->bucket->buckets[myi];
+	//			
+	//			if(pGetComp(asd) == divisor_additional_comp) {
+	//				if(divisor_monom != NULL) {
+	//					printf("multiple monomials with component 732 in dividend\n");
+	//					exit(1);
+	//				}
+	//				divisor_monom = asd;
+	//				
+	//				if(pNext(asd) != NULL) {
+	//					printf("there is another component after 732\n");
+	//					exit(1);
+	//				}
 
-					PR->bucket->buckets_length[myi]--;
-					PR->pLength--;
+	//				PR->bucket->buckets_length[myi]--;
+	//				PR->pLength--;
 
-					PR->bucket->buckets[myi] = pNext(asd);
-					pNext(divisor_monom) = NULL;
-				}
-				else {
-				
-					while (pNext(asd) != NULL)
-					{
-						if(pGetComp(pNext(asd)) == divisor_additional_comp) {
-							if(divisor_monom != NULL) {
-								printf("multiple monomials with component 732 in dividend\n");
-								exit(1);
-							}
-							divisor_monom = pNext(asd);
-							
-							if(pNext(pNext(asd)) != NULL) {
-								printf("there is another component after 732\n");
-								exit(1);
-							}
+	//				PR->bucket->buckets[myi] = pNext(asd);
+	//				pNext(divisor_monom) = NULL;
+	//			}
+	//			else {
+	//			
+	//				while (pNext(asd) != NULL)
+	//				{
+	//					if(pGetComp(pNext(asd)) == divisor_additional_comp) {
+	//						if(divisor_monom != NULL) {
+	//							printf("multiple monomials with component 732 in dividend\n");
+	//							exit(1);
+	//						}
+	//						divisor_monom = pNext(asd);
+	//						
+	//						if(pNext(pNext(asd)) != NULL) {
+	//							printf("there is another component after 732\n");
+	//							exit(1);
+	//						}
 
-							PR->bucket->buckets_length[myi]--;
-							PR->pLength--;
+	//						PR->bucket->buckets_length[myi]--;
+	//						PR->pLength--;
 
-							pNext(asd) = pNext(pNext(asd));
-							pNext(divisor_monom) = NULL;
-							
-							break;
-						}
-						pIter(asd);
-					}
-				}
-			}
-		}
-	}
-	else {
-		printf("bucket is NULL\n");
-		exit(1);
-	}
-	if(divisor_monom == NULL) {
-		printf("could not find divisor_monom\n");
-		exit(1);
-	}
+	//						pNext(asd) = pNext(pNext(asd));
+	//						pNext(divisor_monom) = NULL;
+	//						
+	//						break;
+	//					}
+	//					pIter(asd);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//else {
+	//	printf("bucket is NULL\n");
+	//	exit(1);
+	//}
+	//if(divisor_monom == NULL) {
+	//	printf("could not find divisor_monom\n");
+	//	exit(1);
+	//}
 
-	pSetComp(dividend_monom, 0);
-	pSetComp(divisor_monom, 0);
+	//pSetComp(dividend_monom, 0);
+	//pSetComp(divisor_monom, 0);
 
 	//pWrite(dividend_monom);
 	//pWrite(divisor_monom);
@@ -1093,23 +1093,12 @@ if(strat != NULL && strat->syzComp > 0) {
     // divisor
     if (PW->p != NULL) {
         poly asd = PW->p;
-        while (pNext(asd) != NULL && pGetComp(pNext(asd)) != divisor_additional_comp) {
+        while (pNext(asd) != NULL) {
       	    pIter(asd);
         }
 
-        if(pNext(asd) == NULL || pGetComp(pNext(asd)) != divisor_additional_comp) {
-      	    printf("could not find additional component in divisor at component 732\n");
-      	    exit(1);
-        }
-		
-		if(pNext(pNext(asd)) != 0) {
-			printf("additional component of divisor is follwed by another component\n");
-			exit(1);
-		}
-
         pNext(asd) = transformation_coeffs_divisor;
 
-        PW->pLength--;
         PW->pLength += transformation_coeffs_divisor_length;
     }
     else {
