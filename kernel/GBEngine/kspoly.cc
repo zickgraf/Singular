@@ -256,7 +256,8 @@ int ksReducePoly(LObject* PR,
 				if(pGetComp(asd) > 30) {
 					int new_transformation_coeffs_dividend_length = pLength(asd);
 
-					transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, asd);
+					//transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, asd);
+					transformation_coeffs_dividend = pAdd(transformation_coeffs_dividend, asd);
 
 					if(pLength(transformation_coeffs_dividend) != transformation_coeffs_dividend_length + new_transformation_coeffs_dividend_length) {
 						printf("Merge did not preserve length\n");	
@@ -294,7 +295,8 @@ int ksReducePoly(LObject* PR,
 		
 							int new_transformation_coeffs_dividend_length = pLength(pNext(asd));
 
-							transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, pNext(asd));
+							//transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, pNext(asd));
+							transformation_coeffs_dividend = pAdd(transformation_coeffs_dividend, pNext(asd));
 
 							if(pLength(transformation_coeffs_dividend) != transformation_coeffs_dividend_length + new_transformation_coeffs_dividend_length) {
 								printf("Merge did not preserve length\n");	
@@ -410,6 +412,7 @@ int ksReducePoly(LObject* PR,
 	//	}
 	//}
   
+	//printf("################################\n");
   int ret = 0;
   ring tailRing = PR->tailRing;
   kTest_L(PR,tailRing);
@@ -527,6 +530,9 @@ int ksReducePoly(LObject* PR,
 #ifdef HAVE_SHIFTBBA
     if (tailRing->isLPring) pSetCoeff0(p1, bn); // lm doesn't point to p1 anymore, if the coef was a pointer, it has been deleted
 #endif
+
+	//pWrite(ppMult_nn(pOne(), an));
+	
     if ((ct == 0) || (ct == 2))
       PR->Tail_Mult_nn(an);
     if (coef != NULL) *coef = an;
@@ -629,6 +635,7 @@ int ksReducePoly(LObject* PR,
 	
   
 	//printf("one ksReducePoly\n");
+	//pWrite(lm);
     PR->Tail_Minus_mm_Mult_qq(lm, t2, pLength(t2) /*PW->GetpLength() - 1*/, spNoether);
 
 	// correct bucket length
@@ -940,7 +947,7 @@ int ksReducePoly(LObject* PR,
 							}
 							dividend_monom = pNext(asd);
 							
-							if(pNext(pNext(dividend_monom)) != NULL && pGetComp(pNext(pNext(dividend_monom))) != divisor_additional_comp) {
+							if(pNext(dividend_monom) != NULL && pGetComp(pNext(dividend_monom)) != divisor_additional_comp) {
 								printf("there is a component which is different from 732 after 731\n");
 								exit(1);
 							}
@@ -991,6 +998,7 @@ int ksReducePoly(LObject* PR,
 					PR->pLength--;
 
 					PR->bucket->buckets[myi] = pNext(asd);
+					pNext(divisor_monom) = NULL;
 				}
 				else {
 				
@@ -1012,6 +1020,7 @@ int ksReducePoly(LObject* PR,
 							PR->pLength--;
 
 							pNext(asd) = pNext(pNext(asd));
+							pNext(divisor_monom) = NULL;
 							
 							break;
 						}
@@ -1029,11 +1038,19 @@ int ksReducePoly(LObject* PR,
 		printf("could not find divisor_monom\n");
 		exit(1);
 	}
+
+	pSetComp(dividend_monom, 0);
+	pSetComp(divisor_monom, 0);
+
+	//pWrite(dividend_monom);
+	//pWrite(divisor_monom);
+	
+	
 	// construct new transformaton_coeffs
-	poly transformation_coeffs_dividend_multi_coeff = pMult_nn(transformation_coeffs_dividend, pGetCoeff(dividend_monom));
-	poly transformation_coeffs_divisor_multi_coeff = ppMult_nn(transformation_coeffs_divisor, pGetCoeff(divisor_monom));
-	poly transformation_coeffs = pAdd(transformation_coeffs_dividend_multi_coeff, transformation_coeffs_divisor_multi_coeff);
-	//poly transformation_coeffs = pPlus_mm_Mult_qq(transformation_coeffs_dividend_multi_coeff, divisor_monom, transformation_coeffs_divisor);
+	poly transformation_coeffs_dividend_multi_coeff = pMult_mm(transformation_coeffs_dividend, dividend_monom);
+	//poly transformation_coeffs_divisor_multi_coeff = ppMult_mm(transformation_coeffs_divisor, divisor_monom);
+	//poly transformation_coeffs = pAdd(transformation_coeffs_dividend_multi_coeff, transformation_coeffs_divisor_multi_coeff);
+	poly transformation_coeffs = pPlus_mm_Mult_qq(transformation_coeffs_dividend_multi_coeff, divisor_monom, transformation_coeffs_divisor);
 	
 	int transformation_coeffs_length = pLength(transformation_coeffs);
 	// insert transformation_coeffs_dividend
