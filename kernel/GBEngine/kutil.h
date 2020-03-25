@@ -68,6 +68,7 @@ public:
   poly sig;   // the signature of the element
   poly p;       // Lm(p) \in currRing Tail(p) \in tailRing
   poly t_p;     // t_p \in tailRing: as monomials Lm(t_p) == Lm(p)
+  poly transformation_coeffs = NULL;
   poly max_exp;     // p_GetMaxExpP(pNext(p))
   ring tailRing;
   long FDeg;    // pFDeg(p)

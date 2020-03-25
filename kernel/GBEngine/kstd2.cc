@@ -1930,7 +1930,6 @@ int redHoney (LObject* h, kStrategy strat)
   {
     j=kFindDivisibleByInT(strat, h);
     if (j < 0) {
-
 		
 		// remove additional components from dividend
 		//if(h->bucket != NULL) {
@@ -1973,7 +1972,6 @@ int redHoney (LObject* h, kStrategy strat)
 		//else {
 		//	printf("bucket is NULL\n");	
 		//}
-
 		
 		
 	    printf("number of reductions: %d\n", number_of_reductions);
@@ -3247,19 +3245,32 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	  
 
 	  printf("result polnomial:\n");
-	  pWrite(strat->P.p);
+	  //pWrite(strat->P.p);
 		
 		{
 			poly asd = strat->P.p;
 			while(asd != NULL) {
-				if(pGetComp(asd) > 730) {
-					pWrite(strat->P.p);
-					exit(1);
+				if(pGetComp(asd) > 30) {
+					//pWrite(strat->P.p);
+					printf("p contains a transformation component\n");
+					//exit(1);
+					break;
 				}
 				pIter(asd);
 			}
 		}
 
+	  // compute/append transformation_coeffs
+	  //{
+	  //	  poly asd = strat->P.p;
+	  //	  while(pNext(asd) != NULL) {
+	  //	  	pIter(asd);
+	  //	  }
+	  //	  pNext(asd) = strat->P.transformation_coeffs;
+	  //	  strat->P.pLength += pLength(strat->P.transformation_coeffs);
+	  //}
+	  //  
+	  //strat->P.transformation_coeffs = NULL;
 	  
 	  
       // in the homogeneous case FDeg >= pFDeg (sugar/honey)

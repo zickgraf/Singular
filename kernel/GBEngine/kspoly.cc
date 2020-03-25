@@ -228,14 +228,18 @@ int ksReducePoly(LObject* PR,
 {
   //printf("entering ksReducePoly\n");
   
-	
+#if 1
 	int dividend_additional_comp = 735;
 	int divisor_additional_comp = 738;
-
-	// extract transformation coeffs of dividend and add one
 	poly transformation_coeffs_dividend = NULL;
 	int transformation_coeffs_dividend_bucket = -1;
 	int transformation_coeffs_dividend_length = 0;
+	poly transformation_coeffs_divisor = NULL;
+	int transformation_coeffs_divisor_length = 0;
+if(strat != NULL && strat->syzComp > 0) {
+
+	//if(PR->transformation_coeffs == NULL) {
+		// extract transformation coeffs of dividend and add one
 	if(PR->bucket != NULL) {
 		if(PR->p == NULL) {
 			printf("PR->p is NULL, reducing a syzygy?\n");
@@ -333,52 +337,51 @@ int ksReducePoly(LObject* PR,
 		printf("bucket is NULL\n");
 		exit(1);
 	}
-	if(transformation_coeffs_dividend == NULL) {
+	if(transformation_coeffs_dividend == NULL && strat != NULL && strat->syzComp > 0) {
 		printf("could not find transformation coeffs of dividend\n");
 		exit(1);
 	}
 
-						// pWrite(PR->p); // MYDEBUG
-						// for(int myii = 0; myii <= PR->bucket->buckets_used; myii++) {
-						// 	printf("bucket %d:\n", myii);
-						// 	pWrite(PR->bucket->buckets[myii]);
-						// }
+		//PR->transformation_coeffs = transformation_coeffs_dividend;
+	//}
+
 	
-	
+	//if(PW->transformation_coeffs == NULL) {
 	// extract transformation coeffs of divisor and add one
-	poly transformation_coeffs_divisor = NULL;
-	int transformation_coeffs_divisor_length = 0;
-    if(PW->p != NULL) {
-        
-        poly asd = PW->p;
+	if(PW->p != NULL) {
+		
+		poly asd = PW->p;
 		poly q = pOne();
 		pSetComp(q, divisor_additional_comp);
-        
-        while (pNext(asd) != NULL)
-        {
-            if(pGetComp(pNext(asd)) > 30) {
-                transformation_coeffs_divisor = pNext(asd);
-                asd->next = q;
-                
+		
+		while (pNext(asd) != NULL)
+		{
+			if(pGetComp(pNext(asd)) > 30) {
+				transformation_coeffs_divisor = pNext(asd);
+				pNext(asd) = q;
+				//pNext(asd) = NULL;
+				
 				transformation_coeffs_divisor_length = pLength(transformation_coeffs_divisor);
 
-                PW->pLength -= transformation_coeffs_divisor_length;
+				PW->pLength -= transformation_coeffs_divisor_length;
 				PW->pLength++;
 				
-                break;
-            }
-            pIter(asd);
-        }
-    }
+				break;
+			}
+			pIter(asd);
+		}
+	}
 	else {
 		printf("PW->p is NULL, reducing by zero?\n");
 		exit(1);
 	}
-	if(transformation_coeffs_divisor == NULL) {
+	if(transformation_coeffs_divisor == NULL && strat != NULL && strat->syzComp > 0) {
 		printf("could not find transformation coeffs of divisor\n");
 		exit(1);
 	}
-
+		//PW->transformation_coeffs = transformation_coeffs_divisor;
+}
+#endif
 	
 #ifdef KDEBUG
   red_count++;
@@ -453,11 +456,11 @@ int ksReducePoly(LObject* PR,
   }
 #endif
 
-  if (t2==NULL)           // Divisor is just one term, therefore it will
+  if (t2==NULL && false)           // Divisor is just one term, therefore it will
   {                       // just cancel the leading term
     PR->LmDeleteAndIter();
     if (coef != NULL) *coef = n_Init(1, tailRing->cf);
-	printf("aaaaaaa2");
+	printf("unhandled case: divisor is only a single term\n");
 	exit(1);
     return 0;
   }
@@ -533,8 +536,10 @@ int ksReducePoly(LObject* PR,
 
 	//pWrite(ppMult_nn(pOne(), an));
 	
-    if ((ct == 0) || (ct == 2))
+    if ((ct == 0) || (ct == 2)) {
       PR->Tail_Mult_nn(an);
+	  //PR->transformation_coeffs = pMult_nn(PR->transformation_coeffs, an);
+	}
     if (coef != NULL) *coef = an;
     else n_Delete(&an, tailRing->cf);
   }
@@ -556,6 +561,7 @@ int ksReducePoly(LObject* PR,
 #ifdef HAVE_SHIFTBBA
   if (tailRing->isLPring)
   {
+	printf("unhandled case\n");
     PR->Tail_Minus_mm_Mult_qq(lm, tailRing->p_Procs->pp_Mult_mm(t2, lmRight, tailRing), pLength(t2), spNoether);
   }
   else
@@ -636,6 +642,7 @@ int ksReducePoly(LObject* PR,
   
 	//printf("one ksReducePoly\n");
 	//pWrite(lm);
+	//PR->transformation_coeffs = pPlus_mm_Mult_qq(PR->transformation_coeffs, lm, PW->transformation_coeffs);
     PR->Tail_Minus_mm_Mult_qq(lm, t2, pLength(t2) /*PW->GetpLength() - 1*/, spNoether);
 
 	// correct bucket length
@@ -887,6 +894,14 @@ int ksReducePoly(LObject* PR,
 	//		PR->pLength++;
 	//	}
 	//}
+	//
+	//
+	
+#if 1
+  
+    if(strat == NULL || strat->syzComp == 0) {
+		return ret;	
+	}
 
     // deal with the transformation coeffs
     // dividend
@@ -1098,6 +1113,52 @@ int ksReducePoly(LObject* PR,
         printf("could not find additional component in divisor\n");
         exit(1);
     }
+	
+  
+  
+  
+    // dividend simplified
+	//int transformation_coeffs_dividend_bucket = PR->bucket->buckets_used;
+	//int transformation_coeffs_length = pLength(PR->transformation_coeffs);
+	//if(PR->bucket->buckets[transformation_coeffs_dividend_bucket] == NULL) {
+	//	PR->bucket->buckets[transformation_coeffs_dividend_bucket] = PR->transformation_coeffs;
+	//	
+	//	PR->bucket->buckets_length[transformation_coeffs_dividend_bucket] += transformation_coeffs_length;
+	//	PR->pLength += transformation_coeffs_length;
+	//}
+	//else {
+	//	poly asd = PR->bucket->buckets[transformation_coeffs_dividend_bucket];
+	//	while(pNext(asd) != NULL) {
+	//		pIter(asd);	
+	//	}
+	//	
+	//	pNext(asd) = PR->transformation_coeffs;
+
+	//	PR->bucket->buckets_length[transformation_coeffs_dividend_bucket] += transformation_coeffs_length;
+	//	PR->pLength += transformation_coeffs_length;
+	//}
+	//PR->transformation_coeffs = NULL;
+	
+    // divisor simplified
+	
+  
+	  //{
+	  //	  poly asd = PW->p;
+	  //	  while(pNext(asd) != NULL) {
+	  //	  	pIter(asd);
+	  //	  }
+	  //	  pNext(asd) = PW->transformation_coeffs;
+	  //	  PW->pLength += pLength(PW->transformation_coeffs);
+	  //    PW->transformation_coeffs = NULL;
+	  //}
+		
+  
+						//pWrite(PR->p); // MYDEBUG
+						//for(int myii = 0; myii <= PR->bucket->buckets_used; myii++) {
+						//	printf("bucket %d:\n", myii);
+						//	pWrite(PR->bucket->buckets[myii]);
+						//}
+#endif
   
   return ret;
 }
