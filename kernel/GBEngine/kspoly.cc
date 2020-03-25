@@ -342,9 +342,8 @@ if(strat != NULL && strat->syzComp > 0) {
 		exit(1);
 	}
 
-		//PR->transformation_coeffs = transformation_coeffs_dividend;
+		PR->transformation_coeffs = transformation_coeffs_dividend;
 	//}
-
 	
 	//if(PW->transformation_coeffs == NULL) {
 	// extract transformation coeffs of divisor and add one
@@ -379,7 +378,7 @@ if(strat != NULL && strat->syzComp > 0) {
 		printf("could not find transformation coeffs of divisor\n");
 		exit(1);
 	}
-		//PW->transformation_coeffs = transformation_coeffs_divisor;
+	PW->transformation_coeffs = transformation_coeffs_divisor;
 }
 #endif
 	
@@ -537,8 +536,10 @@ if(strat != NULL && strat->syzComp > 0) {
 	//pWrite(ppMult_nn(pOne(), an));
 	
     if ((ct == 0) || (ct == 2)) {
+	  if(strat != NULL && strat->syzComp > 0) {
+	      PR->transformation_coeffs = pMult_nn(PR->transformation_coeffs, an);
+	  }
       PR->Tail_Mult_nn(an);
-	  //PR->transformation_coeffs = pMult_nn(PR->transformation_coeffs, an);
 	}
     if (coef != NULL) *coef = an;
     else n_Delete(&an, tailRing->cf);
@@ -642,7 +643,9 @@ if(strat != NULL && strat->syzComp > 0) {
   
 	//printf("one ksReducePoly\n");
 	//pWrite(lm);
-	//PR->transformation_coeffs = pPlus_mm_Mult_qq(PR->transformation_coeffs, lm, PW->transformation_coeffs);
+	if(strat != NULL && strat->syzComp > 0) {
+		PR->transformation_coeffs = pMinus_mm_Mult_qq(PR->transformation_coeffs, lm, PW->transformation_coeffs);
+	}
     PR->Tail_Minus_mm_Mult_qq(lm, t2, pLength(t2) /*PW->GetpLength() - 1*/, spNoether);
 
 	// correct bucket length
@@ -1060,13 +1063,13 @@ if(strat != NULL && strat->syzComp > 0) {
 	//pWrite(dividend_monom);
 	//pWrite(divisor_monom);
 	
-	
 	// construct new transformaton_coeffs
-	poly transformation_coeffs_dividend_multi_coeff = pMult_mm(transformation_coeffs_dividend, dividend_monom);
+	//poly transformation_coeffs_dividend_multi_coeff = pMult_mm(transformation_coeffs_dividend, dividend_monom);
 	//poly transformation_coeffs_divisor_multi_coeff = ppMult_mm(transformation_coeffs_divisor, divisor_monom);
 	//poly transformation_coeffs = pAdd(transformation_coeffs_dividend_multi_coeff, transformation_coeffs_divisor_multi_coeff);
-	poly transformation_coeffs = pPlus_mm_Mult_qq(transformation_coeffs_dividend_multi_coeff, divisor_monom, transformation_coeffs_divisor);
+	//poly transformation_coeffs = pPlus_mm_Mult_qq(transformation_coeffs_dividend_multi_coeff, divisor_monom, transformation_coeffs_divisor);
 	
+	poly transformation_coeffs = PR->transformation_coeffs;
 	int transformation_coeffs_length = pLength(transformation_coeffs);
 	// insert transformation_coeffs_dividend
 	if(PR->bucket->buckets[transformation_coeffs_dividend_bucket] == NULL) {
