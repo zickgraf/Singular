@@ -10186,7 +10186,7 @@ void initBuchMoraPos (kStrategy strat)
         strat->posInT = posInT15;
       else
         strat->posInT = posInT_EcartpLength;
-      strat->posInT = posInT15;
+      //strat->posInT = posInT15;
     }
     else if (currRing->pLexOrder && !TEST_OPT_INTSTRATEGY)
     {
