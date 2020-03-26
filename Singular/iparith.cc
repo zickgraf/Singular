@@ -5009,9 +5009,9 @@ static BOOLEAN jjSTD(leftv res, leftv v)
       w=ivCopy(w);
     }
   }
-  printf("before kStd in jjSTD\n");
+  //printf("before kStd in jjSTD\n");
   result=kStd(v_id,currRing->qideal,hom,&w);
-  printf("after kStd in jjSTD\n");
+  //printf("after kStd in jjSTD\n");
   idSkipZeroes(result);
   res->data = (char *)result;
   if(!TEST_OPT_DEGBOUND) setFlag(res,FLAG_STD);

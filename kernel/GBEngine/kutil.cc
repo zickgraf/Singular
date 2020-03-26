@@ -3771,7 +3771,7 @@ void chainCritPart (poly p,int ecart,kStrategy strat)
 */
 void initenterpairs (poly h,int k,int ecart,int isFromQ,kStrategy strat, int atR = -1)
 {
-  printf("pGetComp(h) = %d\n", pGetComp(h));
+  //printf("pGetComp(h) = %d\n", pGetComp(h));
 
   if ((strat->syzComp==0)
   || (pGetComp(h)<=strat->syzComp))
@@ -3789,7 +3789,7 @@ void initenterpairs (poly h,int k,int ecart,int isFromQ,kStrategy strat, int atR
           if (!strat->fromQ[j])
           {
             new_pair=TRUE;
-			printf("asda\n");
+			//printf("asda\n");
             strat->enterOnePair(j,h,ecart,isFromQ,strat, atR);
           //Print("j:%d, Ll:%d\n",j,strat->Ll);
           }
@@ -3800,7 +3800,7 @@ void initenterpairs (poly h,int k,int ecart,int isFromQ,kStrategy strat, int atR
         new_pair=TRUE;
         for (j=0; j<=k; j++)
         {
-			printf("asdb\n");
+			//printf("asdb\n");
           strat->enterOnePair(j,h,ecart,isFromQ,strat, atR);
           //Print("j:%d, Ll:%d\n",j,strat->Ll);
         }
@@ -3814,7 +3814,7 @@ void initenterpairs (poly h,int k,int ecart,int isFromQ,kStrategy strat, int atR
         || (pGetComp(strat->S[j])==0))
         {
           new_pair=TRUE;
-			printf("asdc\n");
+			//printf("asdc\n");
           strat->enterOnePair(j,h,ecart,isFromQ,strat, atR);
         //Print("j:%d, Ll:%d\n",j,strat->Ll);
         }
@@ -3828,7 +3828,7 @@ void initenterpairs (poly h,int k,int ecart,int isFromQ,kStrategy strat, int atR
       else
     #endif
       strat->chainCrit(h,ecart,strat);
-			printf("asdd\n");
+			//printf("asdd\n");
     }
     kMergeBintoL(strat);
   }
@@ -9718,7 +9718,7 @@ void replaceInLAndSAndT(LObject &p, int tj, kStrategy strat)
 void enterT(LObject &p, kStrategy strat, int atT)
 {
   int i;
-  printf("enterT called with atT = %d\n", atT);
+  //printf("enterT called with atT = %d\n", atT);
 
 #ifdef PDEBUG
 #ifdef HAVE_SHIFTBBA
@@ -9811,9 +9811,9 @@ void enterT(LObject &p, kStrategy strat, int atT)
   strat->sevT[atT] = (p.sev == 0 ? pGetShortExpVector(p.p) : p.sev);
   kTest_T(&(strat->T[atT]));
 
-  printf("new T:\n");
+  //printf("new T:\n");
   //strat->T[atT].wrp();printf("\n");
-  printf("at position: %d\n", atT);
+  //printf("at position: %d\n", atT);
 }
 
 /*2
@@ -10171,12 +10171,12 @@ BOOLEAN kPosInLDependsOnLength(int (*pos_in_l)
 
 void initBuchMoraPos (kStrategy strat)
 {
-  printf("find posInT\n");
+  //printf("find posInT\n");
   if (rHasGlobalOrdering(currRing))
   {
     if (strat->honey)
     {
-	  printf("choose posInX15\n");
+	  //printf("choose posInX15\n");
       strat->posInL = posInL15;
       // ok -- here is the deal: from my experiments for Singular-2-0
       // I conclude that that posInT_EcartpLength is the best of
@@ -10257,7 +10257,7 @@ void initBuchMoraPos (kStrategy strat)
   strat->posInLDependsOnLength = kPosInLDependsOnLength(strat->posInL);
 
   if (strat->posInT == posInT_EcartpLength) {
-	printf("I have chosen posInT_EcartpLength\n");
+	//printf("I have chosen posInT_EcartpLength\n");
   }
 }
 
@@ -10368,7 +10368,7 @@ void initBuchMora (ideal F,ideal Q,kStrategy strat)
   strat->Lmax = ((IDELEMS(F)+setmaxLinc-1)/setmaxLinc)*setmaxLinc;
   strat->Ll = -1;
 
-  printf("strat->Ll: %d\n", strat->Ll);
+  //printf("strat->Ll: %d\n", strat->Ll);
   
   strat->L = initL(strat->Lmax);
   /*- set B -*/
@@ -10420,7 +10420,7 @@ void initBuchMora (ideal F,ideal Q,kStrategy strat)
     }
   }
 
-  printf("strat->Ll: %d\n", strat->Ll);
+  //printf("strat->Ll: %d\n", strat->Ll);
   strat->fromT = FALSE;
   strat->noTailReduction = !TEST_OPT_REDTAIL;
   if ((!TEST_OPT_SB_1)
@@ -10437,7 +10437,7 @@ void initBuchMora (ideal F,ideal Q,kStrategy strat)
     strat->fromQ=NULL;
   }
 
-  printf("strat->Ll: %d\n", strat->Ll);
+  //printf("strat->Ll: %d\n", strat->Ll);
   
   assume(kTest_TS(strat));
 }

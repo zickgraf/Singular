@@ -504,7 +504,7 @@ KINLINE void  sTObject::pCleardenom()
   assume(p != NULL);
   if (TEST_OPT_CONTENTSB)
   {
-	printf("is TEST_OPT_CONTENTSB\n");
+	//printf("is TEST_OPT_CONTENTSB\n");
     number n;
     if (t_p != NULL)
     {
@@ -526,16 +526,16 @@ KINLINE void  sTObject::pCleardenom()
   }
   else
   {
-	printf("is not TEST_OPT_CONTENTSB\n");
+	//printf("is not TEST_OPT_CONTENTSB\n");
     if (t_p != NULL)
     {
-	  printf("is t_p != NULL\n");
+	  //printf("is t_p != NULL\n");
       p_ProjectiveUnique(t_p, tailRing);
       pSetCoeff0(p, pGetCoeff(t_p));
     }
     else
     {
-	  printf("is not t_p != NULL\n");
+	  //printf("is not t_p != NULL\n");
       p_ProjectiveUnique(p, currRing);
     }
   }
@@ -806,7 +806,7 @@ KINLINE poly sLObject::GetP(omBin lmBin)
 
   if (bucket != NULL)
   {
-	printf("bucket != NULL\n");
+	//printf("bucket != NULL\n");
     kBucketClear(bucket, &pNext(p), &pLength);
     kBucketDestroy(&bucket);
     pLength++;

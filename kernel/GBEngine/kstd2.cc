@@ -883,7 +883,7 @@ int redRing (LObject* h,kStrategy strat)
 */
 int redHomog (LObject* h,kStrategy strat)
 {
-  printf("entering redHomog");
+  //printf("entering redHomog");
   //PrintS("red:");
   //h->wrp();
 
@@ -1010,7 +1010,7 @@ int redHomog (LObject* h,kStrategy strat)
       }
     }
   }
-  printf("leaving redHomog");
+  //printf("leaving redHomog");
 }
 
 KINLINE int ksReducePolyTailSig(LObject* PR, TObject* PW, LObject* Red, kStrategy strat)
@@ -1798,7 +1798,7 @@ int redHoney (LObject* h, kStrategy strat)
   int number_of_reductions = 0;
 
   h->PrepareRed(strat->use_buckets);
-  printf("before reduce loop\n");
+  //printf("before reduce loop\n");
 
 	// remove additional components from dividend
 	//if(h->bucket != NULL) {
@@ -1974,8 +1974,8 @@ int redHoney (LObject* h, kStrategy strat)
 		//}
 		
 		
-	    printf("number of reductions: %d\n", number_of_reductions);
-		printf("regular return\n");
+	    //printf("number of reductions: %d\n", number_of_reductions);
+		//printf("regular return\n");
 		return 1;
 	}
 
@@ -2573,7 +2573,7 @@ int redHoney (LObject* h, kStrategy strat)
     {
       kDeleteLcm(h);
       h->Clear();
-	  printf("number of reductions: %d\n", number_of_reductions);
+	  //printf("number of reductions: %d\n", number_of_reductions);
       return 0;
     }
     if (TEST_OPT_IDLIFT)
@@ -2601,7 +2601,7 @@ int redHoney (LObject* h, kStrategy strat)
       {
         if(p_GetComp(h->p,currRing)>strat->syzComp)
         {
-		  printf("number of reductions: %d\n", number_of_reductions);
+		  //printf("number of reductions: %d\n", number_of_reductions);
           h->Delete();
           return 0;
         }
@@ -2610,7 +2610,7 @@ int redHoney (LObject* h, kStrategy strat)
       {
         if(p_GetComp(h->t_p,strat->tailRing)>strat->syzComp)
         {
-		  printf("number of reductions: %d\n", number_of_reductions);
+		  //printf("number of reductions: %d\n", number_of_reductions);
           h->Delete();
           return 0;
         }
@@ -2642,8 +2642,8 @@ int redHoney (LObject* h, kStrategy strat)
       {
         int dummy=strat->sl;
         if (kFindDivisibleByInS(strat, &dummy, h) < 0) {
-	      printf("number of reductions: %d\n", number_of_reductions);
-		  printf("early bailout\n");
+	      //printf("number of reductions: %d\n", number_of_reductions);
+		  //printf("early bailout\n");
 		  return 1;
 		}
         enterL(&strat->L,&strat->Ll,&strat->Lmax,*h,at);
@@ -2688,7 +2688,7 @@ int redHoney (LObject* h, kStrategy strat)
   
   
   
-  printf("after reduce loop\n");
+  //printf("after reduce loop\n");
 }
 
 /*2
@@ -3009,7 +3009,7 @@ void kDebugPrint(kStrategy strat);
 
 ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 {
-  printf("entering bba\n");
+  //printf("entering bba\n");
   int   red_result = 1;
   int   olddeg,reduc;
   int hilbeledeg=1,hilbcount=0,minimcnt=0;
@@ -3026,7 +3026,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   initBba(strat);
   /*set enterS, spSpolyShort, reduce, red, initEcart, initEcartPair*/
   /*Shdl=*/initBuchMora(F, Q,strat);
-  printf("strat->Ll: %d\n", strat->Ll);
+  //printf("strat->Ll: %d\n", strat->Ll);
   if (strat->minim>0) strat->M=idInit(IDELEMS(F),F->rank);
   reduc = olddeg = 0;
 
@@ -3038,11 +3038,11 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   if (!TEST_OPT_OLDSTD)
     withT = ! strat->homog;
 
-  printf("strat->Ll: %d\n", strat->Ll);
+  //printf("strat->Ll: %d\n", strat->Ll);
   // strat->posInT = posInT_pLength;
   kTest_TS(strat);
 
-  printf("strat->Ll: %d\n", strat->Ll);
+  //printf("strat->Ll: %d\n", strat->Ll);
 #ifdef HAVE_TAIL_RING
   if(!idIs0(F) &&(!rField_is_Ring(currRing)))  // create strong gcd poly computes with tailring and S[i] ->to be fixed
     kStratInitChangeTailRing(strat);
@@ -3054,24 +3054,24 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     kDebugPrint(strat);
   }
 
-  printf("strat->Ll: %d\n", strat->Ll);
+  //printf("strat->Ll: %d\n", strat->Ll);
 
 #ifdef KDEBUG
   //kDebugPrint(strat);
 #endif
   /* compute------------------------------------------------------- */
-  printf("F->rank: %d\n", F->rank);
-  printf("before while loop in bba\n");
+  //printf("F->rank: %d\n", F->rank);
+  //printf("before while loop in bba\n");
   int mycounter = 0;
   while (strat->Ll >= 0)
   {
-	printf("mycounter: %d\n", mycounter);
+	//printf("mycounter: %d\n", mycounter);
 	if(mycounter == 90) {
 	  // exit(1);
 	  //return (strat->Shdl);
 	}
 	mycounter++;
-    printf("number of GB elements: %d\n", strat->sl);
+    //printf("number of GB elements: %d\n", strat->sl);
     #ifdef KDEBUG
       if (TEST_OPT_DEBUG) messageSets(strat);
     #endif
@@ -3111,7 +3111,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     if (pNext(strat->P.p) == strat->tail)
     {
 	  // ### get here only all elements of the input have been processed
-	  printf("pNext(strat->P.p) == strat->tail\n");
+	  //printf("pNext(strat->P.p) == strat->tail\n");
       // deletes the short spoly
       if (rField_is_Ring(currRing))
         pLmDelete(strat->P.p);
@@ -3140,7 +3140,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     else if (strat->P.p1 == NULL)
     {
 	  // ### first process all elements of the input
-	  printf("elseif strat->P.p1 == NULL\n");
+	  //printf("elseif strat->P.p1 == NULL\n");
       if (strat->minim > 0)
         strat->P.p2=p_Copy(strat->P.p, currRing, strat->tailRing);
       // for input polys, prepare reduction
@@ -3155,7 +3155,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     }
     else
     {
-	  printf("not (strat->P.p == NULL) && (strat->P.t_p == NULL)\n");
+	  //printf("not (strat->P.p == NULL) && (strat->P.t_p == NULL)\n");
       if (TEST_OPT_PROT)
         message((strat->honey ? strat->P.ecart : 0) + strat->P.pFDeg(),
                 &olddeg,&reduc,strat, red_result);
@@ -3255,7 +3255,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	  strat->P.transformation_coeffs_parts_divisor_transformation_coeffs = &transformation_coeffs_parts_divisor_transformation_coeffs;
 	  
       /* reduction of the element chosen from L */
-	  printf("before reducing\n");
+	  //printf("before reducing\n");
 	  //printf("reduce:");
 	  //p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
 	  //pWrite(strat->P.p);
@@ -3293,7 +3293,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
     // reduction to non-zero new poly
     if (red_result == 1)
     {
-	  printf("red_result == 1\n");
+	  //printf("red_result == 1\n");
 		//for(int ii=0;ii<84;ii++)
 		//{
 		//    if(strat->P.bucket != NULL && strat->P.bucket->buckets[strat->P.bucket->buckets_used] != NULL) {
@@ -3334,14 +3334,14 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 		//        }
 		//    }
 		//}
-	  //printf("result polnomial:\n");
+	  //printf("result polynomial:\n");
 	  //pWrite(strat->P.p);
 	  //pWrite(strat->P.bucket->buckets[0]);
       // get the polynomial (canonicalize bucket, make sure P.p is set)
       strat->P.GetP(strat->lmBin);
 	  
 
-	  printf("result polnomial:\n");
+	  //printf("result polynomial:\n");
 	  //pWrite(strat->P.p);
 		
 	  {
@@ -3407,7 +3407,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 
       if ((TEST_OPT_INTSTRATEGY) || (rField_is_Ring(currRing)))
       {
-	    printf("if (TEST_OPT_INTSTRATEGY) || (rField_is_Ring(currRing))\n");
+	    //printf("if (TEST_OPT_INTSTRATEGY) || (rField_is_Ring(currRing))\n");
 		//printf("before clearing denom:\n");
 		//p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
 		// myglobalvar = 1;
@@ -3534,7 +3534,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 		//p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
         if ((TEST_OPT_REDSB)||(TEST_OPT_REDTAIL))
         {
-		  printf("redtail\n");
+		  //printf("redtail\n");
           strat->P.p = redtailBba(&(strat->P),pos-1,strat, withT,!TEST_OPT_CONTENTSB);
           strat->P.pCleardenom();
           if (strat->redTailChange) { strat->P.t_p=NULL; }
@@ -3582,7 +3582,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
       // enter into S, L, and T
       if ((!TEST_OPT_IDLIFT) || (pGetComp(strat->P.p) <= strat->syzComp))
       {
-	    printf("(!TEST_OPT_IDLIFT) || (pGetComp(strat->P.p) <= strat->syzComp)\n");
+	    //printf("(!TEST_OPT_IDLIFT) || (pGetComp(strat->P.p) <= strat->syzComp)\n");
 
 		  //for(int asd=0;asd<1400000;asd++) {
 		  //    poly x = pOne();
@@ -3692,19 +3692,19 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
           superenterpairs(strat->P.p,strat->sl,strat->P.ecart,pos,strat, strat->tl);
 		}
         else {
-		  printf("not rField_is_Ring(currRing)\n");
+		  //printf("not rField_is_Ring(currRing)\n");
           enterpairs(strat->P.p,strat->sl,strat->P.ecart,pos,strat, strat->tl);
 		}
         // posInS only depends on the leading term
-		printf("adding new element to GB\n");
+		//printf("adding new element to GB\n");
 		//p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
-		printf("number of GB elements: %d\n", strat->sl);
+		//printf("number of GB elements: %d\n", strat->sl);
 
 		//if ((strat->syzComp==0) || (pGetComp(strat->P.p)<=strat->syzComp)) {
 			strat->enterS(strat->P, pos, strat, strat->tl);
 		//}
 
-        printf("number of GB elements: %d\n", strat->sl);
+        //printf("number of GB elements: %d\n", strat->sl);
 
 		//p_wrp(strat->T[0].p,currRing,strat->tailRing); printf("\n");
 		//strat->T[0]->p->wrp(); printf("\n");
@@ -3762,11 +3762,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 #endif /* KDEBUG */
     kTest_TS(strat);
   }
-  printf("after while loop in bba\n");
+  //printf("after while loop in bba\n");
 
-  
-  printf("building transformation matrix\n");
-  
   
 #ifdef KDEBUG
   if (TEST_OPT_DEBUG) messageSets(strat);
@@ -3860,9 +3857,9 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 
   idTest(strat->Shdl);
   
-  printf("number of GB elements: %d\n", strat->sl);
+  //printf("number of GB elements: %d\n", strat->sl);
 
-  printf("leaving bba\n");
+  //printf("leaving bba\n");
 
   return (strat->Shdl);
 }
