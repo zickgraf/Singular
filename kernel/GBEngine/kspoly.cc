@@ -260,6 +260,7 @@ if(strat != NULL && strat->syzComp > 0) {
 
 					//transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, asd);
 					transformation_coeffs_dividend = pAdd(transformation_coeffs_dividend, asd);
+					PR->transformation_coeffs = transformation_coeffs_dividend;
 
 					if(pLength(transformation_coeffs_dividend) != transformation_coeffs_dividend_length + new_transformation_coeffs_dividend_length) {
 						printf("Merge did not preserve length\n");	
@@ -299,6 +300,7 @@ if(strat != NULL && strat->syzComp > 0) {
 
 							//transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, pNext(asd));
 							transformation_coeffs_dividend = pAdd(transformation_coeffs_dividend, pNext(asd));
+							PR->transformation_coeffs = transformation_coeffs_dividend;
 
 							if(pLength(transformation_coeffs_dividend) != transformation_coeffs_dividend_length + new_transformation_coeffs_dividend_length) {
 								printf("Merge did not preserve length\n");	
@@ -335,12 +337,12 @@ if(strat != NULL && strat->syzComp > 0) {
 		printf("bucket is NULL\n");
 		exit(1);
 	}
-	if(transformation_coeffs_dividend == NULL && strat != NULL && strat->syzComp > 0) {
+	if(PR->transformation_coeffs == NULL && strat != NULL && strat->syzComp > 0) {
 		printf("could not find transformation coeffs of dividend\n");
 		exit(1);
 	}
 
-		PR->transformation_coeffs = transformation_coeffs_dividend;
+		//PR->transformation_coeffs = transformation_coeffs_dividend;
 	//}
 	
 	//PW->transformation_coeffs = NULL;
@@ -997,12 +999,12 @@ if(strat != NULL && strat->syzComp > 0) {
 	}
 	else {
 		printf("bucket is NULL\n");
-		exit(1);
+		//exit(1);
 	}
-	if(dividend_monom == NULL) {
-		printf("could not find dividend_monom\n");
-		exit(1);
-	}
+	//if(dividend_monom == NULL) {
+	//	printf("could not find dividend_monom\n");
+	//	exit(1);
+	//}
 	//// divisor_monom
 	//poly divisor_monom = NULL;
 	//if(PR->bucket != NULL) {
@@ -1080,27 +1082,27 @@ if(strat != NULL && strat->syzComp > 0) {
 	//poly transformation_coeffs = pAdd(transformation_coeffs_dividend_multi_coeff, transformation_coeffs_divisor_multi_coeff);
 	//poly transformation_coeffs = pPlus_mm_Mult_qq(transformation_coeffs_dividend_multi_coeff, divisor_monom, transformation_coeffs_divisor);
 	
-	poly transformation_coeffs = PR->transformation_coeffs;
-	PR->transformation_coeffs = NULL;
-	int transformation_coeffs_length = pLength(transformation_coeffs);
-	// insert transformation_coeffs_dividend
-	if(PR->bucket->buckets[transformation_coeffs_dividend_bucket] == NULL) {
-		PR->bucket->buckets[transformation_coeffs_dividend_bucket] = transformation_coeffs;
-		
-		PR->bucket->buckets_length[transformation_coeffs_dividend_bucket] += transformation_coeffs_length;
-		PR->pLength += transformation_coeffs_length;
-	}
-	else {
-		poly asd = PR->bucket->buckets[transformation_coeffs_dividend_bucket];
-		while(pNext(asd) != NULL) {
-			pIter(asd);	
-		}
-		
-		pNext(asd) = transformation_coeffs;
+	//poly transformation_coeffs = PR->transformation_coeffs;
+	//PR->transformation_coeffs = NULL;
+	//int transformation_coeffs_length = pLength(transformation_coeffs);
+	//// insert transformation_coeffs_dividend
+	//if(PR->bucket->buckets[transformation_coeffs_dividend_bucket] == NULL) {
+	//	PR->bucket->buckets[transformation_coeffs_dividend_bucket] = transformation_coeffs;
+	//	
+	//	PR->bucket->buckets_length[transformation_coeffs_dividend_bucket] += transformation_coeffs_length;
+	//	PR->pLength += transformation_coeffs_length;
+	//}
+	//else {
+	//	poly asd = PR->bucket->buckets[transformation_coeffs_dividend_bucket];
+	//	while(pNext(asd) != NULL) {
+	//		pIter(asd);	
+	//	}
+	//	
+	//	pNext(asd) = transformation_coeffs;
 
-		PR->bucket->buckets_length[transformation_coeffs_dividend_bucket] += transformation_coeffs_length;
-		PR->pLength += transformation_coeffs_length;
-	}
+	//	PR->bucket->buckets_length[transformation_coeffs_dividend_bucket] += transformation_coeffs_length;
+	//	PR->pLength += transformation_coeffs_length;
+	//}
   
     // restore divisor transformation_coeffs
     if (PW->p != NULL) {

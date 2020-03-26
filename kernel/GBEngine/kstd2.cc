@@ -3261,16 +3261,15 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 		}
 
 	  // compute/append transformation_coeffs
-	  //{
-	  //	  poly asd = strat->P.p;
-	  //	  while(pNext(asd) != NULL) {
-	  //	  	pIter(asd);
-	  //	  }
-	  //	  pNext(asd) = strat->P.transformation_coeffs;
-	  //	  strat->P.pLength += pLength(strat->P.transformation_coeffs);
-	  //}
-	  //  
-	  //strat->P.transformation_coeffs = NULL;
+	  {
+	  	  poly asd = strat->P.p;
+	  	  while(pNext(asd) != NULL) {
+	  	  	pIter(asd);
+	  	  }
+	  	  pNext(asd) = strat->P.transformation_coeffs;
+	  	  strat->P.pLength += pLength(strat->P.transformation_coeffs);
+		  strat->P.transformation_coeffs = NULL;
+	  }
 	  
 	  
       // in the homogeneous case FDeg >= pFDeg (sugar/honey)
