@@ -232,7 +232,7 @@ int ksReducePoly(LObject* PR,
 	int dividend_additional_comp = 735;
 	int divisor_additional_comp = 738;
 	poly transformation_coeffs_dividend = NULL;
-	int transformation_coeffs_dividend_bucket = -1;
+	//int transformation_coeffs_dividend_bucket = -1;
 	int transformation_coeffs_dividend_length = 0;
 if(strat != NULL && strat->syzComp > 0) {
 
@@ -252,8 +252,8 @@ if(strat != NULL && strat->syzComp > 0) {
 			if(PR->bucket->buckets[myi] != NULL) {
 				
 				poly asd = PR->bucket->buckets[myi];
-				poly q = pOne();
-				pSetComp(q, dividend_additional_comp);
+				//poly q = pOne();
+				//pSetComp(q, dividend_additional_comp);
 				
 				if(pGetComp(asd) > 30) {
 					int new_transformation_coeffs_dividend_length = pLength(asd);
@@ -276,17 +276,17 @@ if(strat != NULL && strat->syzComp > 0) {
 						exit(1);	
 					}
 					
-					if(transformation_coeffs_dividend_length == 0) {
-						// first transformation coeffs found -> add one
-						transformation_coeffs_dividend_bucket = myi;
-						PR->bucket->buckets[myi] = q;
+					//if(transformation_coeffs_dividend_length == 0) {
+					//	// first transformation coeffs found -> add one
+					//	transformation_coeffs_dividend_bucket = myi;
+					//	PR->bucket->buckets[myi] = q;
 
-						PR->bucket->buckets_length[myi]++;
-						PR->pLength++;
-					}
-					else {
+					//	PR->bucket->buckets_length[myi]++;
+					//	PR->pLength++;
+					//}
+					//else {
 						PR->bucket->buckets[myi] = NULL;
-					}
+					//}
 							
 					transformation_coeffs_dividend_length += new_transformation_coeffs_dividend_length;
 				}
@@ -311,17 +311,17 @@ if(strat != NULL && strat->syzComp > 0) {
 							PR->bucket->buckets_length[myi] -= new_transformation_coeffs_dividend_length;
 							PR->pLength -= new_transformation_coeffs_dividend_length;
 
-							if(transformation_coeffs_dividend_length == 0) {
-								// first transformation coeffs found -> add one
-								transformation_coeffs_dividend_bucket = myi;
-								pNext(asd) = q;
+							//if(transformation_coeffs_dividend_length == 0) {
+							//	// first transformation coeffs found -> add one
+							//	transformation_coeffs_dividend_bucket = myi;
+							//	pNext(asd) = q;
 
-								PR->bucket->buckets_length[myi]++;
-								PR->pLength++;
-							}
-							else {
+							//	PR->bucket->buckets_length[myi]++;
+							//	PR->pLength++;
+							//}
+							//else {
 								pNext(asd) = NULL;
-							}
+							//}
 							
 							transformation_coeffs_dividend_length += new_transformation_coeffs_dividend_length;
 							
@@ -922,85 +922,85 @@ if(strat != NULL && strat->syzComp > 0) {
     // deal with the transformation coeffs
     // dividend
 	// dividend_monom
-	poly dividend_monom = NULL;
-	if(PR->bucket != NULL) {
-		poly qwe = PR->p;
+	//poly dividend_monom = NULL;
+	//if(PR->bucket != NULL) {
+	//	poly qwe = PR->p;
 
-		if(pGetComp(qwe) == dividend_additional_comp) {
-			if(dividend_monom != NULL) {
-				printf("a: multiple monomials with component 731 in dividend\n");
-				exit(1);
-			}
-			dividend_monom = qwe;
-			
-			if(pNext(qwe) != NULL && pGetComp(pNext(qwe)) != divisor_additional_comp) {
-				printf("there is a component which is different from 732 after 731\n");
-				exit(1);
-			}
+	//	if(pGetComp(qwe) == dividend_additional_comp) {
+	//		if(dividend_monom != NULL) {
+	//			printf("a: multiple monomials with component 731 in dividend\n");
+	//			exit(1);
+	//		}
+	//		dividend_monom = qwe;
+	//		
+	//		if(pNext(qwe) != NULL && pGetComp(pNext(qwe)) != divisor_additional_comp) {
+	//			printf("there is a component which is different from 732 after 731\n");
+	//			exit(1);
+	//		}
 
-			PR->pLength--;
+	//		PR->pLength--;
 
-			PR->p = pNext(qwe);
-			pNext(dividend_monom) = NULL;
-		}
-		
-		for(int myi = 1; myi <= PR->bucket->buckets_used; myi++) {
-			if(PR->bucket->buckets[myi] != NULL) {
-				
-				poly asd = PR->bucket->buckets[myi];
-				
-				if(pGetComp(asd) == dividend_additional_comp) {
-					if(dividend_monom != NULL) {
-						printf("b: multiple monomials with component 731 in dividend\n");
-						exit(1);
-					}
-					dividend_monom = asd;
-					
-					if(pNext(dividend_monom) != NULL && pGetComp(pNext(dividend_monom)) != divisor_additional_comp) {
-						printf("there is a component which is different from 732 after 731\n");
-						exit(1);
-					}
+	//		PR->p = pNext(qwe);
+	//		pNext(dividend_monom) = NULL;
+	//	}
+	//	
+	//	for(int myi = 1; myi <= PR->bucket->buckets_used; myi++) {
+	//		if(PR->bucket->buckets[myi] != NULL) {
+	//			
+	//			poly asd = PR->bucket->buckets[myi];
+	//			
+	//			if(pGetComp(asd) == dividend_additional_comp) {
+	//				if(dividend_monom != NULL) {
+	//					printf("b: multiple monomials with component 731 in dividend\n");
+	//					exit(1);
+	//				}
+	//				dividend_monom = asd;
+	//				
+	//				if(pNext(dividend_monom) != NULL && pGetComp(pNext(dividend_monom)) != divisor_additional_comp) {
+	//					printf("there is a component which is different from 732 after 731\n");
+	//					exit(1);
+	//				}
 
-					PR->bucket->buckets_length[myi]--;
-					PR->pLength--;
+	//				PR->bucket->buckets_length[myi]--;
+	//				PR->pLength--;
 
-					PR->bucket->buckets[myi] = pNext(dividend_monom);
-					pNext(dividend_monom) = NULL;
-				}
-				else {
-				
-					while (pNext(asd) != NULL)
-					{
-						if(pGetComp(pNext(asd)) == dividend_additional_comp) {
-							if(dividend_monom != NULL) {
-								printf("c: multiple monomials with component 731 in dividend\n");
-								exit(1);
-							}
-							dividend_monom = pNext(asd);
-							
-							if(pNext(dividend_monom) != NULL && pGetComp(pNext(dividend_monom)) != divisor_additional_comp) {
-								printf("there is a component which is different from 732 after 731\n");
-								exit(1);
-							}
+	//				PR->bucket->buckets[myi] = pNext(dividend_monom);
+	//				pNext(dividend_monom) = NULL;
+	//			}
+	//			else {
+	//			
+	//				while (pNext(asd) != NULL)
+	//				{
+	//					if(pGetComp(pNext(asd)) == dividend_additional_comp) {
+	//						if(dividend_monom != NULL) {
+	//							printf("c: multiple monomials with component 731 in dividend\n");
+	//							exit(1);
+	//						}
+	//						dividend_monom = pNext(asd);
+	//						
+	//						if(pNext(dividend_monom) != NULL && pGetComp(pNext(dividend_monom)) != divisor_additional_comp) {
+	//							printf("there is a component which is different from 732 after 731\n");
+	//							exit(1);
+	//						}
 
-							PR->bucket->buckets_length[myi]--;
-							PR->pLength--;
+	//						PR->bucket->buckets_length[myi]--;
+	//						PR->pLength--;
 
-							pNext(asd) = pNext(pNext(asd));
-							pNext(dividend_monom) = NULL;
-							
-							break;
-						}
-						pIter(asd);
-					}
-				}
-			}
-		}
-	}
-	else {
-		printf("bucket is NULL\n");
-		//exit(1);
-	}
+	//						pNext(asd) = pNext(pNext(asd));
+	//						pNext(dividend_monom) = NULL;
+	//						
+	//						break;
+	//					}
+	//					pIter(asd);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//else {
+	//	printf("bucket is NULL\n");
+	//	exit(1);
+	//}
 	//if(dividend_monom == NULL) {
 	//	printf("could not find dividend_monom\n");
 	//	exit(1);
