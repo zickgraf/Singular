@@ -536,6 +536,9 @@ if(strat != NULL && strat->syzComp > 0) {
   //printf("\n");
 
   // take care of coef buisness
+  if(PR->transformation_coeffs != NULL) {
+	(*PR->transformation_coeffs_parts_numbers)[PR->transformation_coeffs_parts_length] = NULL;
+  }
   if (! n_IsOne(pGetCoeff(p2), tailRing->cf))
   {
     number bn = pGetCoeff(lm);
@@ -550,12 +553,14 @@ if(strat != NULL && strat->syzComp > 0) {
 	
     if ((ct == 0) || (ct == 2)) {
 	  if(PR->transformation_coeffs != NULL) {
-	      PR->transformation_coeffs = pMult_nn(PR->transformation_coeffs, an);
+	      //PR->transformation_coeffs = pMult_nn(PR->transformation_coeffs, an);
+		  (*PR->transformation_coeffs_parts_numbers)[PR->transformation_coeffs_parts_length] = an;
 	  }
       PR->Tail_Mult_nn(an);
 	}
     if (coef != NULL) *coef = an;
-    else n_Delete(&an, tailRing->cf);
+    if(coef == NULL && (PR->transformation_coeffs == NULL || (*PR->transformation_coeffs_parts_numbers)[PR->transformation_coeffs_parts_length] == NULL)) n_Delete(&an, tailRing->cf);
+    //if(coef == NULL) n_Delete(&an, tailRing->cf);
   }
   else
   {
@@ -657,7 +662,14 @@ if(strat != NULL && strat->syzComp > 0) {
 	//printf("one ksReducePoly\n");
 	//pWrite(lm);
 	if(PR->transformation_coeffs != NULL) {
-		PR->transformation_coeffs = pMinus_mm_Mult_qq(PR->transformation_coeffs, lm, PW->transformation_coeffs);
+		//PR->transformation_coeffs = pMinus_mm_Mult_qq(PR->transformation_coeffs, lm, PW->transformation_coeffs);
+		(*PR->transformation_coeffs_parts_lms)[PR->transformation_coeffs_parts_length] = ppMult_mm(lm, pOne());
+		(*PR->transformation_coeffs_parts_divisor_transformation_coeffs)[PR->transformation_coeffs_parts_length] = PW->transformation_coeffs;
+		PR->transformation_coeffs_parts_length++;
+		if(PR->transformation_coeffs_parts_length == 1000) {
+			printf("reducing by more than 1000 polys, this is not supported\n");
+			exit(1);
+		}
 	}
     PR->Tail_Minus_mm_Mult_qq(lm, t2, pLength(t2) /*PW->GetpLength() - 1*/, spNoether);
 

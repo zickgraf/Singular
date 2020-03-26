@@ -3246,6 +3246,13 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 		}
 	  }
 	  
+	  strat->P.transformation_coeffs_parts_length = 0;
+	  number transformation_coeffs_parts_numbers[1000];
+	  poly transformation_coeffs_parts_lms[1000];
+	  poly transformation_coeffs_parts_divisor_transformation_coeffs[1000];
+	  strat->P.transformation_coeffs_parts_numbers = &transformation_coeffs_parts_numbers;
+	  strat->P.transformation_coeffs_parts_lms = &transformation_coeffs_parts_lms;
+	  strat->P.transformation_coeffs_parts_divisor_transformation_coeffs = &transformation_coeffs_parts_divisor_transformation_coeffs;
 	  
       /* reduction of the element chosen from L */
 	  printf("before reducing\n");
@@ -3337,28 +3344,39 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	  printf("result polnomial:\n");
 	  //pWrite(strat->P.p);
 		
-		{
-			poly asd = strat->P.p;
-			while(asd != NULL) {
-				if(pGetComp(asd) > 30) {
-					//pWrite(strat->P.p);
-					printf("p contains a transformation component\n");
-					//exit(1);
-					break;
+	  {
+		poly asd = strat->P.p;
+		while(asd != NULL) {
+			if(pGetComp(asd) > 30) {
+				//pWrite(strat->P.p);
+				printf("p contains a transformation component\n");
+				//exit(1);
+				break;
+			}
+			pIter(asd);
+		}
+		// compute/append transformation_coeffs
+		if(strat->P.transformation_coeffs != NULL) {
+			poly transformation_coeffs = strat->P.transformation_coeffs;
+			for(int myi = 0; myi < strat->P.transformation_coeffs_parts_length; myi++) {
+				number n = (*strat->P.transformation_coeffs_parts_numbers)[myi];
+				if(n != NULL) {
+					transformation_coeffs = pMult_nn(transformation_coeffs, n);
 				}
+
+				poly lm = (*strat->P.transformation_coeffs_parts_lms)[myi];
+				poly divisor_transformation_coeffs = (*strat->P.transformation_coeffs_parts_divisor_transformation_coeffs)[myi];
+				transformation_coeffs = pMinus_mm_Mult_qq(transformation_coeffs, lm, divisor_transformation_coeffs);
+			}
+
+			poly asd = strat->P.p;
+			while(pNext(asd) != NULL) {
 				pIter(asd);
 			}
+			pNext(asd) = transformation_coeffs;
+			strat->P.pLength += pLength(transformation_coeffs);
+			strat->P.transformation_coeffs = NULL;
 		}
-
-	  // compute/append transformation_coeffs
-	  if(strat->P.transformation_coeffs != NULL) {
-	  	  poly asd = strat->P.p;
-	  	  while(pNext(asd) != NULL) {
-	  	  	pIter(asd);
-	  	  }
-	  	  pNext(asd) = strat->P.transformation_coeffs;
-	  	  strat->P.pLength += pLength(strat->P.transformation_coeffs);
-		  strat->P.transformation_coeffs = NULL;
 	  }
 	  
 	  

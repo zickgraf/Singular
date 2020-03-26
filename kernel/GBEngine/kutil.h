@@ -70,6 +70,10 @@ public:
   poly t_p;     // t_p \in tailRing: as monomials Lm(t_p) == Lm(p)
   poly transformation_coeffs = NULL;
   int transformation_coeffs_length = 0;
+  int transformation_coeffs_parts_length = 0;
+  number (*transformation_coeffs_parts_numbers)[1000];
+  poly (*transformation_coeffs_parts_lms)[1000];
+  poly (*transformation_coeffs_parts_divisor_transformation_coeffs)[1000];
   poly max_exp;     // p_GetMaxExpP(pNext(p))
   ring tailRing;
   long FDeg;    // pFDeg(p)
