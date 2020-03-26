@@ -549,7 +549,7 @@ if(strat != NULL && strat->syzComp > 0) {
 	//pWrite(ppMult_nn(pOne(), an));
 	
     if ((ct == 0) || (ct == 2)) {
-	  if(strat != NULL && strat->syzComp > 0) {
+	  if(PR->transformation_coeffs != NULL) {
 	      PR->transformation_coeffs = pMult_nn(PR->transformation_coeffs, an);
 	  }
       PR->Tail_Mult_nn(an);
@@ -656,7 +656,7 @@ if(strat != NULL && strat->syzComp > 0) {
   
 	//printf("one ksReducePoly\n");
 	//pWrite(lm);
-	if(strat != NULL && strat->syzComp > 0) {
+	if(PR->transformation_coeffs != NULL) {
 		PR->transformation_coeffs = pMinus_mm_Mult_qq(PR->transformation_coeffs, lm, PW->transformation_coeffs);
 	}
     PR->Tail_Minus_mm_Mult_qq(lm, t2, pLength(t2) /*PW->GetpLength() - 1*/, spNoether);
@@ -915,9 +915,9 @@ if(strat != NULL && strat->syzComp > 0) {
 	
 #if 1
   
-    if(strat == NULL || strat->syzComp == 0) {
-		return ret;	
-	}
+    //if(strat == NULL || strat->syzComp == 0) {
+	//	return ret;	
+	//}
 
     // deal with the transformation coeffs
     // dividend
@@ -1105,22 +1105,24 @@ if(strat != NULL && strat->syzComp > 0) {
 	//}
   
     // restore divisor transformation_coeffs
-    if (PW->p != NULL) {
-        poly asd = PW->p;
-        while (pNext(asd) != NULL) {
-      	    pIter(asd);
-        }
+	if(PW->transformation_coeffs != NULL) {
+		if (PW->p != NULL) {
+			poly asd = PW->p;
+			while (pNext(asd) != NULL) {
+				pIter(asd);
+			}
 
-        pNext(asd) = PW->transformation_coeffs;
+			pNext(asd) = PW->transformation_coeffs;
 
-        PW->pLength += PW->transformation_coeffs_length;
+			PW->pLength += PW->transformation_coeffs_length;
 
-		//PW->transformation_coeffs = NULL;
-    }
-    else {
-        printf("could not find additional component in divisor\n");
-        exit(1);
-    }
+			PW->transformation_coeffs = NULL;
+		}
+		else {
+			printf("could not find additional component in divisor\n");
+			exit(1);
+		}
+	}
 	
   
   
