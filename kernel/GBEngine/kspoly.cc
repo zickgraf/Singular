@@ -234,7 +234,7 @@ int ksReducePoly(LObject* PR,
 	poly transformation_coeffs_dividend = NULL;
 	//int transformation_coeffs_dividend_bucket = -1;
 	int transformation_coeffs_dividend_length = 0;
-if(strat != NULL && strat->syzComp > 0) {
+if(strat != NULL && strat->syzComp > 0 && !(TEST_OPT_REDTAIL_SYZ)) {
 
 	//if(PR->transformation_coeffs == NULL) {
 		// extract transformation coeffs of dividend and add one

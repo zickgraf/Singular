@@ -3161,7 +3161,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
                 &olddeg,&reduc,strat, red_result);
 
 	  // extract transformation coeffs
-	  if(strat != NULL && strat->syzComp > 0) {
+	  if(strat != NULL && strat->syzComp > 0 && !(TEST_OPT_REDTAIL_SYZ)) {
 		if(strat->P.bucket != NULL) {
 			if(strat->P.p == NULL) {
 				printf("strat->P.p is NULL, reducing a syzygy?\n");
@@ -3348,7 +3348,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 		if(strat->syzComp > 0) {
 			poly asd = strat->P.p;
 			while(asd != NULL) {
-				if(pGetComp(asd) > strat->syzComp) {
+				if(pGetComp(asd) > strat->syzComp && !(TEST_OPT_REDTAIL_SYZ)) {
 					printf("p contains a transformation component\n");
 					exit(1);
 					break;
@@ -3379,6 +3379,13 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 			strat->P.transformation_coeffs = NULL;
 		}
 	  }
+
+	  //if(TEST_OPT_REDTAIL_SYZ) {
+	  //  printf("TEST_OPT_REDTAIL_SYZ == true\n");	  
+	  //}
+	  //else {
+	  //  printf("TEST_OPT_REDTAIL_SYZ == false\n");
+	  //}
 	  
 	  
       // in the homogeneous case FDeg >= pFDeg (sugar/honey)
