@@ -356,7 +356,7 @@ if(strat != NULL && strat->syzComp > 0) {
 		
 		while (pNext(asd) != NULL)
 		{
-			if(pGetComp(pNext(asd)) > 30) {
+			if(pGetComp(pNext(asd)) > strat->syzComp) {
 				
 				if(PW->transformation_coeffs != NULL && PW->transformation_coeffs != pNext(asd)) {
 					printf("transformation_coeffs:\n");
@@ -462,7 +462,7 @@ if(strat != NULL && strat->syzComp > 0) {
       if (PR->t_p!=NULL) PR->t_p=_p; else PR->p=_p;
       PR->pLength=0; // usually not used, GetpLength re-computes it if needed
     }
-	printf("aaaaaaa1");
+	printf("unhandled case 1\n");
 	exit(1);
     return 0;
   }
@@ -494,12 +494,12 @@ if(strat != NULL && strat->syzComp > 0) {
       // undo changes of lm
       p_ExpVectorAdd(lm, p2, tailRing);
       if (strat == NULL) {
-			printf("aaaaaaa3");
+			printf("unhandled case 3\n");
 			exit(1);
 		  return 2;
 	  }
       if (! kStratChangeTailRing(strat, PR, PW)) {
-			printf("aaaaaaa4");
+			printf("unhandled case 4\n");
 			exit(1);
 		  return -1;
 	  }
@@ -580,7 +580,8 @@ if(strat != NULL && strat->syzComp > 0) {
 #ifdef HAVE_SHIFTBBA
   if (tailRing->isLPring)
   {
-	printf("unhandled case\n");
+	printf("unhandled case: 5\n");
+	exit(1);
     PR->Tail_Minus_mm_Mult_qq(lm, tailRing->p_Procs->pp_Mult_mm(t2, lmRight, tailRing), pLength(t2), spNoether);
   }
   else

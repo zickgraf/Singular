@@ -3345,15 +3345,16 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	  //pWrite(strat->P.p);
 		
 	  {
-		poly asd = strat->P.p;
-		while(asd != NULL) {
-			if(pGetComp(asd) > 30) {
-				//pWrite(strat->P.p);
-				printf("p contains a transformation component\n");
-				//exit(1);
-				break;
+		if(strat->syzComp > 0) {
+			poly asd = strat->P.p;
+			while(asd != NULL) {
+				if(pGetComp(asd) > strat->syzComp) {
+					printf("p contains a transformation component\n");
+					exit(1);
+					break;
+				}
+				pIter(asd);
 			}
-			pIter(asd);
 		}
 		// compute/append transformation_coeffs
 		if(strat->P.transformation_coeffs != NULL) {
