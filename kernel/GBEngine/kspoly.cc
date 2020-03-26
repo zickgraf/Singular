@@ -238,109 +238,109 @@ if(strat != NULL && strat->syzComp > 0) {
 
 	//if(PR->transformation_coeffs == NULL) {
 		// extract transformation coeffs of dividend and add one
-	if(PR->bucket != NULL) {
-		if(PR->p == NULL) {
-			printf("PR->p is NULL, reducing a syzygy?\n");
-			exit(1);
-		}
-		if(pGetComp(PR->p) > 30) {
-			printf("pGetComp(PR->p) > 30, reducing a syzygy?\n");
-			exit(1);
-		}
-		
-		for(int myi = 1; myi <= PR->bucket->buckets_used; myi++) {
-			if(PR->bucket->buckets[myi] != NULL) {
-				
-				poly asd = PR->bucket->buckets[myi];
-				//poly q = pOne();
-				//pSetComp(q, dividend_additional_comp);
-				
-				if(pGetComp(asd) > 30) {
-					int new_transformation_coeffs_dividend_length = pLength(asd);
+	//if(PR->bucket != NULL) {
+	//	if(PR->p == NULL) {
+	//		printf("PR->p is NULL, reducing a syzygy?\n");
+	//		exit(1);
+	//	}
+	//	if(pGetComp(PR->p) > 30) {
+	//		printf("pGetComp(PR->p) > 30, reducing a syzygy?\n");
+	//		exit(1);
+	//	}
+	//	
+	//	for(int myi = 1; myi <= PR->bucket->buckets_used; myi++) {
+	//		if(PR->bucket->buckets[myi] != NULL) {
+	//			
+	//			poly asd = PR->bucket->buckets[myi];
+	//			//poly q = pOne();
+	//			//pSetComp(q, dividend_additional_comp);
+	//			
+	//			if(pGetComp(asd) > 30) {
+	//				int new_transformation_coeffs_dividend_length = pLength(asd);
 
-					//transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, asd);
-					transformation_coeffs_dividend = pAdd(transformation_coeffs_dividend, asd);
-					PR->transformation_coeffs = transformation_coeffs_dividend;
+	//				//transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, asd);
+	//				transformation_coeffs_dividend = pAdd(transformation_coeffs_dividend, asd);
+	//				PR->transformation_coeffs = transformation_coeffs_dividend;
 
-					if(pLength(transformation_coeffs_dividend) != transformation_coeffs_dividend_length + new_transformation_coeffs_dividend_length) {
-						printf("Merge did not preserve length\n");	
-						exit(1);
-					}
-					
-					// replace tail by one or NULL
-					PR->bucket->buckets_length[myi] -= new_transformation_coeffs_dividend_length;
-					PR->pLength -= new_transformation_coeffs_dividend_length;
+	//				if(pLength(transformation_coeffs_dividend) != transformation_coeffs_dividend_length + new_transformation_coeffs_dividend_length) {
+	//					printf("Merge did not preserve length\n");	
+	//					exit(1);
+	//				}
+	//				
+	//				// replace tail by one or NULL
+	//				PR->bucket->buckets_length[myi] -= new_transformation_coeffs_dividend_length;
+	//				PR->pLength -= new_transformation_coeffs_dividend_length;
 
-					if(PR->bucket->buckets_length[myi] != 0) {
-						printf("assertion failed, bucket length is not 0\n");
-						exit(1);	
-					}
-					
-					//if(transformation_coeffs_dividend_length == 0) {
-					//	// first transformation coeffs found -> add one
-					//	transformation_coeffs_dividend_bucket = myi;
-					//	PR->bucket->buckets[myi] = q;
+	//				if(PR->bucket->buckets_length[myi] != 0) {
+	//					printf("assertion failed, bucket length is not 0\n");
+	//					exit(1);	
+	//				}
+	//				
+	//				//if(transformation_coeffs_dividend_length == 0) {
+	//				//	// first transformation coeffs found -> add one
+	//				//	transformation_coeffs_dividend_bucket = myi;
+	//				//	PR->bucket->buckets[myi] = q;
 
-					//	PR->bucket->buckets_length[myi]++;
-					//	PR->pLength++;
-					//}
-					//else {
-						PR->bucket->buckets[myi] = NULL;
-					//}
-							
-					transformation_coeffs_dividend_length += new_transformation_coeffs_dividend_length;
-				}
-				else {
-				
-					while (pNext(asd) != NULL)
-					{
-						if(pGetComp(pNext(asd)) > 30) {
-		
-							int new_transformation_coeffs_dividend_length = pLength(pNext(asd));
+	//				//	PR->bucket->buckets_length[myi]++;
+	//				//	PR->pLength++;
+	//				//}
+	//				//else {
+	//					PR->bucket->buckets[myi] = NULL;
+	//				//}
+	//						
+	//				transformation_coeffs_dividend_length += new_transformation_coeffs_dividend_length;
+	//			}
+	//			else {
+	//			
+	//				while (pNext(asd) != NULL)
+	//				{
+	//					if(pGetComp(pNext(asd)) > 30) {
+	//	
+	//						int new_transformation_coeffs_dividend_length = pLength(pNext(asd));
 
-							//transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, pNext(asd));
-							transformation_coeffs_dividend = pAdd(transformation_coeffs_dividend, pNext(asd));
-							PR->transformation_coeffs = transformation_coeffs_dividend;
+	//						//transformation_coeffs_dividend = mergepolys(transformation_coeffs_dividend, pNext(asd));
+	//						transformation_coeffs_dividend = pAdd(transformation_coeffs_dividend, pNext(asd));
+	//						PR->transformation_coeffs = transformation_coeffs_dividend;
 
-							if(pLength(transformation_coeffs_dividend) != transformation_coeffs_dividend_length + new_transformation_coeffs_dividend_length) {
-								printf("Merge did not preserve length\n");	
-								exit(1);
-							}
-							
-							// replace tail by one or NULL
-							PR->bucket->buckets_length[myi] -= new_transformation_coeffs_dividend_length;
-							PR->pLength -= new_transformation_coeffs_dividend_length;
+	//						if(pLength(transformation_coeffs_dividend) != transformation_coeffs_dividend_length + new_transformation_coeffs_dividend_length) {
+	//							printf("Merge did not preserve length\n");	
+	//							exit(1);
+	//						}
+	//						
+	//						// replace tail by one or NULL
+	//						PR->bucket->buckets_length[myi] -= new_transformation_coeffs_dividend_length;
+	//						PR->pLength -= new_transformation_coeffs_dividend_length;
 
-							//if(transformation_coeffs_dividend_length == 0) {
-							//	// first transformation coeffs found -> add one
-							//	transformation_coeffs_dividend_bucket = myi;
-							//	pNext(asd) = q;
+	//						//if(transformation_coeffs_dividend_length == 0) {
+	//						//	// first transformation coeffs found -> add one
+	//						//	transformation_coeffs_dividend_bucket = myi;
+	//						//	pNext(asd) = q;
 
-							//	PR->bucket->buckets_length[myi]++;
-							//	PR->pLength++;
-							//}
-							//else {
-								pNext(asd) = NULL;
-							//}
-							
-							transformation_coeffs_dividend_length += new_transformation_coeffs_dividend_length;
-							
-							break;
-						}
-						pIter(asd);
-					}
-				}
-			}
-		}
-	}
-	else {
-		printf("bucket is NULL\n");
-		exit(1);
-	}
-	if(PR->transformation_coeffs == NULL && strat != NULL && strat->syzComp > 0) {
-		printf("could not find transformation coeffs of dividend\n");
-		exit(1);
-	}
+	//						//	PR->bucket->buckets_length[myi]++;
+	//						//	PR->pLength++;
+	//						//}
+	//						//else {
+	//							pNext(asd) = NULL;
+	//						//}
+	//						
+	//						transformation_coeffs_dividend_length += new_transformation_coeffs_dividend_length;
+	//						
+	//						break;
+	//					}
+	//					pIter(asd);
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//else {
+	//	printf("bucket is NULL\n");
+	//	exit(1);
+	//}
+	//if(PR->transformation_coeffs == NULL && strat != NULL && strat->syzComp > 0) {
+	//	printf("could not find transformation coeffs of dividend\n");
+	//	exit(1);
+	//}
 
 		//PR->transformation_coeffs = transformation_coeffs_dividend;
 	//}

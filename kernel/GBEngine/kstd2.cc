@@ -3160,6 +3160,93 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
         message((strat->honey ? strat->P.ecart : 0) + strat->P.pFDeg(),
                 &olddeg,&reduc,strat, red_result);
 
+	  // extract transformation coeffs
+	  if(strat != NULL && strat->syzComp > 0) {
+		if(strat->P.bucket != NULL) {
+			if(strat->P.p == NULL) {
+				printf("strat->P.p is NULL, reducing a syzygy?\n");
+				exit(1);
+			}
+			if(pGetComp(strat->P.p) > strat->syzComp) {
+				printf("pGetComp(strat->P.p) > strat->syzComp, reducing a syzygy?\n");
+				exit(1);
+			}
+
+			poly transformation_coeffs = NULL;
+			int transformation_coeffs_length = 0;
+			
+			for(int myi = 1; myi <= strat->P.bucket->buckets_used; myi++) {
+				if(strat->P.bucket->buckets[myi] != NULL) {
+					
+					poly asd = strat->P.bucket->buckets[myi];
+					
+					if(pGetComp(asd) > strat->syzComp) {
+						int new_transformation_coeffs_length = pLength(asd);
+
+						transformation_coeffs = pAdd(transformation_coeffs, asd);
+						strat->P.transformation_coeffs = transformation_coeffs;
+
+						if(pLength(transformation_coeffs) != transformation_coeffs_length + new_transformation_coeffs_length) {
+							printf("Merge did not preserve length\n");	
+							exit(1);
+						}
+						
+						// replace tail by one or NULL
+						strat->P.bucket->buckets_length[myi] -= new_transformation_coeffs_length;
+						strat->P.pLength -= new_transformation_coeffs_length;
+
+						if(strat->P.bucket->buckets_length[myi] != 0) {
+							printf("assertion failed, bucket length is not 0\n");
+							exit(1);	
+						}
+						
+						strat->P.bucket->buckets[myi] = NULL;
+						
+						transformation_coeffs_length += new_transformation_coeffs_length;
+					}
+					else {
+					
+						while (pNext(asd) != NULL)
+						{
+							if(pGetComp(pNext(asd)) > strat->syzComp) {
+			
+								int new_transformation_coeffs_length = pLength(pNext(asd));
+
+								transformation_coeffs = pAdd(transformation_coeffs, pNext(asd));
+								strat->P.transformation_coeffs = transformation_coeffs;
+
+								if(pLength(transformation_coeffs) != transformation_coeffs_length + new_transformation_coeffs_length) {
+									printf("Merge did not preserve length\n");	
+									exit(1);
+								}
+								
+								// replace tail by one or NULL
+								strat->P.bucket->buckets_length[myi] -= new_transformation_coeffs_length;
+								strat->P.pLength -= new_transformation_coeffs_length;
+
+								pNext(asd) = NULL;
+								
+								transformation_coeffs_length += new_transformation_coeffs_length;
+								
+								break;
+							}
+							pIter(asd);
+						}
+					}
+				}
+			}
+		}
+		else {
+			printf("bucket is NULL\n");
+			exit(1);
+		}
+		if(strat->P.transformation_coeffs == NULL && strat != NULL && strat->syzComp > 0) {
+			printf("could not find transformation coeffs of dividend\n");
+			exit(1);
+		}
+	  }
+	  
+	  
       /* reduction of the element chosen from L */
 	  printf("before reducing\n");
 	  //printf("reduce:");
@@ -3172,6 +3259,9 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 	  //p_wrp(strat->P.p,currRing,strat->tailRing); printf("\n");
 
 	  
+	  if(red_result != 1) {
+	      strat->P.transformation_coeffs = NULL;
+	  }
 	  
 	  
 	  if(mycounter == 90) {
@@ -3261,7 +3351,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 		}
 
 	  // compute/append transformation_coeffs
-	  {
+	  if(strat->P.transformation_coeffs != NULL) {
 	  	  poly asd = strat->P.p;
 	  	  while(pNext(asd) != NULL) {
 	  	  	pIter(asd);
