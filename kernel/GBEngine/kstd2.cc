@@ -3161,7 +3161,7 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
                 &olddeg,&reduc,strat, red_result);
 
 	  // extract transformation coeffs
-	  if(strat != NULL && strat->syzComp > 0 && !(TEST_OPT_REDTAIL_SYZ)) {
+	  if(strat != NULL && strat->syzComp > 0 && !(TEST_OPT_REDTAIL_SYZ) && strat->P.p != NULL && pGetComp(strat->P.p) <= strat->syzComp) {
 		if(strat->P.bucket != NULL) {
 			if(strat->P.p == NULL) {
 				printf("strat->P.p is NULL, reducing a syzygy?\n");
