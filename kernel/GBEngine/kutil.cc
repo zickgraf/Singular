@@ -10918,17 +10918,17 @@ void completeReduce (kStrategy strat, BOOLEAN withT)
   {
     Print("(S:%d)",strat->sl);mflush();
   }
-  printf("starting completeReduce\n");
+  //printf("starting completeReduce\n");
   for (i=strat->sl; i>=low; i--)
   {
-	printf("complete reduce for loop: iteration %d\n", i);
+	//printf("complete reduce for loop: iteration %d\n", i);
     int end_pos=strat->sl;
     if ((strat->fromQ!=NULL) && (strat->fromQ[i])) continue; // do not reduce Q_i
     if (strat->ak==0) end_pos=i-1;
     TObject* T_j = strat->s_2_t(i);
     if ((T_j != NULL)&&(T_j->p==strat->S[i]))
     {
-	  printf("if (T_j != NULL)&&(T_j->p==strat->S[i])\n");
+	  //printf("if (T_j != NULL)&&(T_j->p==strat->S[i])\n");
       L = *T_j;
       #ifdef KDEBUG
       if (TEST_OPT_DEBUG)
@@ -10938,12 +10938,12 @@ void completeReduce (kStrategy strat, BOOLEAN withT)
         PrintLn();
       }
       #endif
-	  printf("before redtail\n");
+	  //printf("before redtail\n");
       if (rHasGlobalOrdering(currRing))
         strat->S[i] = redtailBba(&L, end_pos, strat, withT);
       else
         strat->S[i] = redtail(&L, strat->sl, strat);
-	  printf("after redtail\n");
+	  //printf("after redtail\n");
       #ifdef KDEBUG
       if (TEST_OPT_DEBUG)
       {
@@ -10966,7 +10966,7 @@ void completeReduce (kStrategy strat, BOOLEAN withT)
     }
     else
     {
-	  printf("not (T_j != NULL)&&(T_j->p==strat->S[i])\n");
+	  //printf("not (T_j != NULL)&&(T_j->p==strat->S[i])\n");
       assume(currRing == strat->tailRing);
       #ifdef KDEBUG
       if (TEST_OPT_DEBUG)
@@ -10976,12 +10976,12 @@ void completeReduce (kStrategy strat, BOOLEAN withT)
         PrintLn();
       }
       #endif
-	  printf("before redtail\n");
+	  //printf("before redtail\n");
       if (rHasGlobalOrdering(currRing))
         strat->S[i] = redtailBba(strat->S[i], end_pos, strat, withT);
       else
         strat->S[i] = redtail(strat->S[i], strat->sl, strat);
-	  printf("after redtail\n");
+	  //printf("after redtail\n");
       if (TEST_OPT_INTSTRATEGY)
       {
         if (TEST_OPT_CONTENTSB)

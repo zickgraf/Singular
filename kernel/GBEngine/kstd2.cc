@@ -3187,8 +3187,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 						strat->P.transformation_coeffs = transformation_coeffs;
 
 						if(pLength(transformation_coeffs) != transformation_coeffs_length + new_transformation_coeffs_length) {
-							printf("Merge did not preserve length\n");	
-							exit(1);
+							//printf("Merge did not preserve length\n");	
+							//exit(1);
 						}
 						
 						// replace tail by one or NULL
@@ -3216,8 +3216,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 								strat->P.transformation_coeffs = transformation_coeffs;
 
 								if(pLength(transformation_coeffs) != transformation_coeffs_length + new_transformation_coeffs_length) {
-									printf("Merge did not preserve length\n");	
-									exit(1);
+									//printf("Merge did not preserve length\n");	
+									//exit(1);
 								}
 								
 								// replace tail by one or NULL
@@ -3241,8 +3241,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 			exit(1);
 		}
 		if(strat->P.transformation_coeffs == NULL && strat != NULL && strat->syzComp > 0) {
-			printf("could not find transformation coeffs of dividend\n");
-			exit(1);
+			//printf("could not find transformation coeffs of dividend\n");
+			//exit(1);
 		}
 	  }
 	  
@@ -3349,8 +3349,8 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
 			poly asd = strat->P.p;
 			while(asd != NULL) {
 				if(pGetComp(asd) > strat->syzComp && !(TEST_OPT_REDTAIL_SYZ)) {
-					printf("p contains a transformation component\n");
-					exit(1);
+					//printf("p contains a transformation component\n");
+					//exit(1);
 					break;
 				}
 				pIter(asd);
@@ -3798,9 +3798,9 @@ ideal bba (ideal F, ideal Q,intvec *w,intvec *hilb,kStrategy strat)
   /* complete reduction of the standard basis--------- */
   if (TEST_OPT_REDSB)
   {
-	printf("completely reduce SB\n");
+	//printf("completely reduce SB\n");
     completeReduce(strat);
-	printf("finished completely reducing SB\n");
+	//printf("finished completely reducing SB\n");
     if (strat->completeReduce_retry)
     {
 	  printf("retry complete reduction\n");

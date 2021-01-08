@@ -388,8 +388,8 @@ if(strat != NULL && strat->syzComp > 0 && !(TEST_OPT_REDTAIL_SYZ)) {
 		exit(1);
 	}
 	if(PW->transformation_coeffs == NULL && strat != NULL && strat->syzComp > 0) {
-		printf("could not find transformation coeffs of divisor\n");
-		exit(1);
+		//printf("could not find transformation coeffs of divisor\n");
+		//exit(1);
 	}
 	//}
 }
@@ -462,8 +462,8 @@ if(strat != NULL && strat->syzComp > 0 && !(TEST_OPT_REDTAIL_SYZ)) {
       if (PR->t_p!=NULL) PR->t_p=_p; else PR->p=_p;
       PR->pLength=0; // usually not used, GetpLength re-computes it if needed
     }
-	printf("unhandled case 1\n");
-	exit(1);
+	//printf("unhandled case 1\n");
+	//exit(1);
     return 0;
   }
 #endif

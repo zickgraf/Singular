@@ -792,7 +792,7 @@ KINLINE poly sLObject::GetP(omBin lmBin)
   //kTest_L(this);
   if (p == NULL)
   {
-	printf("GetP, p == NULL\n");
+	//printf("GetP, p == NULL\n");
     p = k_LmInit_tailRing_2_currRing(t_p, tailRing,
                                      ((lmBin!=NULL)?lmBin:currRing->PolyBin));
     FDeg = pFDeg();
