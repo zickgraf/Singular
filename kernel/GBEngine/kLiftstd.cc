@@ -96,7 +96,11 @@ static poly kSplitAt(int k,LObject* h,kStrategy strat)
     return p;
   }
   if (p->next==NULL) return NULL;
-  while(p_GetComp(p->next,tailRing)<=k) pIter(p);
+  while(p_GetComp(p->next,tailRing)<=k)
+  {
+    pIter(p);
+    if (p->next==NULL) return NULL;
+  }
   poly t=p->next;
   p->next=NULL;
   if (h->bucket!=NULL)
